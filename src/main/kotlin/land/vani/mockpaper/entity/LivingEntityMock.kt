@@ -46,8 +46,7 @@ abstract class LivingEntityMock(
         private const val MAX_HEALTH = 20.0
     }
 
-    private var _health: Double = MAX_HEALTH
-    private val _maxHealth: Double = MAX_HEALTH
+    private var health: Double = MAX_HEALTH
 
     private var maxAirTick = 300
     private var remainingAirTick = 300
@@ -61,16 +60,16 @@ abstract class LivingEntityMock(
         attributes[Attribute.GENERIC_MAX_HEALTH] = AttributeInstanceMock(Attribute.GENERIC_MAX_HEALTH, MAX_HEALTH)
     }
 
-    override fun getHealth(): Double = _health
+    override fun getHealth(): Double = health
 
     override fun isDead(): Boolean = !isAlive
 
     override fun setHealth(health: Double) {
         if (health > 0) {
-            _health = min(health, _maxHealth)
+            this.health = min(health, maxHealth)
             return
         }
-        _health = 0.0
+        this.health = 0.0
 
         val event = EntityDeathEvent(this, mutableListOf(), 0)
         server.pluginManager.callEvent(event)
@@ -82,13 +81,13 @@ abstract class LivingEntityMock(
 
     override fun setMaxHealth(health: Double) {
         getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue = health
-        if (_health > health) {
-            _health = health
+        if (health > health) {
+            this.health = health
         }
     }
 
     override fun resetMaxHealth() {
-        maxHealth = _maxHealth
+        maxHealth = MAX_HEALTH
     }
 
     override fun damage(amount: Double) {

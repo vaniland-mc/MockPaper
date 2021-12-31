@@ -48,7 +48,7 @@ abstract class EntityMock(
     Metadatable by MetadataHolder(),
     Nameable by NameableHolder(),
     MessageTarget {
-    private var _location = Bukkit.getWorlds().firstOrNull()?.spawnLocation
+    private var location = Bukkit.getWorlds().firstOrNull()?.spawnLocation
         ?: Location(null, 0.0, 0.0, 0.0)
 
     private var isTeleported: Boolean = false
@@ -56,7 +56,7 @@ abstract class EntityMock(
 
     private val persistentDataContainer = PersistentDataContainerMock()
 
-    private var _isOperator: Boolean = false
+    private var isOperator: Boolean = false
 
     private var name: Component = Component.text("entity")
 
@@ -64,17 +64,17 @@ abstract class EntityMock(
 
     private val permissionAttachments = mutableSetOf<PermissionAttachment>()
 
-    private var _velocity: Vector = Vector(0, 0, 0)
+    private var velocity: Vector = Vector(0, 0, 0)
 
-    private var _fireTicks = -20
-    private var _maxFireTicks = 20
+    private var fireTicks = -20
+    private var maxFireTicks = 20
 
-    private var _fallDistance = 0.0f
+    private var fallDistance = 0.0f
 
-    private var _isCustomNameVisible = true
-    private var _isGlowing = false
-    private var _isInvulnerable = false
-    private var _isSilent = false
+    private var isCustomNameVisible = true
+    private var isGlowing = false
+    private var isInvulnerable = false
+    private var isSilent = false
 
     override fun hashCode(): Int = uuid.hashCode()
 
@@ -115,30 +115,30 @@ abstract class EntityMock(
 
     override fun getUniqueId(): UUID = uuid
 
-    override fun getLocation(): Location = _location.clone()
+    override fun getLocation(): Location = location.clone()
 
     override fun getLocation(loc: Location?): Location? = loc?.apply {
-        world = _location.world
-        direction = _location.direction
-        x = _location.x
-        y = _location.y
-        z = _location.z
-        pitch = _location.pitch
-        yaw = _location.yaw
+        world = location.world
+        direction = location.direction
+        x = location.x
+        y = location.y
+        z = location.z
+        pitch = location.pitch
+        yaw = location.yaw
     }
 
     fun setLocation(location: Location) {
-        _location = location
+        this.location = location
     }
 
-    override fun getWorld(): World = _location.world
+    override fun getWorld(): World = location.world
 
     override fun getPersistentDataContainer(): PersistentDataContainer = persistentDataContainer
 
     override fun teleport(location: Location): Boolean = teleport(location, TeleportCause.PLUGIN)
 
     override fun teleport(location: Location, cause: TeleportCause): Boolean {
-        _location = location
+        this.location = location
         isTeleported = true
         teleportCause = cause
         return true
@@ -149,10 +149,10 @@ abstract class EntityMock(
     override fun teleport(destination: Entity, cause: TeleportCause): Boolean =
         teleport(destination.location, cause)
 
-    override fun isOp(): Boolean = _isOperator
+    override fun isOp(): Boolean = isOperator
 
     override fun setOp(value: Boolean) {
-        _isOperator = value
+        isOperator = value
     }
 
     override fun name(): Component = name
@@ -252,10 +252,10 @@ abstract class EntityMock(
             }
         }.toSet()
 
-    override fun getVelocity(): Vector = _velocity
+    override fun getVelocity(): Vector = velocity
 
     override fun setVelocity(velocity: Vector) {
-        _velocity = velocity
+        this.velocity = velocity
     }
 
     override fun getHeight(): Double {
@@ -278,12 +278,12 @@ abstract class EntityMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getFireTicks(): Int = _fireTicks
+    override fun getFireTicks(): Int = fireTicks
 
-    override fun getMaxFireTicks(): Int = _maxFireTicks
+    override fun getMaxFireTicks(): Int = maxFireTicks
 
     override fun setFireTicks(ticks: Int) {
-        _fireTicks = ticks
+        fireTicks = ticks
     }
 
     override fun isVisualFire(): Boolean {
@@ -350,10 +350,10 @@ abstract class EntityMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getFallDistance(): Float = _fallDistance
+    override fun getFallDistance(): Float = fallDistance
 
     override fun setFallDistance(distance: Float) {
-        _fallDistance = distance
+        fallDistance = distance
     }
 
     override fun getLastDamageCause(): EntityDamageEvent? {
@@ -388,28 +388,28 @@ abstract class EntityMock(
         throw UnimplementedOperationException()
     }
 
-    override fun isCustomNameVisible(): Boolean = _isCustomNameVisible
+    override fun isCustomNameVisible(): Boolean = isCustomNameVisible
 
     override fun setCustomNameVisible(flag: Boolean) {
-        _isCustomNameVisible = flag
+        isCustomNameVisible = flag
     }
 
-    override fun isGlowing(): Boolean = _isGlowing
+    override fun isGlowing(): Boolean = isGlowing
 
     override fun setGlowing(flag: Boolean) {
-        _isGlowing = flag
+        isGlowing = flag
     }
 
-    override fun isInvulnerable(): Boolean = _isInvulnerable
+    override fun isInvulnerable(): Boolean = isInvulnerable
 
     override fun setInvulnerable(flag: Boolean) {
-        _isInvulnerable = flag
+        isInvulnerable = flag
     }
 
-    override fun isSilent(): Boolean = _isSilent
+    override fun isSilent(): Boolean = isSilent
 
     override fun setSilent(flag: Boolean) {
-        _isSilent = flag
+        isSilent = flag
     }
 
     override fun hasGravity(): Boolean {
