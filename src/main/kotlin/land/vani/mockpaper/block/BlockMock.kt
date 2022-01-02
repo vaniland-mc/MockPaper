@@ -32,7 +32,7 @@ class BlockMock(
 
     private var data: Byte = 0
 
-    private val _blockData: BlockData = BlockDataMock(material)
+    private var blockData: BlockData = BlockDataMock(material)
 
     override fun getData(): Byte = data
 
@@ -205,10 +205,11 @@ class BlockMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getBlockData(): BlockData = _blockData
+    override fun getBlockData(): BlockData = blockData
 
     override fun setBlockData(data: BlockData) {
-        throw UnimplementedOperationException()
+        this.material = data.material
+        this.blockData = data
     }
 
     override fun setBlockData(data: BlockData, applyPhysics: Boolean) {
