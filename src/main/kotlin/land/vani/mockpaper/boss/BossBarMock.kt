@@ -6,7 +6,7 @@ import org.bukkit.boss.BarStyle
 import org.bukkit.boss.BossBar
 import org.bukkit.entity.Player
 
-class BossBarMock(
+open class BossBarMock(
     private var title: String,
     private var color: BarColor,
     private var style: BarStyle,
