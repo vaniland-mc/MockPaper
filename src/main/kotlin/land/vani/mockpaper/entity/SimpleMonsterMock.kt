@@ -8,7 +8,7 @@ import org.bukkit.entity.Monster
 import org.bukkit.inventory.EntityEquipment
 import java.util.UUID
 
-class SimpleMonsterMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Monster {
+open class SimpleMonsterMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Monster {
     constructor(server: ServerMock) : this(server, UUID.randomUUID())
 
     override fun getType(): EntityType {
