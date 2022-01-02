@@ -5,6 +5,11 @@ import org.bukkit.entity.Projectile
 import org.bukkit.projectiles.ProjectileSource
 import java.util.UUID
 
+/**
+ * [EntityMock] that representing a generic [Projectile].
+ *
+ * @author TheBusyBiscuit
+ */
 abstract class ProjectileMock(server: ServerMock, uuid: UUID) : EntityMock(server, uuid), Projectile {
     private var source: ProjectileSource? = null
     private var isBounce: Boolean = false
