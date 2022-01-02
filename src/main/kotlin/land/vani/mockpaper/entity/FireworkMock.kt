@@ -8,6 +8,13 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.meta.FireworkMeta
 import java.util.UUID
 
+/**
+ * This is a simple mock of the [Firework].
+ *
+ * It takes a [FireworkMeta] to carry all properties.
+ *
+ * @author TheBusyBiscuit
+ */
 class FireworkMock(
     server: ServerMock,
     uuid: UUID,

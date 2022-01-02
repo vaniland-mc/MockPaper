@@ -54,6 +54,8 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerResourcePackStatusEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
+import org.bukkit.event.player.PlayerToggleSneakEvent
+import org.bukkit.event.player.PlayerToggleSprintEvent
 import org.bukkit.inventory.EntityEquipment
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.Inventory
@@ -65,6 +67,7 @@ import org.bukkit.inventory.PlayerInventory
 import org.bukkit.map.MapView
 import org.bukkit.plugin.Plugin
 import org.bukkit.scoreboard.Scoreboard
+import org.jetbrains.annotations.VisibleForTesting
 import java.net.InetSocketAddress
 import java.util.Locale
 import java.util.Queue
@@ -193,11 +196,22 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         compassTarget = loc
     }
 
+    /**
+     * This method simulates the [Player] respawning and also fires the [PlayerRespawnEvent] and
+     * [PlayerPostRespawnEvent].
+     *
+     * If [Player] is not dead (when [isDead] returns false) then this throws an [UnsupportedOperationException].
+     * Otherwise, the [location] will be set to [bedSpawnLocation] or [org.bukkit.World.getSpawnLocation].
+     * Lastly the health of this player will be restored and set to the max health.
+     */
+    @VisibleForTesting
     fun respawn() {
         // TODO: Respawn anchors are not supported yet in Spigot API.
         val isBedSpawn = bedSpawnLocation != null
         val isAnchorSpawn = false
         val respawnLocation = bedSpawnLocation ?: location.world.spawnLocation
+
+        if (!isDead) throw UnsupportedOperationException("Player is not dead")
 
         val event = PlayerRespawnEvent(
             this,
@@ -215,6 +229,10 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         server.pluginManager.callEvent(postEvent)
     }
 
+    /**
+     * This method moves player to [moveLocation] instantly with respect to [PlayerMoveEvent].
+     */
+    @VisibleForTesting
     fun simulatePlayerMove(moveLocation: Location): PlayerMoveEvent {
         val event = PlayerMoveEvent(this, location, moveLocation)
         location = event.to
@@ -514,10 +532,36 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         isSneaking = sneak
     }
 
+    /**
+     * Simulates the player sneaking with [PlayerToggleSneakEvent].
+     */
+    @VisibleForTesting
+    fun simulateSneak(sneak: Boolean): PlayerToggleSneakEvent {
+        val event = PlayerToggleSneakEvent(this, sneak)
+        server.pluginManager.callEvent(event)
+        if (!event.isCancelled) {
+            isSneaking = event.isSneaking
+        }
+        return event
+    }
+
     override fun isSprinting(): Boolean = isSprinting
 
     override fun setSprinting(sprinting: Boolean) {
         isSprinting = sprinting
+    }
+
+    /**
+     * Simulates the player sprinting with [PlayerToggleSprintEvent].
+     */
+    @VisibleForTesting
+    fun simulateSprinting(sprinting: Boolean): PlayerToggleSprintEvent {
+        val event = PlayerToggleSprintEvent(this, sprinting)
+        server.pluginManager.callEvent(event)
+        if (!event.isCancelled) {
+            isSprinting = event.isSprinting
+        }
+        return event
     }
 
     override fun loadData() {
@@ -639,6 +683,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             server.pluginManager.callEvent(it)
         }
 
+    /**
+     * Simulates the player damaging a [block].
+     *
+     * Note that this method does not anything unless the player is in survival mode.
+     * if [BlockDamageEvent.instaBreak] is set to `true` by an event handler, a [BlockBreakEvent] is immediately fired.
+     * The result will then still be whether the [BlockDamageEvent] was cancelled or not,
+     * not the later [BlockBreakEvent].
+     */
+    @VisibleForTesting
     fun simulateBlocKDamage(block: Block): BlockDamageEvent? {
         if (gameMode != GameMode.SURVIVAL) return null
 
@@ -652,6 +705,13 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         return event
     }
 
+    /**
+     * Simulates the player breaking a [block].
+     *
+     * This method will not break the block if the player is in adventure or spectator mode.
+     * If the player is in survival mode, the player will first damage the block.
+     */
+    @VisibleForTesting
     fun simulateBlockBreak(block: Block): BlockBreakEvent? {
         if (gameMode == GameMode.SPECTATOR || gameMode == GameMode.ADVENTURE) return null
         if (gameMode == GameMode.SURVIVAL && simulateBlockDamagePure(block).isCancelled) return null
@@ -664,6 +724,12 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         return event
     }
 
+    /**
+     * Simulates the player placing a block with [material] to [location].
+     *
+     * This method will not place the block if the player is in adventure or spectator mode.
+     */
+    @VisibleForTesting
     fun simulateBlockPlace(material: Material, location: Location): BlockPlaceEvent? {
         if (gameMode == GameMode.ADVENTURE || gameMode == GameMode.SPECTATOR) return null
 
@@ -944,6 +1010,10 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         isFlying = value
     }
 
+    /**
+     * Simulates the player flight to [fly].
+     */
+    @VisibleForTesting
     fun simulateToggleFlight(fly: Boolean): PlayerToggleFlightEvent {
         val event = PlayerToggleFlightEvent(this, fly)
         server.pluginManager.callEvent(event)
@@ -1039,8 +1109,16 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    /**
+     * Returns the next title that was sent to the player.
+     */
+    @VisibleForTesting
     fun nextTitle(): String = titles.poll()
 
+    /**
+     * Returns the next subtitle that was sent to the player.
+     */
+    @VisibleForTesting
     fun nextSubTitle(): String = subTitles.poll()
 
     override fun spawnParticle(particle: Particle, location: Location, count: Int) {

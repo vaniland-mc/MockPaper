@@ -5,6 +5,9 @@ import org.bukkit.Statistic
 import org.bukkit.entity.EntityType
 import java.util.EnumMap
 
+/**
+ * An implementation of player statistic, similar to CraftStatistic.
+ */
 class StatisticsMock {
     private val untypedStatistics: MutableMap<Statistic, Int> = EnumMap(Statistic::class.java)
     private val materialStatistics: MutableMap<Statistic, MutableMap<Material, Int>> = EnumMap(Statistic::class.java)

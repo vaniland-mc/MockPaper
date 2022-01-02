@@ -7,6 +7,13 @@ import org.bukkit.entity.Item
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
+/**
+ * This is the mock of a dropped [Item].
+ *
+ * It can hold an [ItemStack], that pretty much covers it all.
+ *
+ * @author TheBusyBiscuit
+ */
 class ItemEntityMock(
     server: ServerMock,
     uuid: UUID,
@@ -19,7 +26,7 @@ class ItemEntityMock(
     override fun getItemStack(): ItemStack = item
 
     override fun setItemStack(stack: ItemStack) {
-        item = stack
+        item = stack.clone()
     }
 
     override fun getPickupDelay(): Int = pickupDelay

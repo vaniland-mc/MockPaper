@@ -24,15 +24,21 @@ import org.bukkit.util.RayTraceResult
 import org.bukkit.util.Vector
 import org.bukkit.util.VoxelShape
 
+/**
+ * @constructor Creates a basic block with a given [material] that's also linked to a specific [location].
+ */
 class BlockMock(
     private var material: Material,
     private val location: Location,
 ) : Block, Metadatable by MetadataHolder() {
+    /**
+     * Creates a basic block made of air at a certain [location].
+     */
     constructor(location: Location) : this(Material.AIR, location)
 
     private var data: Byte = 0
 
-    private val _blockData: BlockData = BlockDataMock(material)
+    private var blockData: BlockData = BlockDataMock(material)
 
     override fun getData(): Byte = data
 
@@ -205,10 +211,11 @@ class BlockMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getBlockData(): BlockData = _blockData
+    override fun getBlockData(): BlockData = blockData
 
     override fun setBlockData(data: BlockData) {
-        throw UnimplementedOperationException()
+        this.material = data.material
+        this.blockData = data
     }
 
     override fun setBlockData(data: BlockData, applyPhysics: Boolean) {

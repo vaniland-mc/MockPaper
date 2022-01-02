@@ -4,6 +4,9 @@ import org.bukkit.metadata.MetadataValue
 import org.bukkit.metadata.Metadatable
 import org.bukkit.plugin.Plugin
 
+/**
+ * A [Metadata] holder for delegating.
+ */
 class MetadataHolder : Metadatable {
     private val metadata = mutableMapOf<String, MutableMap<Plugin, MetadataValue>>()
 

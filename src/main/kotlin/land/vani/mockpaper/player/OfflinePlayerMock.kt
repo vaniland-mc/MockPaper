@@ -10,6 +10,14 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import java.util.UUID
 
+/**
+ * A mock specifically for [OfflinePlayer].
+ *
+ * Not interchangeable with [PlayerMock].
+ *
+ * @author TheBusyBiscuit
+ * @see PlayerMock
+ */
 class OfflinePlayerMock(
     private val server: ServerMock,
     private val uuid: UUID,

@@ -6,6 +6,11 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.ExperienceOrb
 import java.util.UUID
 
+/**
+ * This is a simple mock of the [ExperienceOrb].
+ *
+ * @author TheBusyBiscuit
+ */
 class ExperienceOrbMock(
     server: ServerMock,
     uuid: UUID,

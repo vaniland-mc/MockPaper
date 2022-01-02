@@ -5,6 +5,9 @@ import land.vani.mockpaper.internal.toLegacyString
 import net.kyori.adventure.text.Component
 import org.bukkit.Nameable
 
+/**
+ * A [Nameable] holder for delegating.
+ */
 class NameableHolder : Nameable {
     private var customName: Component? = null
 

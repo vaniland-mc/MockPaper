@@ -5,6 +5,9 @@ import org.bukkit.BanEntry
 import org.bukkit.BanList
 import java.util.Date
 
+/**
+ * A simple mock of [BanList].
+ */
 class BanListMock : BanList {
     private val bans = mutableMapOf<String, BanEntry>()
 
@@ -23,6 +26,9 @@ class BanListMock : BanList {
         bans -= target
     }
 
+    /**
+     * A simple mock of [BanEntry].
+     */
     class BanEntryMock(
         private val target: String,
         private var expires: Date?,
