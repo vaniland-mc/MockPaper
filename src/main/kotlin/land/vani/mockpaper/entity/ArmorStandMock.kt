@@ -13,6 +13,11 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.EulerAngle
 import java.util.UUID
 
+/**
+ * This is the mock of an [ArmorStand].
+ *
+ * @author TheBusyBiscuit
+ */
 class ArmorStandMock(server: ServerMock, uuid: UUID) : LivingEntityMock(server, uuid), ArmorStand {
     private val equipment = EntityEquipmentMock(this)
 
