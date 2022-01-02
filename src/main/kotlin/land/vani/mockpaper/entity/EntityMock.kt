@@ -32,6 +32,7 @@ import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.plugin.Plugin
 import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.Queue
 import java.util.UUID
 import java.util.concurrent.LinkedTransferQueue
@@ -85,6 +86,10 @@ abstract class EntityMock(
         return false
     }
 
+    /**
+     * Assert that the actual location of the entity is a [expectedLocation] within a [maximumDistance].
+     */
+    @VisibleForTesting
     fun assertLocation(expectedLocation: Location, maximumDistance: Double) {
         val distance = location.distance(expectedLocation)
         assertEquals(expectedLocation.world, location.world)
@@ -94,23 +99,47 @@ abstract class EntityMock(
         )
     }
 
+    /**
+     * Assert that the player teleported to a [expectedLocation] within a [maximumDistance] to a given location.
+     *
+     * Also clears the teleported flag.
+     */
+    @VisibleForTesting
     fun assertTeleported(expectedLocation: Location, maximumDistance: Double) {
         assertTrue(isTeleported, "Entity was expected to teleport, but actually it did not teleport.")
         assertLocation(expectedLocation, maximumDistance)
         isTeleported = false
     }
 
+    /**
+     * Assert that the entity hasn't teleported.
+     *
+     * Also clears the teleported flag.
+     */
+    @VisibleForTesting
     fun assertNotTeleported() {
         assertFalse(isTeleported, "Entity was expected not to teleport, but actually it teleported.")
         isTeleported = false
     }
 
+    /**
+     * Entity has been teleported or else since the last assert or [clearTeleported].
+     */
+    @VisibleForTesting
     fun hasTeleported() = isTeleported
 
+    /**
+     * Clears the teleported flag.
+     */
+    @VisibleForTesting
     fun clearTeleported() {
         isTeleported = false
     }
 
+    /**
+     * Get the cause of the last teleport.
+     */
+    @VisibleForTesting
     fun getTeleportCause(): TeleportCause? = teleportCause
 
     override fun getUniqueId(): UUID = uuid
@@ -127,6 +156,10 @@ abstract class EntityMock(
         yaw = location.yaw
     }
 
+    /**
+     * Sets the location of the entity without firing a teleport event.
+     */
+    @VisibleForTesting
     fun setLocation(location: Location) {
         this.location = location
     }
@@ -159,6 +192,9 @@ abstract class EntityMock(
 
     override fun getName(): String = name.toLegacyString()
 
+    /**
+     * Sets the name of this entity.
+     */
     fun setName(name: String) {
         this.name = name.toComponent()
     }
