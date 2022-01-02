@@ -24,10 +24,16 @@ import org.bukkit.util.RayTraceResult
 import org.bukkit.util.Vector
 import org.bukkit.util.VoxelShape
 
+/**
+ * @constructor Creates a basic block with a given [material] that's also linked to a specific [location].
+ */
 class BlockMock(
     private var material: Material,
     private val location: Location,
 ) : Block, Metadatable by MetadataHolder() {
+    /**
+     * Creates a basic block made of air at a certain [location].
+     */
     constructor(location: Location) : this(Material.AIR, location)
 
     private var data: Byte = 0
