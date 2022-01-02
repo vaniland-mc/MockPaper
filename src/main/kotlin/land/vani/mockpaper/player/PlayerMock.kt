@@ -73,7 +73,7 @@ import java.util.concurrent.LinkedTransferQueue
 import kotlin.math.max
 import kotlin.math.min
 
-class MockPlayer(server: ServerMock, name: String, uuid: UUID) :
+class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     LivingEntityMock(server, uuid),
     Player,
     SoundReceiver {
@@ -1470,7 +1470,7 @@ class MockPlayer(server: ServerMock, name: String, uuid: UUID) :
         }
 
         override fun sendMessage(position: ChatMessageType, component: BaseComponent) {
-            this@MockPlayer.sendMessage(component.toLegacyText())
+            this@PlayerMock.sendMessage(component.toLegacyText())
         }
     }
 }
