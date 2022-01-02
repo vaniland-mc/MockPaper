@@ -7,6 +7,14 @@ import org.bukkit.inventory.EntityEquipment
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 
+/**
+ * This mocks the [EntityEquipment] of a [LivingEntityMock].
+ *
+ * Note that not every [org.bukkit.entity.LivingEntity] has [EntityEquipment],
+ * So only implement this where necessary.
+ *
+ * @author TheBusyBiscuit
+ */
 class EntityEquipmentMock(
     private val holder: LivingEntityMock,
 ) : EntityEquipment {
