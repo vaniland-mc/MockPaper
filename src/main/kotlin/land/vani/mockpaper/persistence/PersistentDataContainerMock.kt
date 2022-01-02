@@ -5,7 +5,15 @@ import org.bukkit.NamespacedKey
 import org.bukkit.persistence.PersistentDataAdapterContext
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
+import org.jetbrains.annotations.VisibleForTesting
 
+/**
+ * This is a mock of the [PersistentDataContainer] to allow the "persistent" storage of data.
+ *
+ * Only that it isn't persistent of course since it only ever exists in a test environment.
+ *
+ * @author TheBusyBiscuit
+ */
 class PersistentDataContainerMock
 @JvmOverloads
 constructor(
@@ -57,6 +65,7 @@ constructor(
 
     override fun getKeys(): Set<NamespacedKey> = map.keys.asUnmodifiable()
 
+    @VisibleForTesting
     fun serialize(): Map<String, Any?> = map.map { (key, value) ->
         key.toString() to value
     }.toMap()
