@@ -20,6 +20,15 @@
       "groupName": "kotest"
     },
     {
+      "matchDatasources": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "io.papermc.paper:paper-api"
+      ],
+      "versioning": "regex:^(?<major>(?:\\d|\\.)+)-(?<compatibility>R(?:\\d|\\.)+)-(?:\\d+)\\.(?:\\d+)-(?<minor>\\d+)"
+    },
+    {
       "matchUpdateTypes": [
         "minor",
         "patch"
