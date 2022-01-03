@@ -20,6 +20,15 @@
       "groupName": "kotest"
     },
     {
+      "matchDatasources": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "io.papermc.paper:paper-api"
+      ],
+      "versioning": "gradle"
+    },
+    {
       "matchUpdateTypes": [
         "minor",
         "patch"
