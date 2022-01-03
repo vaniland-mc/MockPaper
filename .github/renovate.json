@@ -26,7 +26,7 @@
       "matchPackageNames": [
         "io.papermc.paper:paper-api"
       ],
-      "versioning": "gradle"
+      "versioning": "regex:^(?<major>(?:\\d|\\.)+)-(?<compatibility>R(?:\\d|\\.)+)-(?:\\d+)\\.(?:\\d+)-(?<minor>\\d+)"
     },
     {
       "matchUpdateTypes": [
