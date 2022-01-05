@@ -107,7 +107,9 @@ class InventoryMock(
         }
     }
 
-    override fun getStorageContents(): Array<ItemStack> = contents.filterNotNull().toTypedArray()
+    override fun getStorageContents(): Array<ItemStack> = contents.map {
+        it ?: ItemStack(Material.AIR)
+    }.toTypedArray()
 
     override fun setStorageContents(items: Array<out ItemStack>) {
         setContents(items)
@@ -182,7 +184,11 @@ class InventoryMock(
                 override fun getInventory(): Inventory =
                     InventoryMock(this, size, type).apply {
                         @Suppress("UNCHECKED_CAST")
-                        setContents(this@InventoryMock.contents as Array<out ItemStack>)
+                        setContents(
+                            this@InventoryMock.contents.map {
+                                it ?: ItemStack(Material.AIR)
+                            }.toTypedArray()
+                        )
                     }
             }
         } else {
