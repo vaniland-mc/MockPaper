@@ -7,11 +7,19 @@ import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import org.bukkit.inventory.meta.BookMeta
 
-class BookMetaMock : ItemMetaMock(), BookMeta {
+class BookMetaMock : ItemMetaMock, BookMeta {
     private var title: Component? = null
     private var author: Component? = null
     private var generation: BookMeta.Generation? = null
     private var pages: MutableList<Component> = mutableListOf()
+
+    constructor() : super()
+
+    constructor(meta: BookMeta) : super(meta) {
+        title = meta.title()
+        author = meta.author()
+        pages = meta.pages().toMutableList()
+    }
 
     override fun hasTitle(): Boolean = title != null
 
