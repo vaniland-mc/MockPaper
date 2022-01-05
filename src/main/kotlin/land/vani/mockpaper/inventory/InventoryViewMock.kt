@@ -6,7 +6,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryView
 import org.jetbrains.annotations.VisibleForTesting
 
-class InventoryViewMock(
+open class InventoryViewMock(
     private var player: HumanEntity,
     private var name: String,
     private var topInventory: Inventory,
