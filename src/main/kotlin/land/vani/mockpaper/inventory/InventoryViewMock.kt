@@ -13,6 +13,13 @@ open class InventoryViewMock(
     private var bottomInventory: Inventory,
     private var type: InventoryType,
 ) : InventoryView() {
+    constructor(
+        player: HumanEntity,
+        topInventory: Inventory,
+        bottomInventory: Inventory,
+        type: InventoryType,
+    ) : this(player, "Inventory", topInventory, bottomInventory, type)
+
     override fun getTopInventory(): Inventory = topInventory
 
     /**
