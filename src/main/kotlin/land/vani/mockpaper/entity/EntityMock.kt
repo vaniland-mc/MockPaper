@@ -560,5 +560,9 @@ abstract class EntityMock(
         throw UnimplementedOperationException()
     }
 
+    override fun isInPowderedSnow(): Boolean {
+        throw UnimplementedOperationException()
+    }
+
     override fun spigot(): Entity.Spigot = this
 }
