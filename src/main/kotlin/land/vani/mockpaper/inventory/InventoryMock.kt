@@ -1,6 +1,7 @@
 package land.vani.mockpaper.inventory
 
 import land.vani.mockpaper.UnimplementedOperationException
+import land.vani.mockpaper.internal.fallbackNull
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.HumanEntity
@@ -107,9 +108,7 @@ open class InventoryMock(
         }
     }
 
-    override fun getStorageContents(): Array<ItemStack> = contents.map {
-        it ?: ItemStack(Material.AIR)
-    }.toTypedArray()
+    override fun getStorageContents(): Array<ItemStack> = contents.fallbackNull()
 
     override fun setStorageContents(items: Array<out ItemStack>) {
         setContents(items)
@@ -182,12 +181,7 @@ open class InventoryMock(
         if (useSnapshot) {
             InventoryHolder {
                 InventoryMock(holder, size, type).apply {
-                    @Suppress("UNCHECKED_CAST")
-                    setContents(
-                        this@InventoryMock.contents.map {
-                            it ?: ItemStack(Material.AIR)
-                        }.toTypedArray()
-                    )
+                    setContents(contents.fallbackNull())
                 }
             }
         } else {
@@ -205,4 +199,9 @@ open class InventoryMock(
     override fun getLocation(): Location? {
         throw UnimplementedOperationException()
     }
+
+    open fun getSnapshot(): Inventory = InventoryMock(holder, size, type)
+        .apply {
+            setContents(contents.fallbackNull())
+        }
 }
