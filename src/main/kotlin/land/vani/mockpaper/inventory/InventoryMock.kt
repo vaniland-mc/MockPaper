@@ -180,16 +180,15 @@ class InventoryMock(
 
     override fun getHolder(useSnapshot: Boolean): InventoryHolder? =
         if (useSnapshot) {
-            object : InventoryHolder {
-                override fun getInventory(): Inventory =
-                    InventoryMock(this, size, type).apply {
-                        @Suppress("UNCHECKED_CAST")
-                        setContents(
-                            this@InventoryMock.contents.map {
-                                it ?: ItemStack(Material.AIR)
-                            }.toTypedArray()
-                        )
-                    }
+            InventoryHolder {
+                InventoryMock(holder, size, type).apply {
+                    @Suppress("UNCHECKED_CAST")
+                    setContents(
+                        this@InventoryMock.contents.map {
+                            it ?: ItemStack(Material.AIR)
+                        }.toTypedArray()
+                    )
+                }
             }
         } else {
             holder
