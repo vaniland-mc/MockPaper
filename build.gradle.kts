@@ -28,7 +28,7 @@ dependencies {
     implementation(kotlin("test-junit5"))
     implementation("org.opentest4j:opentest4j:1.2.0")
 
-    implementation("io.papermc.paper:paper-api:1.17.1-R0.1-20211219.175449-302")
+    implementation("io.papermc.paper:paper-api:1.18.1-R0.1-20220104.205543-66")
 }
 
 val targetJavaVersion = 17
