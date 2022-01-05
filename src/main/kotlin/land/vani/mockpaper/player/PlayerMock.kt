@@ -42,6 +42,7 @@ import org.bukkit.conversations.ConversationAbandonedEvent
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Firework
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Villager
 import org.bukkit.event.block.BlockBreakEvent
@@ -749,7 +750,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         return event
     }
 
-    override fun sendChunkChange(loc: Location, sx: Int, sy: Int, sz: Int, data: ByteArray): Boolean {
+    override fun sendEquipmentChange(entity: LivingEntity, slot: EquipmentSlot, item: ItemStack) {
         throw UnimplementedOperationException()
     }
 
@@ -1004,6 +1005,18 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         player.uniqueId !in hiddenPlayers &&
             player.uniqueId !in hiddenPlayersDeprecated
 
+    override fun hideEntity(plugin: Plugin, entity: Entity) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun showEntity(plugin: Plugin, entity: Entity) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun canSee(entity: Entity): Boolean {
+        throw UnimplementedOperationException()
+    }
+
     override fun isFlying(): Boolean = isFlying
 
     override fun setFlying(value: Boolean) {
@@ -1043,11 +1056,27 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
-    override fun setResourcePack(url: String, hash: ByteArray) {
+    override fun setResourcePack(url: String, hash: ByteArray?) {
         throw UnimplementedOperationException()
     }
 
     override fun setResourcePack(url: String, hash: String) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun setResourcePack(url: String, hash: ByteArray?, prompt: String?) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun setResourcePack(url: String, hash: ByteArray?, force: Boolean) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun setResourcePack(url: String, hash: ByteArray?, prompt: Component?, force: Boolean) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun setResourcePack(url: String, hash: ByteArray?, prompt: String?, force: Boolean) {
         throw UnimplementedOperationException()
     }
 
@@ -1084,6 +1113,14 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun setHealthScale(scale: Double) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun sendHealthUpdate() {
+        throw UnimplementedOperationException()
+    }
+
+    override fun sendHealthUpdate(health: Double, foodLevel: Int, saturationLevel: Float) {
         throw UnimplementedOperationException()
     }
 
@@ -1450,6 +1487,14 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun openSign(sign: Sign) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun showDemoScreen() {
+        throw UnimplementedOperationException()
+    }
+
+    override fun isAllowingServerListings(): Boolean {
         throw UnimplementedOperationException()
     }
 

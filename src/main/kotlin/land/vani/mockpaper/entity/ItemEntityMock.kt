@@ -74,4 +74,12 @@ class ItemEntityMock(
     override fun setWillAge(willAge: Boolean) {
         throw UnimplementedOperationException()
     }
+
+    override fun getHealth(): Int {
+        throw UnimplementedOperationException()
+    }
+
+    override fun setHealth(health: Int) {
+        throw UnimplementedOperationException()
+    }
 }

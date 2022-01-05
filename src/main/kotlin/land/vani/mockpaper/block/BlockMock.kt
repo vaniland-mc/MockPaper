@@ -243,6 +243,10 @@ class BlockMock(
         throw UnimplementedOperationException()
     }
 
+    override fun canPlace(data: BlockData): Boolean {
+        throw UnimplementedOperationException()
+    }
+
     override fun getSoundGroup(): BlockSoundGroup {
         throw UnimplementedOperationException()
     }
