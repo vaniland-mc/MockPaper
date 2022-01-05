@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack
 import org.jetbrains.annotations.VisibleForTesting
 import kotlin.math.min
 
-class InventoryMock(
+open class InventoryMock(
     private val holder: InventoryHolder?,
     private val size: Int,
     private val type: InventoryType,
