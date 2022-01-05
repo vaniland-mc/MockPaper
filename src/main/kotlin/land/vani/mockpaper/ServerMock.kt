@@ -107,6 +107,10 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    override fun getSimulationDistance(): Int {
+        throw UnimplementedOperationException()
+    }
+
     override fun getIp(): String {
         throw UnimplementedOperationException()
     }
@@ -128,6 +132,22 @@ class ServerMock : Server, Server.Spigot() {
     }
 
     override fun getAllowNether(): Boolean {
+        throw UnimplementedOperationException()
+    }
+
+    override fun getResourcePack(): String {
+        throw UnimplementedOperationException()
+    }
+
+    override fun getResourcePackHash(): String {
+        throw UnimplementedOperationException()
+    }
+
+    override fun getResourcePackPrompt(): String {
+        throw UnimplementedOperationException()
+    }
+
+    override fun isResourcePackRequired(): Boolean {
         throw UnimplementedOperationException()
     }
 
@@ -361,6 +381,10 @@ class ServerMock : Server, Server.Spigot() {
     }
 
     override fun setSpawnRadius(value: Int) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun getHideOnlinePlayers(): Boolean {
         throw UnimplementedOperationException()
     }
 
