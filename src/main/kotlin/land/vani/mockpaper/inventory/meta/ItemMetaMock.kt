@@ -23,7 +23,7 @@ import org.bukkit.inventory.meta.tags.CustomItemTagContainer
 import org.bukkit.persistence.PersistentDataContainer
 import java.util.EnumSet
 
-class ItemMetaMock : ItemMeta {
+open class ItemMetaMock : ItemMeta {
     private var displayName: Component? = null
     private var lore: MutableList<Component>? = null
     private var customModelData: Int? = null
