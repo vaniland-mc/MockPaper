@@ -12,12 +12,24 @@ import org.bukkit.inventory.ItemStack
 import org.jetbrains.annotations.VisibleForTesting
 import kotlin.math.min
 
+/**
+ * @constructor Creates a new inventory with [size].
+ */
 open class InventoryMock(
     private val holder: InventoryHolder?,
     private val size: Int,
     private val type: InventoryType,
 ) : Inventory {
+    /**
+     * Creates a new inventory with size inherited from [InventoryType.getDefaultSize].
+     */
     constructor(holder: InventoryHolder?, type: InventoryType) : this(holder, type.defaultSize, type)
+
+    /**
+     * Creates a very simple inventory with no holder, as name `Inventory`,
+     * a size of 9, and an inventory type of [InventoryType.CHEST].
+     */
+    constructor() : this(null, 9, InventoryType.CHEST)
 
     private val items: Array<ItemStack?>
 
