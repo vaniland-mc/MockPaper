@@ -31,6 +31,20 @@ open class ItemMetaMock : ItemMeta {
     private var hideFlags: MutableSet<ItemFlag> = EnumSet.noneOf(ItemFlag::class.java)
     private var isUnbreakable: Boolean = false
 
+    constructor()
+
+    constructor(meta: ItemMeta) {
+        isUnbreakable = meta.isUnbreakable
+        enchants = meta.enchants
+        customModelData = meta.customModelData
+        hideFlags += meta.itemFlags
+        displayName = meta.displayName()
+        lore = meta.lore()
+        if (meta is ItemMetaMock) {
+            persistentDataContainer = meta.persistentDataContainer
+        }
+    }
+
     private var persistentDataContainer = PersistentDataContainerMock()
 
     override fun hasDisplayName(): Boolean = displayName != null
