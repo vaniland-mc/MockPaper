@@ -9,3 +9,6 @@ internal fun <C : Collection<T>, T> C.asUnmodifiable(): C =
         is Set<*> -> Collections.unmodifiableSet(this) as C
         else -> Collections.unmodifiableCollection(this) as C
     }
+
+internal fun <K, V> Map<K, V>.asUnmodifiable(): Map<K, V> =
+    Collections.unmodifiableMap(this)
