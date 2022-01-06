@@ -50,18 +50,8 @@ class PotionMetaMock : ItemMetaMock, PotionMeta {
         return true
     }
 
-    override fun removeCustomEffect(type: PotionEffectType): Boolean {
-        val iterator = effects.iterator()
-        var changed = false
-        while (iterator.hasNext()) {
-            val effect = iterator.next()
-            if (type == effect.type) {
-                iterator.remove()
-                changed = true
-            }
-        }
-        return changed
-    }
+    override fun removeCustomEffect(type: PotionEffectType): Boolean =
+        effects.removeAll { it.type == type }
 
     override fun hasCustomEffect(type: PotionEffectType): Boolean =
         indexOf(type) != -1
