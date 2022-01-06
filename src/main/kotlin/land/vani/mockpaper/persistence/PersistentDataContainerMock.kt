@@ -19,6 +19,8 @@ class PersistentDataContainerMock
 constructor(
     private val map: MutableMap<NamespacedKey, Any?> = mutableMapOf(),
 ) : PersistentDataContainer {
+    constructor(mock: PersistentDataContainerMock) : this(mock.map)
+
     private val context = PersistentDataAdapterContextMock()
 
     override fun hashCode(): Int {
