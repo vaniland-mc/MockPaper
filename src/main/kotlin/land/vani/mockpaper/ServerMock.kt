@@ -3,6 +3,8 @@ package land.vani.mockpaper
 import com.destroystokyo.paper.entity.ai.MobGoals
 import com.destroystokyo.paper.profile.PlayerProfile
 import io.papermc.paper.datapack.DatapackManager
+import land.vani.mockpaper.entity.EntityMock
+import land.vani.mockpaper.internal.asUnmodifiable
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.BaseComponent
@@ -59,6 +61,10 @@ import java.util.function.Consumer
 import java.util.logging.Logger
 
 class ServerMock : Server, Server.Spigot() {
+    private val mainThread: Thread = Thread.currentThread()
+
+    private val _entities: MutableSet<EntityMock> = mutableSetOf()
+
     override fun sendPluginMessage(source: Plugin, channel: String, message: ByteArray) {
         throw UnimplementedOperationException()
     }
@@ -732,5 +738,25 @@ class ServerMock : Server, Server.Spigot() {
 
     override fun broadcast(component: BaseComponent) {
         throw UnimplementedOperationException()
+    }
+
+    /**
+     * Checks if we are running a method on the main thread.
+     *
+     * @throws IllegalThreadStateException If calling this method with non-main thread.
+     */
+    @Throws(IllegalThreadStateException::class)
+    fun assertMainThread() {
+        if (mainThread != Thread.currentThread()) {
+            throw IllegalThreadStateException()
+        }
+    }
+
+    val entities: Set<Entity>
+        get() = _entities.asUnmodifiable()
+
+    fun registerEntity(entity: EntityMock) {
+        assertMainThread()
+        _entities += entity
     }
 }

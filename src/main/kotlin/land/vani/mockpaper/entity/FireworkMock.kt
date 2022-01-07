@@ -2,6 +2,7 @@ package land.vani.mockpaper.entity
 
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.UnimplementedOperationException
+import land.vani.mockpaper.inventory.meta.FireworkMetaMock
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Firework
 import org.bukkit.entity.LivingEntity
@@ -15,10 +16,12 @@ import java.util.UUID
  *
  * @author TheBusyBiscuit
  */
-class FireworkMock(
+class FireworkMock
+@JvmOverloads
+constructor(
     server: ServerMock,
     uuid: UUID,
-    private var meta: FireworkMeta,
+    private var meta: FireworkMeta = FireworkMetaMock(),
 ) : ProjectileMock(server, uuid), Firework {
     private var isShotAtAngle: Boolean = false
 
