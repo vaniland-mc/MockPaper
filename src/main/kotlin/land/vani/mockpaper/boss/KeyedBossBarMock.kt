@@ -8,7 +8,7 @@ import org.bukkit.boss.KeyedBossBar
 
 class KeyedBossBarMock(
     private val key: NamespacedKey,
-    title: String,
+    title: String?,
     color: BarColor,
     style: BarStyle,
     vararg flags: BarFlag,

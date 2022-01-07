@@ -260,12 +260,10 @@ exceptions:
     exceptionNames:
       - 'ArrayIndexOutOfBoundsException'
       - 'Error'
-      - 'Exception'
       - 'IllegalMonitorStateException'
       - 'IndexOutOfBoundsException'
       - 'NullPointerException'
       - 'RuntimeException'
-      - 'Throwable'
     allowedExceptionNameRegex: '_|(ignore|expected).*'
   TooGenericExceptionThrown:
     active: true
@@ -740,7 +738,7 @@ style:
     active: false
   ThrowsCount:
     active: true
-    max: 2
+    max: 5
     excludeGuardClauses: false
   TrailingWhitespace:
     active: false
