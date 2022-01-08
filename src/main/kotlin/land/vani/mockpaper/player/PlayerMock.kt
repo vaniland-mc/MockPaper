@@ -1,7 +1,6 @@
 package land.vani.mockpaper.player
 
 import com.destroystokyo.paper.ClientOption
-import com.destroystokyo.paper.Title
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import com.destroystokyo.paper.profile.PlayerProfile
 import com.google.common.collect.ImmutableSet
@@ -860,13 +859,13 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     @Suppress("DEPRECATION")
-    override fun sendTitle(title: Title) {
+    override fun sendTitle(title: com.destroystokyo.paper.Title) {
         showTitle(title.title)
         setSubtitle(title.subtitle)
     }
 
     @Suppress("DEPRECATION")
-    override fun updateTitle(title: Title) {
+    override fun updateTitle(title: com.destroystokyo.paper.Title) {
         showTitle(title.title)
         setSubtitle(title.subtitle)
     }

@@ -1,6 +1,5 @@
 package land.vani.mockpaper.world
 
-import com.destroystokyo.paper.HeightmapType
 import io.papermc.paper.world.MoonPhase
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.UnimplementedOperationException
@@ -59,7 +58,6 @@ import org.bukkit.generator.BiomeProvider
 import org.bukkit.generator.BlockPopulator
 import org.bukkit.generator.ChunkGenerator
 import org.bukkit.inventory.ItemStack
-import org.bukkit.material.MaterialData
 import org.bukkit.metadata.Metadatable
 import org.bukkit.plugin.Plugin
 import org.bukkit.util.BoundingBox
@@ -241,11 +239,20 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getHighestBlockYAt(x: Int, z: Int, heightmap: HeightmapType): Int {
+    override fun getHighestBlockYAt(
+        x: Int,
+        z: Int,
+        @Suppress("DEPRECATION")
+        heightmap: com.destroystokyo.paper.HeightmapType,
+    ): Int {
         throw UnimplementedOperationException()
     }
 
-    override fun getHighestBlockYAt(location: Location, heightmap: HeightmapType): Int {
+    override fun getHighestBlockYAt(
+        location: Location,
+        @Suppress("DEPRECATION")
+        heightmap: com.destroystokyo.paper.HeightmapType,
+    ): Int {
         throw UnimplementedOperationException()
     }
 
@@ -265,11 +272,20 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getHighestBlockAt(location: Location, heightmap: HeightmapType): Block {
+    override fun getHighestBlockAt(
+        location: Location,
+        @Suppress("DEPRECATION")
+        heightmap: com.destroystokyo.paper.HeightmapType,
+    ): Block {
         throw UnimplementedOperationException()
     }
 
-    override fun getHighestBlockAt(x: Int, z: Int, heightmap: HeightmapType): Block {
+    override fun getHighestBlockAt(
+        x: Int,
+        z: Int,
+        @Suppress("DEPRECATION")
+        heightmap: com.destroystokyo.paper.HeightmapType,
+    ): Block {
         throw UnimplementedOperationException()
     }
 
@@ -748,7 +764,11 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
-    override fun spawnFallingBlock(location: Location, data: MaterialData): FallingBlock {
+    override fun spawnFallingBlock(
+        location: Location,
+        @Suppress("DEPRECATION")
+        data: org.bukkit.material.MaterialData,
+    ): FallingBlock {
         throw UnimplementedOperationException()
     }
 

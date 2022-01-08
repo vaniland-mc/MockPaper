@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package land.vani.mockpaper
 
 import com.destroystokyo.paper.entity.ai.MobGoals
@@ -43,7 +41,6 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.Server
 import org.bukkit.StructureType
 import org.bukkit.Tag
-import org.bukkit.UnsafeValues
 import org.bukkit.Warning
 import org.bukkit.World
 import org.bukkit.WorldCreator
@@ -758,7 +755,8 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getUnsafe(): UnsafeValues = unsafeValues
+    @Suppress("DEPRECATION")
+    override fun getUnsafe(): org.bukkit.UnsafeValues = unsafeValues
 
     override fun spigot(): Server.Spigot {
         throw UnimplementedOperationException()
