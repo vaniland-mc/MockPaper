@@ -10,7 +10,6 @@ import land.vani.mockpaper.metadata.MetadataHolder
 import land.vani.mockpaper.persistence.PersistentDataContainerMock
 import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.BaseComponent
-import org.bukkit.Bukkit
 import org.bukkit.EntityEffect
 import org.bukkit.Location
 import org.bukkit.Nameable
@@ -49,7 +48,7 @@ abstract class EntityMock(
     Metadatable by MetadataHolder(),
     Nameable by NameableHolder(),
     MessageTarget {
-    private var location = Bukkit.getWorlds().firstOrNull()?.spawnLocation
+    private var location = server.worlds.firstOrNull()?.spawnLocation
         ?: Location(null, 0.0, 0.0, 0.0)
 
     private var isTeleported: Boolean = false
