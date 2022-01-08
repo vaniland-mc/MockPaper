@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package land.vani.mockpaper
 
 import com.destroystokyo.paper.entity.ai.MobGoals
@@ -102,6 +104,7 @@ class ServerMock : Server, Server.Spigot() {
     private val playerList: PlayerListMock = PlayerListMock(this)
 
     private val pluginManager = PluginManagerMock(this)
+    private val unsafeValues = UnsafeValuesMock()
     private val worlds: MutableSet<WorldMock> = mutableSetOf()
     private val recipes: MutableSet<Recipe> = mutableSetOf()
 
@@ -755,9 +758,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getUnsafe(): UnsafeValues {
-        throw UnimplementedOperationException()
-    }
+    override fun getUnsafe(): UnsafeValues = unsafeValues
 
     override fun spigot(): Server.Spigot {
         throw UnimplementedOperationException()
