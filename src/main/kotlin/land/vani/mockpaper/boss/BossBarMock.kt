@@ -7,7 +7,7 @@ import org.bukkit.boss.BossBar
 import org.bukkit.entity.Player
 
 open class BossBarMock(
-    private var title: String,
+    private var title: String?,
     private var color: BarColor,
     private var style: BarStyle,
     vararg flags: BarFlag,
@@ -17,7 +17,7 @@ open class BossBarMock(
     private val players = mutableSetOf<Player>()
     private var isVisible: Boolean = true
 
-    override fun getTitle(): String = title
+    override fun getTitle(): String = title ?: ""
 
     override fun setTitle(title: String?) {
         this.title = title ?: ""

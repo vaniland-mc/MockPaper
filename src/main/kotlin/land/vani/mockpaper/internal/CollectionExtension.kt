@@ -12,3 +12,6 @@ internal fun <C : Collection<T>, T> C.asUnmodifiable(): C =
 
 internal fun <K, V> Map<K, V>.asUnmodifiable(): Map<K, V> =
     Collections.unmodifiableMap(this)
+
+internal fun <T> MutableSet<T>.asSynchronized(): MutableSet<T> =
+    Collections.synchronizedSet(this)

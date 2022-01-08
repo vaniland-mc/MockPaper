@@ -155,6 +155,10 @@ class WorldMock(
 
     override fun getName(): String = name
 
+    fun setName(name: String) {
+        this.name = name
+    }
+
     override fun getUID(): UUID = uuid
 
     override fun getEnvironment(): World.Environment = environment
