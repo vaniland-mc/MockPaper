@@ -36,6 +36,11 @@ class BlockMock(
      */
     constructor(location: Location) : this(Material.AIR, location)
 
+    /**
+     * Creates a basic block made of air.
+     */
+    constructor() : this(Material.AIR, Location(null, 0.0, 0.0, 0.0))
+
     private var data: Byte = 0
 
     private var blockData: BlockData = BlockDataMock(material)
