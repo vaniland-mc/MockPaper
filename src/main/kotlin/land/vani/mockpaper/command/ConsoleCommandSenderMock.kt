@@ -82,7 +82,7 @@ class ConsoleCommandSenderMock : ConsoleCommandSender, MessageTarget {
         throw UnimplementedOperationException()
     }
 
-    override fun getEffectivePermissions(): MutableSet<PermissionAttachmentInfo> {
+    override fun getEffectivePermissions(): Set<PermissionAttachmentInfo> {
         throw UnimplementedOperationException()
     }
 
