@@ -1,6 +1,7 @@
 package land.vani.mockpaper.attribute
 
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import org.bukkit.attribute.Attribute
 
@@ -15,13 +16,13 @@ class AttributeInstanceMockTest : ShouldSpec({
         }
 
         should("getBaseValue is 5.0") {
-            attribute.baseValue shouldBe 5.0
+            attribute.baseValue shouldBeExactly 5.0
         }
         should("getValue is 5.0") {
-            attribute.value shouldBe 5.0
+            attribute.value shouldBeExactly 5.0
         }
         should("getDefaultValue is 5.0") {
-            attribute.defaultValue shouldBe 5.0
+            attribute.defaultValue shouldBeExactly 5.0
         }
     }
 
@@ -30,13 +31,13 @@ class AttributeInstanceMockTest : ShouldSpec({
         attribute.baseValue = 8.0
 
         should("getBaseValue is 8.0") {
-            attribute.baseValue shouldBe 8.0
+            attribute.baseValue shouldBeExactly 8.0
         }
         should("getValue is 8.0") {
-            attribute.value shouldBe 8.0
+            attribute.value shouldBeExactly 8.0
         }
         should("getDefaultValue is 5.0") {
-            attribute.defaultValue shouldBe 5.0
+            attribute.defaultValue shouldBeExactly 5.0
         }
     }
 })
