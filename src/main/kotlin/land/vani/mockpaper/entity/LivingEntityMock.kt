@@ -26,7 +26,6 @@ import org.bukkit.entity.Projectile
 import org.bukkit.entity.memory.MemoryKey
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.EntityDamageEvent.DamageModifier
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
@@ -102,12 +101,16 @@ abstract class LivingEntityMock(
             }
         }
 
-        val modifiers = EnumMap<DamageModifier, Double>(DamageModifier::class.java).apply {
-            put(DamageModifier.BASE, 1.0)
-        }
-        val modifierFunctions = EnumMap<DamageModifier, Function<Double, Double>>(DamageModifier::class.java).apply {
-            put(DamageModifier.BASE) { damage -> damage }
-        }
+        val modifiers =
+            EnumMap<EntityDamageEvent.DamageModifier, Double>(EntityDamageEvent.DamageModifier::class.java).apply {
+                put(EntityDamageEvent.DamageModifier.BASE, 1.0)
+            }
+        val modifierFunctions =
+            EnumMap<EntityDamageEvent.DamageModifier, Function<Double, Double>>(
+                EntityDamageEvent.DamageModifier::class.java
+            ).apply {
+                put(EntityDamageEvent.DamageModifier.BASE) { damage -> damage }
+            }
 
         val event = if (source != null) {
             EntityDamageByEntityEvent(

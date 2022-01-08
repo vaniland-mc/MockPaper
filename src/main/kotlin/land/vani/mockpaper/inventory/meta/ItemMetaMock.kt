@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.Repairable
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer
 import org.bukkit.persistence.PersistentDataContainer
 import java.util.EnumSet
 
@@ -193,7 +192,8 @@ open class ItemMetaMock : ItemMeta {
         throw UnimplementedOperationException()
     }
 
-    override fun getCustomTagContainer(): CustomItemTagContainer {
+    @Suppress("DEPRECATION")
+    override fun getCustomTagContainer(): org.bukkit.inventory.meta.tags.CustomItemTagContainer {
         throw UnimplementedOperationException()
     }
 
