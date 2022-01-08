@@ -67,21 +67,13 @@ class PlayerListMock(
 
     fun getPlayer(uuid: UUID): PlayerMock? = onlinePlayers.find { it.uniqueId == uuid }
 
-    fun getOfflinePlayer(name: String): OfflinePlayer {
-        val player = getPlayer(name)
-        if (player != null) return player
+    fun getOfflinePlayer(name: String): OfflinePlayer =
+        getPlayer(name)
+            ?: offlinePlayers.find { it.name == name }
+            ?: OfflinePlayerMock(server, name)
 
-        offlinePlayers.forEach { offlinePlayer ->
-            if (offlinePlayer.name == name) return offlinePlayer
-        }
-        return OfflinePlayerMock(server, name)
-    }
-
-    fun getOfflinePlayer(uuid: UUID): OfflinePlayer? {
-        val player = getPlayer(uuid)
-        if (player != null) return player
-        return offlinePlayers.find { it.uniqueId == uuid }
-    }
+    fun getOfflinePlayer(uuid: UUID): OfflinePlayer? =
+        getPlayer(uuid) ?: offlinePlayers.find { it.uniqueId == uuid }
 
     fun clearOnlinePlayers() {
         _onlinePlayers.clear()
