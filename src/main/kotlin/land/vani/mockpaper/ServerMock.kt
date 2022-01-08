@@ -333,9 +333,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getWorlds(): MutableList<World> {
-        throw UnimplementedOperationException()
-    }
+    override fun getWorlds(): List<World> = worlds.toList()
 
     override fun createWorld(creator: WorldCreator): World = WorldMock(this, creator)
         .also {
