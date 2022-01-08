@@ -80,7 +80,6 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     LivingEntityMock(server, uuid),
     Player,
     SoundReceiver {
-    private val sentMessages: Queue<String> = LinkedTransferQueue()
     override val heardSounds: MutableList<AudioExperience> = mutableListOf()
 
     private val statistics = StatisticsMock()
@@ -140,8 +139,6 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     ) {
         isOnline = false
     }
-
-    override fun nextMessage(): String? = sentMessages.poll()
 
     override fun getType(): EntityType = EntityType.PLAYER
 
@@ -521,7 +518,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun chat(msg: String) {
-        sentMessages.offer(msg)
+        messages.offer(msg)
     }
 
     override fun performCommand(command: String): Boolean = server.dispatchCommand(this, command)
@@ -1521,15 +1518,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         foodLevel = value
     }
 
-    override fun sendMessage(component: BaseComponent) {
-        sentMessages.offer(component.toLegacyText())
-    }
-
     override fun sendMessage(vararg components: BaseComponent) {
         components.forEach {
             @Suppress("DEPRECATION")
             sendMessage(it)
         }
+    }
+
+    override fun sendMessage(component: BaseComponent) {
+        messages.offer(component.toLegacyText())
     }
 
     override fun getSaturatedRegenRate(): Int {

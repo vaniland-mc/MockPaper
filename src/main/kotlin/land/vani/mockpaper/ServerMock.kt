@@ -32,6 +32,7 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.BanList
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Keyed
 import org.bukkit.Location
@@ -82,6 +83,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 import java.util.logging.Level
 import java.util.logging.LogManager
@@ -92,6 +94,8 @@ class ServerMock : Server, Server.Spigot() {
         private const val BUKKIT_VERSION = "1.18.1"
         private const val JOIN_MESSAGE = "%s has joined the server."
         private const val MOTD = "A Minecraft Server"
+
+        private val inited = AtomicBoolean(false)
     }
 
     private val mainThread: Thread = Thread.currentThread()
@@ -116,6 +120,10 @@ class ServerMock : Server, Server.Spigot() {
 
     init {
         registerSerializables()
+
+        if (!inited.getAndSet(true)) {
+            Bukkit.setServer(this)
+        }
     }
 
     private fun registerSerializables() {

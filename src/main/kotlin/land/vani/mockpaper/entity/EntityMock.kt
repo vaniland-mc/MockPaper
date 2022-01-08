@@ -60,7 +60,7 @@ abstract class EntityMock(
 
     private var name: Component = Component.text("entity")
 
-    private val messages: Queue<String> = LinkedTransferQueue()
+    protected val messages: Queue<String> = LinkedTransferQueue()
 
     private val permissionAttachments = mutableSetOf<PermissionAttachment>()
 
