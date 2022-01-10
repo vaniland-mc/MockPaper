@@ -11,6 +11,7 @@ import land.vani.mockpaper.entity.FireworkMock
 import land.vani.mockpaper.entity.ItemEntityMock
 import land.vani.mockpaper.entity.ZombieMock
 import land.vani.mockpaper.metadata.MetadataHolder
+import land.vani.mockpaper.player.PlayerMock
 import org.bukkit.BlockChangeDelegate
 import org.bukkit.Chunk
 import org.bukkit.ChunkSnapshot
@@ -1382,14 +1383,26 @@ class WorldMock(
 
     private fun <T : Entity?> mockEntity(clazz: Class<T>): EntityMock =
         when (clazz) {
-            ArmorStand::class.java -> ArmorStandMock(server, UUID.randomUUID())
-            Zombie::class.java -> ZombieMock(server, UUID.randomUUID())
-            Firework::class.java -> FireworkMock(server, UUID.randomUUID())
-            ExperienceOrb::class.java -> ExperienceOrbMock(server, UUID.randomUUID())
-            Player::class.java -> throw IllegalArgumentException(
+            ArmorStand::class.java,
+            ArmorStandMock::class.java,
+            -> ArmorStandMock(server, UUID.randomUUID())
+            Zombie::class.java,
+            ZombieMock::class.java,
+            -> ZombieMock(server, UUID.randomUUID())
+            Firework::class.java,
+            FireworkMock::class.java,
+            -> FireworkMock(server, UUID.randomUUID())
+            ExperienceOrb::class.java,
+            ExperienceOrbMock::class.java,
+            -> ExperienceOrbMock(server, UUID.randomUUID())
+            Player::class.java,
+            PlayerMock::class.java,
+            -> throw IllegalArgumentException(
                 "Player entities cannot be spawned, use ServerMock#addPlayer(...)"
             )
-            Item::class.java -> throw IllegalArgumentException("Items must be spawned using World#dropItem(...)")
+            Item::class.java,
+            ItemEntityMock::class.java,
+            -> throw IllegalArgumentException("Items must be spawned using World#dropItem(...)")
             else -> throw UnimplementedOperationException()
         }
 
@@ -1419,6 +1432,8 @@ class WorldMock(
     ): T {
         throw UnimplementedOperationException()
     }
+
+    inline fun <reified T : Entity> spawn(location: Location): T = spawn(location, T::class.java)
 
     override fun sendPluginMessage(source: Plugin, channel: String, message: ByteArray) {
         throw UnimplementedOperationException()
