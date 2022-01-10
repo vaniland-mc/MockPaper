@@ -629,9 +629,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun isPrimaryThread(): Boolean {
-        throw UnimplementedOperationException()
-    }
+    override fun isPrimaryThread(): Boolean = isOnMainThread
 
     override fun motd(): Component = Component.text(MOTD)
 

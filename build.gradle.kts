@@ -24,7 +24,7 @@ repositories {
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.19.0")
 
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("test-junit5"))
     implementation("org.opentest4j:opentest4j:1.2.0")
 
@@ -33,6 +33,12 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:5.0.3")
     testImplementation("io.kotest:kotest-assertions-core:5.0.3")
+
+    // Missing dependencies for LibraryLoader
+    implementation("org.apache.maven:maven-aether-provider:3.3.9")
+    implementation("org.eclipse.aether:aether-impl:1.1.0")
+    implementation("org.eclipse.aether:aether-transport-http:1.1.0")
+    implementation("org.eclipse.aether:aether-connector-basic:1.1.0")
 }
 
 val targetJavaVersion = 17
