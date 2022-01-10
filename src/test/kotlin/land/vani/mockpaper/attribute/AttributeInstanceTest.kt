@@ -5,7 +5,7 @@ import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import org.bukkit.attribute.Attribute
 
-class AttributeInstanceMockTest : ShouldSpec({
+class AttributeInstanceTest : ShouldSpec({
     lateinit var attribute: AttributeInstanceMock
 
     context("default") {
