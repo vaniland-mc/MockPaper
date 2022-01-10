@@ -51,8 +51,19 @@ abstract class EntityMock(
     private var location = server.worlds.firstOrNull()?.spawnLocation
         ?: Location(null, 0.0, 0.0, 0.0)
 
-    private var isTeleported: Boolean = false
-    private var teleportCause: TeleportCause? = null
+    /**
+     * Entity has been teleported or else since the last assert or [clearTeleported].
+     */
+    @get:VisibleForTesting
+    var isTeleported: Boolean = false
+        private set
+
+    /**
+     * Get the cause of the last teleport.
+     */
+    @get:VisibleForTesting
+    var teleportCause: TeleportCause? = null
+        private set
 
     private val persistentDataContainer = PersistentDataContainerMock()
 
@@ -122,24 +133,12 @@ abstract class EntityMock(
     }
 
     /**
-     * Entity has been teleported or else since the last assert or [clearTeleported].
-     */
-    @VisibleForTesting
-    fun hasTeleported() = isTeleported
-
-    /**
      * Clears the teleported flag.
      */
     @VisibleForTesting
     fun clearTeleported() {
         isTeleported = false
     }
-
-    /**
-     * Get the cause of the last teleport.
-     */
-    @VisibleForTesting
-    fun getTeleportCause(): TeleportCause? = teleportCause
 
     override fun getUniqueId(): UUID = uuid
 

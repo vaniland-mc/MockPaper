@@ -7,7 +7,6 @@ import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.attribute.AttributeInstanceMock
 import land.vani.mockpaper.potion.ActivePotionEffect
-import org.bukkit.Bukkit
 import org.bukkit.FluidCollisionMode
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -124,7 +123,7 @@ abstract class LivingEntityMock(
             EntityDamageEvent(this, EntityDamageEvent.DamageCause.CUSTOM, modifiers, modifierFunctions)
         }
         event.damage = amount
-        Bukkit.getPluginManager().callEvent(event)
+        server.pluginManager.callEvent(event)
         if (event.isCancelled) return
 
         health -= amount
