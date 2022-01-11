@@ -61,6 +61,7 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
     /**
      * Asserts that at least one event of a certain [clazz] for which the [predicate] is true.
      */
+    @JvmOverloads
     fun <T : Event> assertEventFired(
         clazz: Class<T>,
         predicate: (T) -> Boolean = { true },
