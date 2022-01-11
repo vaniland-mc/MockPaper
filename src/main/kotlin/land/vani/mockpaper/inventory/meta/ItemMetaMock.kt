@@ -22,13 +22,16 @@ import org.bukkit.inventory.meta.Repairable
 import org.bukkit.persistence.PersistentDataContainer
 import java.util.EnumSet
 
-open class ItemMetaMock : ItemMeta {
+open class ItemMetaMock : ItemMeta, Damageable, Repairable {
     private var displayName: Component? = null
     private var lore: MutableList<Component>? = null
     private var customModelData: Int? = null
     private var enchants: MutableMap<Enchantment, Int> = mutableMapOf()
     private var hideFlags: MutableSet<ItemFlag> = EnumSet.noneOf(ItemFlag::class.java)
     private var isUnbreakable: Boolean = false
+
+    private var damage: Int = 0
+    private var repairCost: Int = 0
 
     constructor()
 
@@ -201,7 +204,7 @@ open class ItemMetaMock : ItemMeta {
         throw UnimplementedOperationException()
     }
 
-    override fun clone(): ItemMeta = ItemMetaMock().let {
+    override fun clone(): ItemMetaMock = ItemMetaMock().let {
         it.displayName = displayName
         it.lore = lore
         it.isUnbreakable = isUnbreakable
@@ -251,6 +254,22 @@ open class ItemMetaMock : ItemMeta {
 
     override fun hasDestroyableKeys(): Boolean {
         throw UnimplementedOperationException()
+    }
+
+    override fun hasDamage(): Boolean = damage > 0
+
+    override fun getDamage(): Int = damage
+
+    override fun setDamage(damage: Int) {
+        this.damage = damage
+    }
+
+    override fun hasRepairCost(): Boolean = repairCost > 0
+
+    override fun getRepairCost(): Int = repairCost
+
+    override fun setRepairCost(cost: Int) {
+        this.repairCost = cost
     }
 
     override fun getPersistentDataContainer(): PersistentDataContainer =

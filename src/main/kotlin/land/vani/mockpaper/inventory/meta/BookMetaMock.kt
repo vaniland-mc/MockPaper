@@ -114,7 +114,7 @@ class BookMetaMock : ItemMetaMock, BookMeta {
 
     override fun getPageCount(): Int = pages.size
 
-    override fun clone(): BookMeta = (super.clone() as BookMeta).apply {
+    override fun clone(): BookMetaMock = (super.clone() as BookMetaMock).apply {
         pages(this@BookMetaMock.pages.toList())
     }
 
