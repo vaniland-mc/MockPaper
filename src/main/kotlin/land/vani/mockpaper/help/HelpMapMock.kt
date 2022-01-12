@@ -44,6 +44,9 @@ class HelpMapMock : HelpMap {
         factories[commandClass] = factory
     }
 
+    inline fun <reified T> registerHelpTopicFactory(factory: HelpTopicFactory<*>) =
+        registerHelpTopicFactory(T::class.java, factory)
+
     /**
      * Asserts that [factory] is registered.
      */
