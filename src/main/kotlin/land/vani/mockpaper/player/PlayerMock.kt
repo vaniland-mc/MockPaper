@@ -9,6 +9,9 @@ import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.entity.LivingEntityMock
 import land.vani.mockpaper.internal.toComponent
 import land.vani.mockpaper.internal.toLegacyString
+import land.vani.mockpaper.inventory.InventoryViewMock
+import land.vani.mockpaper.inventory.PlayerInventoryMock
+import land.vani.mockpaper.inventory.PlayerInventoryViewMock
 import land.vani.mockpaper.sound.AudioExperience
 import land.vani.mockpaper.sound.SoundReceiver
 import land.vani.mockpaper.statistic.StatisticsMock
@@ -48,6 +51,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.player.PlayerLevelChangeEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -63,7 +67,6 @@ import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MainHand
 import org.bukkit.inventory.Merchant
-import org.bukkit.inventory.PlayerInventory
 import org.bukkit.map.MapView
 import org.bukkit.plugin.Plugin
 import org.bukkit.scoreboard.Scoreboard
@@ -120,6 +123,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     private var saturation: Float = 5.0F
 
     private var cursorItem: ItemStack? = null
+
+    private val inventory: PlayerInventoryMock =
+        server.createInventory(this, InventoryType.PLAYER) as PlayerInventoryMock
+    private var inventoryView: InventoryViewMock = InventoryViewMock(
+        this,
+        null,
+        inventory,
+        InventoryType.CRAFTING,
+    )
 
     init {
         isOnline = true
@@ -287,10 +299,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
-    override fun getInventory(): PlayerInventory {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
-    }
+    override fun getInventory(): PlayerInventoryMock = inventory
 
     override fun getEnderChest(): Inventory {
         // TODO: implement inventory
@@ -306,14 +315,13 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
-    override fun getOpenInventory(): InventoryView {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
-    }
+    override fun getOpenInventory(): InventoryView = inventoryView
 
-    override fun openInventory(inventory: Inventory): InventoryView? {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+    override fun openInventory(inventory: Inventory): InventoryView {
+        closeInventory()
+        return PlayerInventoryViewMock(this, inventory).also {
+            inventoryView = it
+        }
     }
 
     override fun openWorkbench(location: Location?, force: Boolean): InventoryView? {
@@ -372,13 +380,17 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun closeInventory() {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+        closeInventory(InventoryCloseEvent.Reason.PLUGIN)
     }
 
     override fun closeInventory(reason: InventoryCloseEvent.Reason) {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+        if (inventoryView is PlayerInventoryViewMock) {
+            val event = InventoryCloseEvent(inventoryView)
+            server.pluginManager.callEvent(event)
+        }
+
+        cursorItem = null
+        inventoryView = InventoryViewMock(this, null, inventory, InventoryType.CRAFTING)
     }
 
     override fun getItemInHand(): ItemStack = inventory.itemInMainHand

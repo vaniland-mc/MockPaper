@@ -9,18 +9,18 @@ import org.jetbrains.annotations.VisibleForTesting
 open class InventoryViewMock(
     private var player: HumanEntity,
     private var name: String,
-    private var topInventory: Inventory,
+    private var topInventory: Inventory?,
     private var bottomInventory: Inventory,
     private var type: InventoryType,
 ) : InventoryView() {
     constructor(
         player: HumanEntity,
-        topInventory: Inventory,
+        topInventory: Inventory?,
         bottomInventory: Inventory,
         type: InventoryType,
     ) : this(player, "Inventory", topInventory, bottomInventory, type)
 
-    override fun getTopInventory(): Inventory = topInventory
+    override fun getTopInventory(): Inventory = topInventory ?: error("top inventory is null")
 
     /**
      * Sets the top [inventory].

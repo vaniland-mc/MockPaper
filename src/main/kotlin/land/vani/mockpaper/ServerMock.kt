@@ -559,7 +559,7 @@ class ServerMock : Server, Server.Spigot() {
         createInventory(owner, type, -1)
 
     override fun createInventory(owner: InventoryHolder?, type: InventoryType, title: String): Inventory =
-        createInventory(owner, type)
+        createInventory(owner, type, -1)
 
     @Suppress("DEPRECATION")
     override fun createInventory(owner: InventoryHolder?, size: Int): Inventory =

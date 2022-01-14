@@ -34,8 +34,10 @@ open class InventoryMock(
     private val items: Array<ItemStack?>
 
     init {
-        require(size in 9..54 && size % 9 == 0) {
-            "Size for custom inventory must be a multiple of 9 between 9 and 54 slots (got $size)"
+        if (size != type.defaultSize) {
+            require(size in 9..54 && size % 9 == 0) {
+                "Size for custom inventory must be a multiple of 9 between 9 and 54 slots (got $size)"
+            }
         }
         items = arrayOfNulls(size)
     }

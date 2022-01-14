@@ -9,19 +9,19 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 
-class PlayerInventoryMock(holder: HumanEntity) : InventoryMock(holder, InventoryType.PLAYER), PlayerInventory {
+class PlayerInventoryMock(holder: HumanEntity?) : InventoryMock(holder, InventoryType.PLAYER), PlayerInventory {
     companion object {
-        private const val SLOT_BAR = 9
-        private const val BOOTS = 36
-        private const val LEGGINGS = 37
-        private const val CHEST_PLATE = 38
-        private const val HELMET = 39
-        private const val OFF_HAND = 40
+        const val SLOT_BAR = 9
+        const val BOOTS = 36
+        const val LEGGINGS = 37
+        const val CHEST_PLATE = 38
+        const val HELMET = 39
+        const val OFF_HAND = 40
     }
 
     private var mainHandSlot = 0
 
-    override fun getHolder(): HumanEntity = super.getHolder() as HumanEntity
+    override fun getHolder(): HumanEntity? = super.getHolder() as HumanEntity?
 
     override fun getStorageContents(): Array<ItemStack> =
         contents.copyOfRange(0, 36).fallbackNull()
