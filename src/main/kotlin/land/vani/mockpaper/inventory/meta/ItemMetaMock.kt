@@ -26,7 +26,7 @@ import java.util.Objects
 open class ItemMetaMock : ItemMeta, Damageable, Repairable {
     private var displayName: Component? = null
     private var lore: MutableList<Component>? = null
-    private var customModelData: Int? = null
+    private var customModelData: Int = 0
     private var enchants: MutableMap<Enchantment, Int> = mutableMapOf()
     private var hideFlags: MutableSet<ItemFlag> = EnumSet.noneOf(ItemFlag::class.java)
     private var isUnbreakable: Boolean = false
@@ -106,13 +106,12 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
         this.lore = lore?.map { it.toComponent() }?.toMutableList()
     }
 
-    override fun hasCustomModelData(): Boolean = customModelData != null
+    override fun hasCustomModelData(): Boolean = customModelData != 0
 
     override fun getCustomModelData(): Int = customModelData
-        ?: error("Custom model data is not set")
 
     override fun setCustomModelData(data: Int?) {
-        customModelData = data
+        customModelData = data ?: 0
     }
 
     override fun hasEnchants(): Boolean = enchants.isNotEmpty()
@@ -283,8 +282,8 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
         if (lore != null) {
             put("lore", lore!!.map { it.toLegacyString() })
         }
-        if (customModelData != null) {
-            put("customModelData", customModelData!!)
+        if (customModelData != 0) {
+            put("customModelData", customModelData)
         }
         put("enchants", enchants)
 
@@ -311,16 +310,18 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
         lore,
         customModelData,
         enchants,
-        repairCost,
-        persistentDataContainer,
         hideFlags,
         isUnbreakable,
-        damage
+        damage,
+        repairCost,
+        persistentDataContainer,
     )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is ItemMetaMock) return false
+        if (javaClass != other?.javaClass) return false
+
+        other as ItemMetaMock
 
         if (displayName != other.displayName) return false
         if (lore != other.lore) return false
@@ -348,7 +349,7 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
 
                 // attributeModifier and customTagContainer are not supported
 
-                customModelData = args["customModelData"] as Int?
+                customModelData = args["customModelData"] as? Int ?: 0
                 persistentDataContainer = (args["persistentDataContainer"] as Map<String, Any>)
                     .let {
                         PersistentDataContainerMock.deserialize(it)
