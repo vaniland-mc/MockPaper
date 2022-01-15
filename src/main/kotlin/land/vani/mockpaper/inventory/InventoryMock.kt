@@ -20,6 +20,8 @@ open class InventoryMock(
     private val size: Int,
     private val type: InventoryType,
 ) : Inventory {
+    object Crafting : InventoryMock(null, InventoryType.CRAFTING)
+
     /**
      * Creates a new inventory with size inherited from [InventoryType.getDefaultSize].
      */

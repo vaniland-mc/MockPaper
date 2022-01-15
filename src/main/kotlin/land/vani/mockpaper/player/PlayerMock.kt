@@ -9,6 +9,7 @@ import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.entity.LivingEntityMock
 import land.vani.mockpaper.internal.toComponent
 import land.vani.mockpaper.internal.toLegacyString
+import land.vani.mockpaper.inventory.InventoryMock
 import land.vani.mockpaper.inventory.InventoryViewMock
 import land.vani.mockpaper.inventory.PlayerInventoryMock
 import land.vani.mockpaper.inventory.PlayerInventoryViewMock
@@ -128,7 +129,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         server.createInventory(this, InventoryType.PLAYER) as PlayerInventoryMock
     private var inventoryView: InventoryViewMock = InventoryViewMock(
         this,
-        null,
+        InventoryMock.Crafting,
         inventory,
         InventoryType.CRAFTING,
     )
@@ -390,7 +391,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         }
 
         cursorItem = null
-        inventoryView = InventoryViewMock(this, null, inventory, InventoryType.CRAFTING)
+        inventoryView = InventoryViewMock(this, InventoryMock.Crafting, inventory, InventoryType.CRAFTING)
     }
 
     override fun getItemInHand(): ItemStack = inventory.itemInMainHand
