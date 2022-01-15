@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionData
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.potion.PotionType
+import java.util.Objects
 
 class PotionMetaMock : ItemMetaMock, PotionMeta {
     private val effects: MutableList<PotionEffect> = mutableListOf()
@@ -88,4 +89,22 @@ class PotionMetaMock : ItemMetaMock, PotionMeta {
             basePotionData = this@PotionMetaMock.basePotionData
             color = this@PotionMetaMock.color
         }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(
+        effects,
+        basePotionData,
+        color
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is PotionMetaMock) return false
+
+        if (effects != other.effects) return false
+        if (basePotionData != other.basePotionData) return false
+        if (color != other.color) return false
+
+        return true
+    }
 }

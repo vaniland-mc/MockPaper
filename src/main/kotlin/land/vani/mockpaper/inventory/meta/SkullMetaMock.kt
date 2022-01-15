@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.meta.SkullMeta
+import java.util.Objects
 
 class SkullMetaMock : ItemMetaMock, SkullMeta {
     private var owningPlayer: OfflinePlayer? = null
@@ -46,4 +47,20 @@ class SkullMetaMock : ItemMetaMock, SkullMeta {
             playerProfile = this@SkullMetaMock.playerProfile
             owningPlayer = this@SkullMetaMock.owningPlayer
         }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(
+        owningPlayer,
+        profile
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is SkullMetaMock) return false
+
+        if (owningPlayer != other.owningPlayer) return false
+        if (profile != other.profile) return false
+
+        return true
+    }
 }

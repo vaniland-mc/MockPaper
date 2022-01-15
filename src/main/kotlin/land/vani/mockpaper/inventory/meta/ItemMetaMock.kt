@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.Repairable
 import org.bukkit.persistence.PersistentDataContainer
 import java.util.EnumSet
+import java.util.Objects
 
 open class ItemMetaMock : ItemMeta, Damageable, Repairable {
     private var displayName: Component? = null
@@ -303,6 +304,35 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
         // Not implemented: customTagContainer
 
         put("persistentDataContainer", persistentDataContainer.serialize())
+    }
+
+    override fun hashCode(): Int = Objects.hash(
+        displayName,
+        lore,
+        customModelData,
+        enchants,
+        repairCost,
+        persistentDataContainer,
+        hideFlags,
+        isUnbreakable,
+        damage
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ItemMetaMock) return false
+
+        if (displayName != other.displayName) return false
+        if (lore != other.lore) return false
+        if (customModelData != other.customModelData) return false
+        if (enchants != other.enchants) return false
+        if (hideFlags != other.hideFlags) return false
+        if (isUnbreakable != other.isUnbreakable) return false
+        if (damage != other.damage) return false
+        if (repairCost != other.repairCost) return false
+        if (persistentDataContainer != other.persistentDataContainer) return false
+
+        return true
     }
 
     companion object {

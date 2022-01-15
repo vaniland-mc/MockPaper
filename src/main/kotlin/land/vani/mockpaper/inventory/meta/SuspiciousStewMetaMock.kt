@@ -4,6 +4,7 @@ import land.vani.mockpaper.internal.asUnmodifiable
 import org.bukkit.inventory.meta.SuspiciousStewMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import java.util.Objects
 
 class SuspiciousStewMetaMock : ItemMetaMock, SuspiciousStewMeta {
     private val effects: MutableList<PotionEffect> = mutableListOf()
@@ -54,4 +55,16 @@ class SuspiciousStewMetaMock : ItemMetaMock, SuspiciousStewMeta {
         .apply {
             effects += this@SuspiciousStewMetaMock.effects
         }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(effects)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is SuspiciousStewMetaMock) return false
+
+        if (effects != other.effects) return false
+
+        return true
+    }
 }

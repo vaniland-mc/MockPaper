@@ -6,6 +6,7 @@ import land.vani.mockpaper.internal.toLegacyString
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import org.bukkit.inventory.meta.BookMeta
+import java.util.Objects
 
 class BookMetaMock : ItemMetaMock, BookMeta {
     private var title: Component? = null
@@ -120,5 +121,24 @@ class BookMetaMock : ItemMetaMock, BookMeta {
 
     override fun spigot(): BookMeta.Spigot {
         throw UnimplementedOperationException()
+    }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(
+        author,
+        pages,
+        title
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is BookMetaMock) return false
+
+        if (title != other.title) return false
+        if (author != other.author) return false
+        if (generation != other.generation) return false
+        if (pages != other.pages) return false
+
+        return true
     }
 }
