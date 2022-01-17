@@ -58,7 +58,8 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
         this.displayName = displayName
     }
 
-    override fun getDisplayName(): String = displayName?.toLegacyString() ?: ""
+    override fun getDisplayName(): String = displayName?.toLegacyString()
+        ?: error("this item does not have display name")
 
     override fun getDisplayNameComponent(): Array<out BaseComponent> =
         displayName?.toBungeeComponents() ?: emptyArray()
@@ -87,10 +88,10 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
 
     override fun hasLore(): Boolean = lore != null
 
-    override fun lore(): MutableList<Component>? = lore
+    override fun lore(): List<Component>? = lore
 
-    override fun lore(lore: MutableList<Component>?) {
-        this.lore = lore
+    override fun lore(lore: List<Component>?) {
+        this.lore = lore?.toMutableList()
     }
 
     override fun getLore(): List<String>? = lore?.map { it.toLegacyString() }
@@ -289,14 +290,14 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
 
         // Not implemented: attributeModifiers
 
-        if (this is Repairable) {
+        if (hasRepairCost()) {
             put("repairCost", repairCost)
         }
 
         put("itemFlags", hideFlags)
         put("unbreakable", isUnbreakable)
 
-        if (this is Damageable) {
+        if (hasDamage()) {
             put("damage", damage)
         }
 
@@ -338,6 +339,7 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
 
     companion object {
         @Suppress("UNCHECKED_CAST")
+        @JvmStatic
         fun deserialize(args: Map<String, Any>): ItemMeta =
             ItemMetaMock().apply {
                 displayName = (args["displayName"] as String?)?.toComponent()
@@ -346,6 +348,8 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
                 enchants = args["enchants"] as MutableMap<Enchantment, Int>
                 hideFlags = args["itemFlags"] as MutableSet<ItemFlag>
                 isUnbreakable = args["unbreakable"] as Boolean
+                damage = args["damage"] as Int? ?: 0
+                repairCost = args["repairCost"] as Int? ?: 0
 
                 // attributeModifier and customTagContainer are not supported
 
