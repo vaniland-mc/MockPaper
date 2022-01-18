@@ -60,11 +60,13 @@ jobs:
         with:
           name: test-results
           path: build/test-results/test
-      - name: Cleanup Gradle cache
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
+      - name: Run koverXmlReport
+        run: ./gradlew koverXmlReport
       - name: Upload coverage reports
         uses: codecov/codecov-action@v2
         with:
           files: build/reports/kover/project-xml/report.xml
+      - name: Cleanup Gradle cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties

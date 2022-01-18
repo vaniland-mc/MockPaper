@@ -78,10 +78,6 @@ tasks {
         jvmTarget = "16"
     }
 
-    koverHtmlReport {
-        isEnabled = true
-    }
-
     koverXmlReport {
         isEnabled = true
     }
