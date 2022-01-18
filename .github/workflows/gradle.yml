@@ -53,7 +53,7 @@ jobs:
       - name: Validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Test
-        run: ./gradlew test
+        run: ./gradlew test -x koverVerify
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v2
@@ -64,3 +64,7 @@ jobs:
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v2
+        with:
+          files: build/reports/kover/project-xml/report.xml

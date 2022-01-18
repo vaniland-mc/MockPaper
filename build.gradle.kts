@@ -1,10 +1,13 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import kotlinx.kover.api.KoverTaskExtension
+import kotlinx.kover.api.VerificationValueType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
+    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC2"
 }
 
 group = "land.vani.mockpaper"
@@ -61,6 +64,11 @@ tasks {
     withType<Test> {
         useJUnitPlatform()
         maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 + 1
+
+        extensions.configure<KoverTaskExtension> {
+            isDisabled = false
+            includes = listOf("land.vani.mockpaper.*")
+        }
     }
 
     withType<Detekt> {
@@ -68,5 +76,22 @@ tasks {
             xml.required.set(true)
         }
         jvmTarget = "16"
+    }
+
+    koverHtmlReport {
+        isEnabled = true
+    }
+
+    koverXmlReport {
+        isEnabled = true
+    }
+
+    koverVerify {
+        rule {
+            bound {
+                minValue = 80
+                valueType = VerificationValueType.COVERED_LINES_PERCENTAGE
+            }
+        }
     }
 }
