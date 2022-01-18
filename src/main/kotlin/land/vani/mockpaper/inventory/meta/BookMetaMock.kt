@@ -19,6 +19,7 @@ class BookMetaMock : ItemMetaMock, BookMeta {
     constructor(meta: BookMeta) : super(meta) {
         title = meta.title()
         author = meta.author()
+        generation = meta.generation
         pages = meta.pages().toMutableList()
     }
 
@@ -78,9 +79,7 @@ class BookMetaMock : ItemMetaMock, BookMeta {
     }
 
     override fun addPages(vararg pages: Component) {
-        pages.forEach { page ->
-            this.pages += page
-        }
+        this.pages += pages
     }
 
     override fun pages(): List<Component> = pages.toList()
