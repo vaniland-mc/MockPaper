@@ -1,6 +1,7 @@
 package land.vani.mockpaper.inventory.meta
 
 import com.destroystokyo.paper.profile.PlayerProfile
+import land.vani.mockpaper.UnimplementedOperationException
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.meta.SkullMeta
@@ -8,7 +9,6 @@ import java.util.Objects
 
 class SkullMetaMock : ItemMetaMock, SkullMeta {
     private var owningPlayer: OfflinePlayer? = null
-    private var profile: PlayerProfile? = null
 
     constructor() : super()
 
@@ -28,10 +28,12 @@ class SkullMetaMock : ItemMetaMock, SkullMeta {
         return true
     }
 
-    override fun getPlayerProfile(): PlayerProfile? = profile
+    override fun getPlayerProfile(): PlayerProfile? {
+        throw UnimplementedOperationException()
+    }
 
     override fun setPlayerProfile(profile: PlayerProfile?) {
-        this.profile = profile
+        throw UnimplementedOperationException()
     }
 
     override fun getOwningPlayer(): OfflinePlayer? = owningPlayer
@@ -44,14 +46,10 @@ class SkullMetaMock : ItemMetaMock, SkullMeta {
     override fun clone(): SkullMetaMock = (super.clone() as SkullMetaMock)
         .apply {
             owner = this@SkullMetaMock.owner
-            playerProfile = this@SkullMetaMock.playerProfile
             owningPlayer = this@SkullMetaMock.owningPlayer
         }
 
-    override fun hashCode(): Int = super.hashCode() + Objects.hash(
-        owningPlayer,
-        profile
-    )
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(owningPlayer)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -59,7 +57,6 @@ class SkullMetaMock : ItemMetaMock, SkullMeta {
         if (other !is SkullMetaMock) return false
 
         if (owningPlayer != other.owningPlayer) return false
-        if (profile != other.profile) return false
 
         return true
     }
