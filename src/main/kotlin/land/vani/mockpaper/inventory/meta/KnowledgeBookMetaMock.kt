@@ -20,11 +20,11 @@ class KnowledgeBookMetaMock : ItemMetaMock, KnowledgeBookMeta {
 
     override fun hasRecipes(): Boolean = recipes.isNotEmpty()
 
-    override fun getRecipes(): MutableList<NamespacedKey> =
+    override fun getRecipes(): List<NamespacedKey> =
         recipes.asUnmodifiable()
 
-    override fun setRecipes(recipes: MutableList<NamespacedKey>) {
-        recipes.clear()
+    override fun setRecipes(recipes: List<NamespacedKey>) {
+        this.recipes.clear()
         addRecipe(*recipes.toTypedArray())
     }
 
