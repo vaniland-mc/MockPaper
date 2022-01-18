@@ -10,6 +10,7 @@ class SuspiciousStewMetaMock : ItemMetaMock, SuspiciousStewMeta {
     private val effects: MutableList<PotionEffect> = mutableListOf()
 
     constructor() : super()
+
     constructor(meta: SuspiciousStewMeta) : super(meta) {
         effects += meta.customEffects
     }
