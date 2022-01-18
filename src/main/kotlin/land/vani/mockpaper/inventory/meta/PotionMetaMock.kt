@@ -57,14 +57,8 @@ class PotionMetaMock : ItemMetaMock, PotionMeta {
     override fun hasCustomEffect(type: PotionEffectType): Boolean =
         indexOf(type) != -1
 
-    private fun indexOf(type: PotionEffectType): Int {
-        for (i in effects.indices) {
-            if (effects[i].type == type) {
-                return i
-            }
-        }
-        return -1
-    }
+    private fun indexOf(type: PotionEffectType): Int =
+        effects.indexOfFirst { it.type == type }
 
     override fun setMainEffect(type: PotionEffectType): Boolean {
         throw UnimplementedOperationException()

@@ -27,6 +27,7 @@ import land.vani.mockpaper.player.OfflinePlayerMock
 import land.vani.mockpaper.player.PlayerMock
 import land.vani.mockpaper.player.randomPlayerName
 import land.vani.mockpaper.plugin.PluginManagerMock
+import land.vani.mockpaper.potion.registerPotionEffectTypes
 import land.vani.mockpaper.world.WorldMock
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
@@ -130,6 +131,7 @@ class ServerMock : Server, Server.Spigot() {
         // TODO: load tag
 
         registerDefaultEnchantments()
+        registerPotionEffectTypes()
 
         try {
             ClassLoader.getSystemResourceAsStream("logger.properties").use {
