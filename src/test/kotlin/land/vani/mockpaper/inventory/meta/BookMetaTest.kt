@@ -210,4 +210,10 @@ class BookMetaTest : ShouldSpec({
             )
         }
     }
+
+    should("clone") {
+        val meta2 = meta.clone()
+        meta shouldBe meta2
+        meta2 shouldBe meta
+    }
 })
