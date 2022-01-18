@@ -23,7 +23,8 @@ import org.bukkit.persistence.PersistentDataContainer
 import java.util.EnumSet
 import java.util.Objects
 
-open class ItemMetaMock : ItemMeta, Damageable, Repairable {
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") // for clone()
+open class ItemMetaMock : ItemMeta, Damageable, Repairable, Object {
     private var displayName: Component? = null
     private var lore: MutableList<Component>? = null
     private var customModelData: Int = 0
@@ -34,9 +35,9 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
     private var damage: Int = 0
     private var repairCost: Int = 0
 
-    constructor()
+    constructor() : super()
 
-    constructor(meta: ItemMeta) {
+    constructor(meta: ItemMeta) : super() {
         isUnbreakable = meta.isUnbreakable
         enchants = meta.enchants
         customModelData = meta.customModelData
@@ -205,7 +206,7 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable {
         throw UnimplementedOperationException()
     }
 
-    override fun clone(): ItemMetaMock = ItemMetaMock().let {
+    override fun clone(): ItemMetaMock = (super.clone() as ItemMetaMock).let {
         it.displayName = displayName
         it.lore = lore
         it.isUnbreakable = isUnbreakable
