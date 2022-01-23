@@ -89,7 +89,7 @@ import java.util.logging.Level
 import java.util.logging.LogManager
 import java.util.logging.Logger
 
-class ServerMock : Server, Server.Spigot() {
+open class ServerMock : Server, Server.Spigot() {
     companion object {
         private const val BUKKIT_VERSION = "1.18.1"
         private const val JOIN_MESSAGE = "%s has joined the server."
@@ -237,7 +237,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getWhitelistedPlayers(): MutableSet<OfflinePlayer> {
+    override fun getWhitelistedPlayers(): Set<OfflinePlayer> {
         throw UnimplementedOperationException()
     }
 
@@ -824,6 +824,9 @@ class ServerMock : Server, Server.Spigot() {
         }
     }
 
+    open val currentServerTime: Long
+        get() = System.currentTimeMillis()
+
     val isOnMainThread: Boolean
         get() = mainThread == Thread.currentThread()
 
@@ -876,6 +879,7 @@ class ServerMock : Server, Server.Spigot() {
     fun addPlayer(player: PlayerMock) {
         assertMainThread()
         playerList.addPlayer(player)
+        player.lastPlayed = currentServerTime
         @Suppress("DEPRECATION")
         val event = PlayerJoinEvent(
             player,

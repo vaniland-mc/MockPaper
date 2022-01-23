@@ -79,6 +79,26 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
         noinline predicate: (T) -> Boolean = { true },
     ) = assertEventFired(T::class.java, predicate)
 
+    /**
+     * Asserts that at none event of a certain [T] for which the predicate is true.
+     */
+    @JvmOverloads
+    fun <T : Event> assertEventNotFired(
+        clazz: Class<T>,
+        predicate: (T) -> Boolean = { true },
+    ) {
+        assertEventFired(clazz) { !predicate(it) }
+    }
+
+    /**
+     * Asserts that at none event of a certain [T] for which the predicate is true.
+     */
+    inline fun <reified T : Event> assertEventNotFired(
+        noinline predicate: (T) -> Boolean = { true },
+    ) {
+        assertEventNotFired(T::class.java, predicate)
+    }
+
     override fun registerInterface(loader: Class<out PluginLoader>) {
         throw UnimplementedOperationException()
     }
@@ -421,6 +441,23 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
         parameters: Array<Any> = arrayOf(),
     ): T = loadPlugin(T::class.java, description, parameters)
 
+    /**
+     * Load a plugin [T] with [description].
+     */
+    fun <T : JavaPlugin> loadPlugin(
+        clazz: Class<T>,
+        description: String,
+        parameters: Array<Any> = arrayOf(),
+    ): T = loadPlugin(clazz, PluginDescriptionFile(description.reader()), parameters)
+
+    /**
+     * Load a plugin [T] with [description].
+     */
+    inline fun <reified T : JavaPlugin> loadPlugin(
+        description: String,
+        parameters: Array<Any> = arrayOf(),
+    ): T = loadPlugin(T::class.java, description, parameters)
+
     @PublishedApi
     internal fun findPluginDescription(clazz: Class<out JavaPlugin>): PluginDescriptionFile {
         val resources = clazz.classLoader.getResources("plugin.yml")
@@ -432,6 +469,9 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
             )
     }
 
+    /**
+     * Load a [MockPlugin] with [pluginName] for mocking.
+     */
     @JvmOverloads
     fun createMockPlugin(pluginName: String = "MockPlugin"): MockPlugin = loadPlugin(
         PluginDescriptionFile(
@@ -441,6 +481,9 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
         )
     )
 
+    /**
+     * Load a plugin [T].
+     */
     @JvmOverloads
     fun <T : JavaPlugin> loadSimple(clazz: Class<T>, parameters: Array<Any> = arrayOf()): T {
         val description = PluginDescriptionFile(
@@ -451,6 +494,9 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
         return loadPlugin(clazz, description, parameters)
     }
 
+    /**
+     * Load a plugin [T].
+     */
     inline fun <reified T : JavaPlugin> loadSimple(parameters: Array<Any> = arrayOf()): T =
         loadSimple(T::class.java, parameters)
 }

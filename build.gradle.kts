@@ -36,6 +36,7 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:5.0.3")
     testImplementation("io.kotest:kotest-assertions-core:5.0.3")
+    testImplementation("io.kotest:kotest-property:5.0.3")
 
     // Missing dependencies for LibraryLoader
     implementation("org.apache.maven:maven-aether-provider:3.3.9")
