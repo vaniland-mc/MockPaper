@@ -79,6 +79,7 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
      * Asserts that at least one event of a certain [T] for which the predicate is true.
      */
     @JvmName("assertEventFiredInline")
+    @JvmSynthetic
     inline fun <reified T : Event> assertEventFired(
         noinline predicate: (T) -> Boolean = { true },
     ) = assertEventFired(T::class.java, predicate)
@@ -111,6 +112,7 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
      * Asserts that at none event of a certain [T] for which the predicate is true.
      */
     @JvmName("assertEventNotFiredInline")
+    @JvmSynthetic
     inline fun <reified T : Event> assertEventNotFired(
         noinline predicate: (T) -> Boolean = { true },
     ) = assertEventNotFired(T::class.java, predicate)
