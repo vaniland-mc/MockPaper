@@ -11,7 +11,7 @@ class LeatherArmorMetaTest : ShouldSpec({
     lateinit var meta: LeatherArmorMetaMock
 
     beforeTest {
-        MockPaper.mock()
+        server = MockPaper.mock()
         meta = LeatherArmorMetaMock()
     }
 
