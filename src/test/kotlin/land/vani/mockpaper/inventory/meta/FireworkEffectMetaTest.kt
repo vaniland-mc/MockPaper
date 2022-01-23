@@ -2,7 +2,7 @@ package land.vani.mockpaper.inventory.meta
 
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 
@@ -10,7 +10,7 @@ class FireworkEffectMetaTest : ShouldSpec({
     lateinit var meta: FireworkEffectMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = FireworkEffectMetaMock()
     }
 

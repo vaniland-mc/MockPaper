@@ -5,6 +5,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.inventory.meta.ItemMetaMock
 import org.bukkit.NamespacedKey
@@ -18,7 +19,7 @@ class PersistentDataTest : ShouldSpec({
     lateinit var container: PersistentDataContainerMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         container = PersistentDataContainerMock()
     }
 

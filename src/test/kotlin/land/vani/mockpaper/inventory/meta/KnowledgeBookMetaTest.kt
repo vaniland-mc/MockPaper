@@ -3,14 +3,14 @@ package land.vani.mockpaper.inventory.meta
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import org.bukkit.Material
 
 class KnowledgeBookMetaTest : ShouldSpec({
     lateinit var meta: KnowledgeBookMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = KnowledgeBookMetaMock()
     }
 

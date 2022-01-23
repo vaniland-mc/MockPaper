@@ -2,6 +2,7 @@ package land.vani.mockpaper.inventory
 
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import org.bukkit.event.inventory.InventoryType
 
@@ -9,7 +10,7 @@ class PlayerInventoryViewTest : ShouldSpec({
     lateinit var server: ServerMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
     }
 
     should("constructor") {

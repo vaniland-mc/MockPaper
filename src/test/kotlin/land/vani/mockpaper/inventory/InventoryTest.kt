@@ -7,7 +7,7 @@ import io.kotest.matchers.maps.shouldContainKey
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.internal.fallbackNull
 import org.bukkit.Material
 import org.bukkit.event.inventory.InventoryType
@@ -17,7 +17,7 @@ class InventoryTest : ShouldSpec({
     lateinit var inventory: InventoryMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         inventory = InventoryMock(null, 9, InventoryType.CHEST)
     }
 

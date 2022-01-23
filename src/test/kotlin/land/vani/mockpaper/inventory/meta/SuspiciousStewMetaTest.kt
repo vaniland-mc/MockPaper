@@ -5,7 +5,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldNotContainExactly
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
@@ -13,7 +13,7 @@ class SuspiciousStewMetaTest : ShouldSpec({
     lateinit var meta: SuspiciousStewMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = SuspiciousStewMetaMock()
     }
 

@@ -3,6 +3,7 @@ package land.vani.mockpaper.help
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import org.bukkit.command.defaults.VersionCommand
 import org.bukkit.help.HelpTopicFactory
@@ -13,7 +14,7 @@ class HelpMapTest : ShouldSpec({
     lateinit var helpMap: HelpMapMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         helpMap = server.helpMap
     }
 

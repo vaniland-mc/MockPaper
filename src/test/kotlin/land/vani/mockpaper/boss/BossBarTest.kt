@@ -5,6 +5,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.player.PlayerMock
 import land.vani.mockpaper.player.randomPlayerName
@@ -18,7 +19,7 @@ class BossBarTest : ShouldSpec({
     lateinit var bar: BossBar
 
     beforeEach {
-        server = ServerMock()
+        server = MockPaper.mock()
         bar = server.createBossBar(
             "Test bossbar",
             BarColor.BLUE,

@@ -5,7 +5,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldNotContainExactly
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import org.bukkit.Color
 import org.bukkit.potion.PotionData
 import org.bukkit.potion.PotionEffect
@@ -16,7 +16,7 @@ class PotionMetaTest : ShouldSpec({
     lateinit var meta: PotionMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = PotionMetaMock()
     }
 

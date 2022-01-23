@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import org.bukkit.enchantments.Enchantment
 
 class EnchantedBootMetaTest : ShouldSpec({
@@ -14,7 +14,7 @@ class EnchantedBootMetaTest : ShouldSpec({
     lateinit var meta: EnchantedBookMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = EnchantedBookMetaMock()
         enchantment1 = Enchantment.DURABILITY
         enchantment2 = Enchantment.DAMAGE_ALL

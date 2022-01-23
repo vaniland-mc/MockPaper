@@ -8,6 +8,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.internal.fallbackNull
 import org.bukkit.Material
@@ -18,7 +19,7 @@ class PlayerInventoryTest : ShouldSpec({
     lateinit var inventory: PlayerInventoryMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         inventory = PlayerInventoryMock(null)
     }
 

@@ -20,6 +20,7 @@ import io.kotest.property.exhaustive.enum
 import io.kotest.property.exhaustive.exhaustive
 import io.kotest.property.exhaustive.filterNot
 import io.papermc.paper.event.player.AsyncChatEvent
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.MockPlugin
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.inventory.EnderChestInventoryMock
@@ -55,12 +56,14 @@ class PlayerTest : ShouldSpec({
     lateinit var player: PlayerMock
 
     beforeTest {
-        server = object : ServerMock() {
-            private var tick = 0
+        server = MockPaper.mock(
+            object : ServerMock() {
+                private var tick = 0
 
-            override val currentServerTime: Long
-                get() = super.currentServerTime + tick++
-        }
+                override val currentServerTime: Long
+                    get() = super.currentServerTime + tick++
+            }
+        )
         uuid = UUID.randomUUID()
         player = PlayerMock(server, randomPlayerName(), uuid)
     }

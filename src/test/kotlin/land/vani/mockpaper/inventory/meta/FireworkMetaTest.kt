@@ -5,7 +5,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 
@@ -13,7 +13,7 @@ class FireworkMetaTest : ShouldSpec({
     lateinit var meta: FireworkMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = FireworkMetaMock()
     }
 

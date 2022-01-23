@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.randomLocation
 import land.vani.mockpaper.world.WorldMock
@@ -16,7 +17,7 @@ class ExperienceOrbTest : ShouldSpec({
     lateinit var orb: ExperienceOrbMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         orb = world.spawn(randomLocation(world))
     }

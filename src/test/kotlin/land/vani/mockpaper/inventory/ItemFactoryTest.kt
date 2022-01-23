@@ -3,6 +3,7 @@ package land.vani.mockpaper.inventory
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.inventory.meta.BookMetaMock
 import land.vani.mockpaper.inventory.meta.EnchantedBookMetaMock
@@ -23,7 +24,7 @@ class ItemFactoryTest : ShouldSpec({
     lateinit var factory: ItemFactoryMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         factory = server.itemFactory as ItemFactoryMock
     }
 

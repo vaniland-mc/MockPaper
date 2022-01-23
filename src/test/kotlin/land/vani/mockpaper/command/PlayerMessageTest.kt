@@ -3,6 +3,7 @@ package land.vani.mockpaper.command
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.player.PlayerMock
 import net.kyori.adventure.text.Component
@@ -16,7 +17,7 @@ class PlayerMessageTest : ShouldSpec({
     lateinit var player: PlayerMock
 
     beforeEach {
-        server = ServerMock()
+        server = MockPaper.mock()
         player = server.addPlayer()
     }
 

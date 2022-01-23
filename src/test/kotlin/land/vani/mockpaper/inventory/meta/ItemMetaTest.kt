@@ -10,7 +10,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import net.kyori.adventure.text.Component
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
@@ -23,7 +23,7 @@ class ItemMetaTest : ShouldSpec({
     lateinit var meta: ItemMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = ItemMetaMock()
     }
 

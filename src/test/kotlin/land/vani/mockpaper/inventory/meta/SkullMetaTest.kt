@@ -2,13 +2,13 @@ package land.vani.mockpaper.inventory.meta
 
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 
 class SkullMetaTest : ShouldSpec({
     lateinit var meta: SkullMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = SkullMetaMock()
     }
 

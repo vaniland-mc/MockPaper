@@ -3,6 +3,7 @@ package land.vani.mockpaper.player
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import java.util.UUID
 
@@ -10,7 +11,7 @@ class OfflinePlayerTest : ShouldSpec({
     lateinit var server: ServerMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
     }
 
     should("isOnline") {

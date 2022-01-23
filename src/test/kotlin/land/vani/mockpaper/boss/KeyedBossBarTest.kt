@@ -5,6 +5,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import org.bukkit.NamespacedKey
 import org.bukkit.boss.BarColor
@@ -14,7 +15,7 @@ class KeyedBossBarTest : ShouldSpec({
     lateinit var server: ServerMock
 
     beforeEach {
-        server = ServerMock()
+        server = MockPaper.mock()
     }
 
     should("keyedBossBar") {

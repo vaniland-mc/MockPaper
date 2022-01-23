@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.block.data.BlockDataMock
 import land.vani.mockpaper.randomLocation
@@ -17,7 +18,7 @@ class BlockTest : ShouldSpec({
     lateinit var block: BlockMock
 
     beforeEach {
-        server = ServerMock()
+        server = MockPaper.mock()
         val world = WorldMock(server)
         block = BlockMock(randomLocation(world))
     }

@@ -3,6 +3,7 @@ package land.vani.mockpaper.entity
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import org.bukkit.Material
 import org.bukkit.inventory.EntityEquipment
@@ -16,7 +17,7 @@ class EntityEquipmentTest : ShouldSpec({
     lateinit var equipment: EntityEquipment
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         armorStand = ArmorStandMock(server, UUID.randomUUID())
         equipment = armorStand.equipment
     }

@@ -6,7 +6,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.MockPaper
 import net.kyori.adventure.text.Component
 import org.bukkit.inventory.meta.BookMeta
 
@@ -14,7 +14,7 @@ class BookMetaTest : ShouldSpec({
     lateinit var meta: BookMetaMock
 
     beforeTest {
-        ServerMock()
+        MockPaper.mock()
         meta = BookMetaMock()
     }
 

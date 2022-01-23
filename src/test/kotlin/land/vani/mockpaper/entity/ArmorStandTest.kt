@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.randomLocation
 import land.vani.mockpaper.world.WorldMock
@@ -15,7 +16,7 @@ class ArmorStandTest : ShouldSpec({
     lateinit var armorStand: ArmorStandMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         armorStand = world.spawn(randomLocation(world))
     }

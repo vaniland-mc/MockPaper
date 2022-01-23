@@ -5,6 +5,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.inventory.meta.FireworkMetaMock
 import land.vani.mockpaper.randomLocation
@@ -20,7 +21,7 @@ class FireworkTest : ShouldSpec({
     lateinit var firework: FireworkMock
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         firework = world.spawn(randomLocation(world))
     }

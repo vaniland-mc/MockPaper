@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import org.bukkit.metadata.FixedMetadataValue
 
@@ -12,7 +13,7 @@ class MetadataHolderTest : ShouldSpec({
     lateinit var meta: MetadataHolder
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         meta = MetadataHolder()
     }
 

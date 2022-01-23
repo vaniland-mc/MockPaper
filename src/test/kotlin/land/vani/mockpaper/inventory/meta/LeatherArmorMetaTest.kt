@@ -2,6 +2,7 @@ package land.vani.mockpaper.inventory.meta
 
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import org.bukkit.Color
 
@@ -10,7 +11,7 @@ class LeatherArmorMetaTest : ShouldSpec({
     lateinit var meta: LeatherArmorMetaMock
 
     beforeTest {
-        server = ServerMock()
+        MockPaper.mock()
         meta = LeatherArmorMetaMock()
     }
 

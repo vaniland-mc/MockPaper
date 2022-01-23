@@ -7,6 +7,7 @@ import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.randomLocation
 import land.vani.mockpaper.world.WorldMock
@@ -22,7 +23,7 @@ class ItemTest : ShouldSpec({
     lateinit var entity: Item
 
     beforeTest {
-        server = ServerMock()
+        server = MockPaper.mock()
         world = server.addSimpleWorld("world")
     }
 

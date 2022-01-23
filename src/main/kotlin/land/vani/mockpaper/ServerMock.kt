@@ -33,7 +33,6 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.BanList
-import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Keyed
 import org.bukkit.Location
@@ -83,7 +82,6 @@ import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.util.UUID
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 import java.util.logging.Level
 import java.util.logging.LogManager
@@ -94,17 +92,19 @@ open class ServerMock : Server, Server.Spigot() {
         private const val BUKKIT_VERSION = "1.18.1"
         private const val JOIN_MESSAGE = "%s has joined the server."
         private const val MOTD = "A Minecraft Server"
-
-        private val inited = AtomicBoolean(false)
     }
 
     private val mainThread: Thread = Thread.currentThread()
     private val _logger = Logger.getLogger("MockPaper")
 
     private val _entities: MutableSet<EntityMock> = mutableSetOf()
-    private val playerList: PlayerListMock = PlayerListMock(this)
+    private val playerList: PlayerListMock by lazy {
+        PlayerListMock(this)
+    }
 
-    private val pluginManager = PluginManagerMock(this)
+    private val pluginManagerMock: PluginManagerMock by lazy {
+        PluginManagerMock(this)
+    }
     private val unsafeValues = UnsafeValuesMock()
     private val worlds: MutableSet<WorldMock> = mutableSetOf()
     private val recipes: MutableSet<Recipe> = mutableSetOf()
@@ -116,14 +116,12 @@ open class ServerMock : Server, Server.Spigot() {
 
     private val itemFactory = ItemFactoryMock()
     private val bossBars: MutableMap<NamespacedKey, KeyedBossBarMock> = mutableMapOf()
-    private val commandMap: CommandMap = CommandMapMock(this)
+    private val commandMap: CommandMapMock by lazy {
+        CommandMapMock(this)
+    }
 
     init {
         registerSerializables()
-
-        if (!inited.getAndSet(true)) {
-            Bukkit.setServer(this)
-        }
     }
 
     private fun registerSerializables() {
@@ -332,7 +330,7 @@ open class ServerMock : Server, Server.Spigot() {
 
     override fun getPlayerUniqueId(playerName: String): UUID? = playerList.getPlayerExact(playerName)?.uniqueId
 
-    override fun getPluginManager(): PluginManagerMock = pluginManager
+    override fun getPluginManager(): PluginManagerMock = pluginManagerMock
 
     override fun getScheduler(): BukkitScheduler {
         throw UnimplementedOperationException()
@@ -885,7 +883,7 @@ open class ServerMock : Server, Server.Spigot() {
             player,
             JOIN_MESSAGE.format(player.displayName)
         )
-        pluginManager.callEvent(event)
+        pluginManagerMock.callEvent(event)
         registerEntity(player)
     }
 
