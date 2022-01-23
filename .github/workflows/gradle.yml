@@ -61,8 +61,10 @@ jobs:
           name: test-results
           path: build/test-results/test
       - name: Run koverXmlReport
+        if: always()
         run: ./gradlew koverXmlReport
       - name: Upload coverage reports
+        if: always()
         uses: codecov/codecov-action@v2
         with:
           files: build/reports/kover/project-xml/report.xml
