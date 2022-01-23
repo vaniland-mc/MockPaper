@@ -46,6 +46,10 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
     private val loader = JavaPluginLoader(server)
 
     private val _commands: MutableList<PluginCommand> = mutableListOf()
+
+    /**
+     * Get a collection of all available commands
+     */
     val command: List<PluginCommand>
         get() = _commands.asUnmodifiable()
 
@@ -80,24 +84,36 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
     ) = assertEventFired(T::class.java, predicate)
 
     /**
+     * Asserts that at none event for which the predicate is true.
+     */
+    @JvmOverloads
+    fun assertEventNotFired(
+        message: String = "Event assert failed",
+        predicate: (Event) -> Boolean,
+    ) {
+        if (events.any(predicate)) fail(message)
+    }
+
+    /**
      * Asserts that at none event of a certain [T] for which the predicate is true.
      */
     @JvmOverloads
     fun <T : Event> assertEventNotFired(
         clazz: Class<T>,
         predicate: (T) -> Boolean = { true },
+    ) = assertEventNotFired(
+        "Some event of that type has been fired"
     ) {
-        assertEventFired(clazz) { !predicate(it) }
+        clazz.isInstance(it) && predicate(clazz.cast(it))
     }
 
     /**
      * Asserts that at none event of a certain [T] for which the predicate is true.
      */
+    @JvmName("assertEventNotFiredInline")
     inline fun <reified T : Event> assertEventNotFired(
         noinline predicate: (T) -> Boolean = { true },
-    ) {
-        assertEventNotFired(T::class.java, predicate)
-    }
+    ) = assertEventNotFired(T::class.java, predicate)
 
     override fun registerInterface(loader: Class<out PluginLoader>) {
         throw UnimplementedOperationException()
