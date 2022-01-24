@@ -1434,6 +1434,16 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    /**
+     * Creates a new entity at the given Location with the supplied function run
+     * before the entity is added to the world.
+     *
+     * Note that when the function is run, the entity will not be actually in the world.
+     * Any operation involving such as teleporting the entity is undefined until after this function returns.
+     * The passed function however is run after the potential entity's spawn randomization and hence already allows
+     * access to the values of the mob, whether those were randomized, such as attributes or the entity equipment.
+     */
+    @JvmSynthetic
     inline fun <reified T : Entity> spawn(location: Location): T = spawn(location, T::class.java)
 
     override fun sendPluginMessage(source: Plugin, channel: String, message: ByteArray) {
