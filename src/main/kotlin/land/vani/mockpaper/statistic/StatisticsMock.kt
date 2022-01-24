@@ -47,18 +47,18 @@ class StatisticsMock {
         require(
             statistic.type == Statistic.Type.ITEM || statistic.type == Statistic.Type.BLOCK
         ) { "statistic must take a material parameter" }
-        setStatistic(statistic, getStatistic(statistic, material) + amount)
+        setStatistic(statistic, material, getStatistic(statistic, material) + amount)
     }
 
     fun incrementStatistic(statistic: Statistic, entityType: EntityType, amount: Int) {
         require(amount > 0) { "amount must be greater than 0" }
         require(statistic.type == Statistic.Type.ENTITY) { "statistic must take an entity parameter" }
-        setStatistic(statistic, getStatistic(statistic, entityType) + amount)
+        setStatistic(statistic, entityType, getStatistic(statistic, entityType) + amount)
     }
 
     fun decrementStatistic(statistic: Statistic, amount: Int) {
         require(amount > 0) { "amount must be greater than 0" }
-        setStatistic(statistic, getStatistic(statistic) - 1)
+        setStatistic(statistic, getStatistic(statistic) - amount)
     }
 
     fun decrementStatistic(statistic: Statistic, material: Material, amount: Int) {
@@ -66,13 +66,13 @@ class StatisticsMock {
         require(
             statistic.type == Statistic.Type.ITEM || statistic.type == Statistic.Type.BLOCK
         ) { "statistic must take a material parameter" }
-        setStatistic(statistic, getStatistic(statistic, material) - amount)
+        setStatistic(statistic, material, getStatistic(statistic, material) - amount)
     }
 
     fun decrementStatistic(statistic: Statistic, entityType: EntityType, amount: Int) {
         require(amount > 0) { "amount must be greater than 0" }
         require(statistic.type == Statistic.Type.ENTITY) { "statistic must take an entity parameter" }
-        setStatistic(statistic, getStatistic(statistic, entityType) - amount)
+        setStatistic(statistic, entityType, getStatistic(statistic, entityType) - amount)
     }
 
     fun getStatistic(statistic: Statistic): Int {
