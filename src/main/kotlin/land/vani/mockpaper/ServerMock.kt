@@ -854,9 +854,10 @@ open class ServerMock : Server, Server.Spigot() {
     /**
      * Adds the given mocked world to this server.
      */
-    fun addWorld(worldMock: WorldMock) {
+    fun addWorld(worldMock: WorldMock): WorldMock {
         assertMainThread()
         worlds += worldMock
+        return worldMock
     }
 
     /**
