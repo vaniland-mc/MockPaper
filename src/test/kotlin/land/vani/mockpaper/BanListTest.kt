@@ -1,10 +1,11 @@
+package land.vani.mockpaper
+
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import land.vani.mockpaper.BanListMock
 import java.util.Date
 
 class BanListTest : ShouldSpec({
