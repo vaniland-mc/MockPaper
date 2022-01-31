@@ -16,7 +16,7 @@ import java.util.UUID
 import java.util.concurrent.LinkedTransferQueue
 
 class ConsoleCommandSenderMock : ConsoleCommandSender, MessageTarget {
-    private val messages: Queue<String> = LinkedTransferQueue()
+    override val messages: Queue<String> = LinkedTransferQueue()
 
     override fun sendMessage(vararg messages: String) {
         messages.forEach { sendMessage(it) }

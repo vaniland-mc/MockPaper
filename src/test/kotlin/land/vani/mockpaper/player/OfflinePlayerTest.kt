@@ -27,14 +27,14 @@ class OfflinePlayerTest : ShouldSpec({
 
     should("uniqueId") {
         val uuid = UUID.randomUUID()
-        val player = OfflinePlayerMock(server, uuid, randomPlayerName())
+        val player = OfflinePlayerMock(server, randomPlayerName(), uuid)
         player.uniqueId shouldBe uuid
     }
 
     should("player") {
         val uuid = UUID.randomUUID()
         val name = randomPlayerName()
-        val offlinePlayer = OfflinePlayerMock(server, uuid, name)
+        val offlinePlayer = OfflinePlayerMock(server, name, uuid)
         val joinedPlayer = offlinePlayer.join(server)
         val player = offlinePlayer.player
 

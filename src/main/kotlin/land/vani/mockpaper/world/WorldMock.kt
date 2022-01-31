@@ -497,7 +497,7 @@ class WorldMock(
     override fun getChunkAtAsync(x: Int, z: Int, gen: Boolean, urgent: Boolean): CompletableFuture<Chunk> =
         CompletableFuture.completedFuture(getChunkAt(x, z))
 
-    override fun getKey(): NamespacedKey = NamespacedKey.minecraft(name)
+    override fun getKey(): NamespacedKey = NamespacedKey.minecraft(name.lowercase())
 
     override fun getPlayers(): List<Player> = server.onlinePlayers
         .filter { it.world == this }

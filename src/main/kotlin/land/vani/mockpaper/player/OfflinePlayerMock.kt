@@ -20,13 +20,13 @@ import java.util.UUID
  */
 class OfflinePlayerMock(
     private val server: ServerMock,
-    private val uuid: UUID,
     private val name: String,
+    private val uuid: UUID,
 ) : OfflinePlayer {
     constructor(server: ServerMock, name: String) : this(
         server,
+        name,
         UUID.nameUUIDFromBytes("OfflinePlayer:$name".toByteArray()),
-        name
     )
 
     /**

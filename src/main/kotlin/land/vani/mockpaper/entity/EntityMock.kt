@@ -71,7 +71,7 @@ abstract class EntityMock(
 
     private var name: Component = Component.text("entity")
 
-    protected val messages: Queue<String> = LinkedTransferQueue()
+    override val messages: Queue<String> = LinkedTransferQueue()
 
     private val permissionAttachments = mutableSetOf<PermissionAttachment>()
 
@@ -225,8 +225,6 @@ abstract class EntityMock(
             sendMessage(it)
         }
     }
-
-    override fun nextMessage(): String? = messages.poll()
 
     override fun isPermissionSet(name: String): Boolean =
         permissionAttachments.any { attachments ->

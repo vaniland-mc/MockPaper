@@ -9,7 +9,7 @@ import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.abs
 
-class PlayerListMock(
+internal class PlayerListMock(
     private val server: ServerMock,
 ) {
     var maxPlayers = Int.MAX_VALUE
@@ -17,8 +17,8 @@ class PlayerListMock(
     private val _onlinePlayers: MutableList<PlayerMock> = CopyOnWriteArrayList()
     private val _offlinePlayers: MutableSet<OfflinePlayer> = mutableSetOf<OfflinePlayer>().asSynchronized()
 
-    val ipBans = BanListMock()
-    val profileBans = BanListMock()
+    internal val ipBans = BanListMock()
+    internal val profileBans = BanListMock()
 
     fun addPlayer(player: PlayerMock) {
         _onlinePlayers += player
@@ -28,10 +28,6 @@ class PlayerListMock(
     fun addOfflinePlayer(player: OfflinePlayer) {
         _offlinePlayers += player
     }
-
-    val operators: Set<OfflinePlayer>
-        get() = ((_onlinePlayers + _offlinePlayers).toSet()).filter { it.isOp }
-            .toSet()
 
     val onlinePlayers: Collection<PlayerMock>
         get() = _onlinePlayers.asUnmodifiable()
@@ -72,8 +68,8 @@ class PlayerListMock(
             ?: offlinePlayers.find { it.name == name }
             ?: OfflinePlayerMock(server, name)
 
-    fun getOfflinePlayer(uuid: UUID): OfflinePlayer? =
-        getPlayer(uuid) ?: offlinePlayers.find { it.uniqueId == uuid }
+    fun getOfflinePlayer(uuid: UUID): OfflinePlayer =
+        getPlayer(uuid) ?: offlinePlayers.find { it.uniqueId == uuid }!!
 
     fun clearOnlinePlayers() {
         _onlinePlayers.clear()
