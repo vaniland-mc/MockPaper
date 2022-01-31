@@ -6,6 +6,7 @@ import land.vani.mockpaper.internal.toLegacyString
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import org.bukkit.inventory.meta.BookMeta
+import java.util.Objects
 
 class BookMetaMock : ItemMetaMock, BookMeta {
     private var title: Component? = null
@@ -18,6 +19,7 @@ class BookMetaMock : ItemMetaMock, BookMeta {
     constructor(meta: BookMeta) : super(meta) {
         title = meta.title()
         author = meta.author()
+        generation = meta.generation
         pages = meta.pages().toMutableList()
     }
 
@@ -77,9 +79,7 @@ class BookMetaMock : ItemMetaMock, BookMeta {
     }
 
     override fun addPages(vararg pages: Component) {
-        pages.forEach { page ->
-            this.pages += page
-        }
+        this.pages += pages
     }
 
     override fun pages(): List<Component> = pages.toList()
@@ -114,11 +114,30 @@ class BookMetaMock : ItemMetaMock, BookMeta {
 
     override fun getPageCount(): Int = pages.size
 
-    override fun clone(): BookMeta = (super.clone() as BookMeta).apply {
+    override fun clone(): BookMetaMock = (super.clone() as BookMetaMock).apply {
         pages(this@BookMetaMock.pages.toList())
     }
 
     override fun spigot(): BookMeta.Spigot {
         throw UnimplementedOperationException()
+    }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(
+        author,
+        pages,
+        title
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is BookMetaMock) return false
+
+        if (title != other.title) return false
+        if (author != other.author) return false
+        if (generation != other.generation) return false
+        if (pages != other.pages) return false
+
+        return true
     }
 }

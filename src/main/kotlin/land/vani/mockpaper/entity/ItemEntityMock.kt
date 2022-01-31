@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Item
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
+import kotlin.math.min
 
 /**
  * This is the mock of a dropped [Item].
@@ -32,7 +33,7 @@ class ItemEntityMock(
     override fun getPickupDelay(): Int = pickupDelay
 
     override fun setPickupDelay(delay: Int) {
-        pickupDelay = delay
+        pickupDelay = min(delay, 32767)
     }
 
     override fun getOwner(): UUID? {

@@ -11,6 +11,7 @@ import land.vani.mockpaper.entity.FireworkMock
 import land.vani.mockpaper.entity.ItemEntityMock
 import land.vani.mockpaper.entity.ZombieMock
 import land.vani.mockpaper.metadata.MetadataHolder
+import land.vani.mockpaper.player.PlayerMock
 import org.bukkit.BlockChangeDelegate
 import org.bukkit.Chunk
 import org.bukkit.ChunkSnapshot
@@ -64,6 +65,7 @@ import org.bukkit.util.BoundingBox
 import org.bukkit.util.Consumer
 import org.bukkit.util.RayTraceResult
 import org.bukkit.util.Vector
+import org.jetbrains.annotations.VisibleForTesting
 import java.io.File
 import java.util.Random
 import java.util.UUID
@@ -88,7 +90,31 @@ class WorldMock(
     private var worldType: WorldType = WorldType.NORMAL
     private var seed: Long = 0
 
-    private val gameRules: MutableMap<GameRule<*>, Any?> = mutableMapOf()
+    private val gameRules: MutableMap<GameRule<*>, Any?> = mutableMapOf(
+        GameRule.ANNOUNCE_ADVANCEMENTS to true,
+        GameRule.COMMAND_BLOCK_OUTPUT to true,
+        GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK to false,
+        GameRule.DO_DAYLIGHT_CYCLE to true,
+        GameRule.DO_ENTITY_DROPS to true,
+        GameRule.DO_FIRE_TICK to true,
+        GameRule.DO_LIMITED_CRAFTING to true,
+        GameRule.DO_MOB_LOOT to true,
+        GameRule.DO_MOB_SPAWNING to true,
+        GameRule.DO_TILE_DROPS to true,
+        GameRule.DO_WEATHER_CYCLE to true,
+        GameRule.KEEP_INVENTORY to false,
+        GameRule.LOG_ADMIN_COMMANDS to true,
+        GameRule.MAX_COMMAND_CHAIN_LENGTH to 65536,
+        GameRule.MAX_ENTITY_CRAMMING to 24,
+        GameRule.MOB_GRIEFING to true,
+        GameRule.NATURAL_REGENERATION to true,
+        GameRule.RANDOM_TICK_SPEED to 3,
+        GameRule.REDUCED_DEBUG_INFO to false,
+        GameRule.SEND_COMMAND_FEEDBACK to true,
+        GameRule.SHOW_DEATH_MESSAGES to true,
+        GameRule.SPAWN_RADIUS to 10,
+        GameRule.SPECTATORS_GENERATE_CHUNKS to true,
+    )
 
     private val blocks: MutableMap<Coordinate, BlockMock> = mutableMapOf()
     private val loadedChunks: MutableMap<ChunkCoordinate, ChunkMock> = mutableMapOf()
@@ -101,35 +127,7 @@ class WorldMock(
     )
     private var fullTime: Long = 0
     private var hasStorm: Boolean = false
-    private var weatherDuration: Int = 0
-    private var isThundering: Boolean = false
     private var thunderDuration: Int = 0
-
-    init {
-        gameRules[GameRule.ANNOUNCE_ADVANCEMENTS] = true
-        gameRules[GameRule.COMMAND_BLOCK_OUTPUT] = true
-        gameRules[GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK] = false
-        gameRules[GameRule.DO_DAYLIGHT_CYCLE] = true
-        gameRules[GameRule.DO_ENTITY_DROPS] = true
-        gameRules[GameRule.DO_FIRE_TICK] = true
-        gameRules[GameRule.DO_LIMITED_CRAFTING] = false
-        gameRules[GameRule.DO_MOB_LOOT] = true
-        gameRules[GameRule.DO_MOB_SPAWNING] = true
-        gameRules[GameRule.DO_TILE_DROPS] = true
-        gameRules[GameRule.DO_WEATHER_CYCLE] = true
-        gameRules[GameRule.KEEP_INVENTORY] = false
-        gameRules[GameRule.LOG_ADMIN_COMMANDS] = true
-        gameRules[GameRule.MAX_COMMAND_CHAIN_LENGTH] = 65536
-        gameRules[GameRule.MAX_ENTITY_CRAMMING] = 24
-        gameRules[GameRule.MOB_GRIEFING] = true
-        gameRules[GameRule.NATURAL_REGENERATION] = true
-        gameRules[GameRule.RANDOM_TICK_SPEED] = 3
-        gameRules[GameRule.REDUCED_DEBUG_INFO] = false
-        gameRules[GameRule.SEND_COMMAND_FEEDBACK] = true
-        gameRules[GameRule.SHOW_DEATH_MESSAGES] = true
-        gameRules[GameRule.SPAWN_RADIUS] = 10
-        gameRules[GameRule.SPECTATORS_GENERATE_CHUNKS] = true
-    }
 
     constructor(server: ServerMock, creator: WorldCreator) : this(server) {
         name = creator.name()
@@ -153,6 +151,10 @@ class WorldMock(
 
     override fun getName(): String = name
 
+    /**
+     * Sets the unique name of this world.
+     */
+    @VisibleForTesting
     fun setName(name: String) {
         this.name = name
     }
@@ -192,7 +194,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
-    fun createBlock(coordinate: Coordinate): BlockMock {
+    private fun createBlock(coordinate: Coordinate): BlockMock {
         if (coordinate.y !in MIN_WORLD_HEIGHT..height) {
             throw IndexOutOfBoundsException("y is out of bounds ($MIN_WORLD_HEIGHT to $height)")
         }
@@ -302,9 +304,7 @@ class WorldMock(
         (loadedChunks[coordinate] ?: ChunkMock(this, coordinate.x, coordinate.z))
             .also { loadedChunks[coordinate] = it }
 
-    override fun isChunkLoaded(chunk: Chunk): Boolean {
-        throw UnimplementedOperationException()
-    }
+    override fun isChunkLoaded(chunk: Chunk): Boolean = isChunkLoaded(chunk.x, chunk.z)
 
     override fun getLoadedChunks(): Array<Chunk> = loadedChunks.values.toTypedArray()
 
@@ -497,7 +497,7 @@ class WorldMock(
     override fun getChunkAtAsync(x: Int, z: Int, gen: Boolean, urgent: Boolean): CompletableFuture<Chunk> =
         CompletableFuture.completedFuture(getChunkAt(x, z))
 
-    override fun getKey(): NamespacedKey = NamespacedKey.minecraft(name)
+    override fun getKey(): NamespacedKey = NamespacedKey.minecraft(name.lowercase())
 
     override fun getPlayers(): List<Player> = server.onlinePlayers
         .filter { it.world == this }
@@ -612,7 +612,7 @@ class WorldMock(
 
     override fun setTime(time: Long) {
         val base = fullTime - fullTime % 24000
-        fullTime = base + time % 24000
+        setFullTime(base + time % 24000)
     }
 
     override fun getFullTime(): Long = fullTime
@@ -643,16 +643,18 @@ class WorldMock(
         this.hasStorm = hasStorm
     }
 
-    override fun getWeatherDuration(): Int = weatherDuration
-
-    override fun setWeatherDuration(duration: Int) {
-        weatherDuration = duration
+    override fun getWeatherDuration(): Int {
+        throw UnimplementedOperationException()
     }
 
-    override fun isThundering(): Boolean = isThundering
+    override fun setWeatherDuration(duration: Int) {
+        throw UnimplementedOperationException()
+    }
+
+    override fun isThundering(): Boolean = thunderDuration > 0
 
     override fun setThundering(thundering: Boolean) {
-        isThundering = thundering
+        thunderDuration = if (thundering) 600 else 0
     }
 
     override fun getThunderDuration(): Int = thunderDuration
@@ -1382,14 +1384,26 @@ class WorldMock(
 
     private fun <T : Entity?> mockEntity(clazz: Class<T>): EntityMock =
         when (clazz) {
-            ArmorStand::class.java -> ArmorStandMock(server, UUID.randomUUID())
-            Zombie::class.java -> ZombieMock(server, UUID.randomUUID())
-            Firework::class.java -> FireworkMock(server, UUID.randomUUID())
-            ExperienceOrb::class.java -> ExperienceOrbMock(server, UUID.randomUUID())
-            Player::class.java -> throw IllegalArgumentException(
+            ArmorStand::class.java,
+            ArmorStandMock::class.java,
+            -> ArmorStandMock(server, UUID.randomUUID())
+            Zombie::class.java,
+            ZombieMock::class.java,
+            -> ZombieMock(server, UUID.randomUUID())
+            Firework::class.java,
+            FireworkMock::class.java,
+            -> FireworkMock(server, UUID.randomUUID())
+            ExperienceOrb::class.java,
+            ExperienceOrbMock::class.java,
+            -> ExperienceOrbMock(server, UUID.randomUUID())
+            Player::class.java,
+            PlayerMock::class.java,
+            -> throw IllegalArgumentException(
                 "Player entities cannot be spawned, use ServerMock#addPlayer(...)"
             )
-            Item::class.java -> throw IllegalArgumentException("Items must be spawned using World#dropItem(...)")
+            Item::class.java,
+            ItemEntityMock::class.java,
+            -> throw IllegalArgumentException("Items must be spawned using World#dropItem(...)")
             else -> throw UnimplementedOperationException()
         }
 
@@ -1419,6 +1433,18 @@ class WorldMock(
     ): T {
         throw UnimplementedOperationException()
     }
+
+    /**
+     * Creates a new entity at the given Location with the supplied function run
+     * before the entity is added to the world.
+     *
+     * Note that when the function is run, the entity will not be actually in the world.
+     * Any operation involving such as teleporting the entity is undefined until after this function returns.
+     * The passed function however is run after the potential entity's spawn randomization and hence already allows
+     * access to the values of the mob, whether those were randomized, such as attributes or the entity equipment.
+     */
+    @JvmSynthetic
+    inline fun <reified T : Entity> spawn(location: Location): T = spawn(location, T::class.java)
 
     override fun sendPluginMessage(source: Plugin, channel: String, message: ByteArray) {
         throw UnimplementedOperationException()

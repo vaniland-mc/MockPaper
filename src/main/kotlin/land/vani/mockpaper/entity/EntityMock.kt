@@ -10,7 +10,6 @@ import land.vani.mockpaper.metadata.MetadataHolder
 import land.vani.mockpaper.persistence.PersistentDataContainerMock
 import net.kyori.adventure.text.Component
 import net.md_5.bungee.api.chat.BaseComponent
-import org.bukkit.Bukkit
 import org.bukkit.EntityEffect
 import org.bukkit.Location
 import org.bukkit.Nameable
@@ -49,11 +48,22 @@ abstract class EntityMock(
     Metadatable by MetadataHolder(),
     Nameable by NameableHolder(),
     MessageTarget {
-    private var location = Bukkit.getWorlds().firstOrNull()?.spawnLocation
+    private var location = server.worlds.firstOrNull()?.spawnLocation
         ?: Location(null, 0.0, 0.0, 0.0)
 
-    private var isTeleported: Boolean = false
-    private var teleportCause: TeleportCause? = null
+    /**
+     * Entity has been teleported or else since the last assert or [clearTeleported].
+     */
+    @get:VisibleForTesting
+    var isTeleported: Boolean = false
+        private set
+
+    /**
+     * Get the cause of the last teleport.
+     */
+    @get:VisibleForTesting
+    var teleportCause: TeleportCause? = null
+        private set
 
     private val persistentDataContainer = PersistentDataContainerMock()
 
@@ -61,7 +71,7 @@ abstract class EntityMock(
 
     private var name: Component = Component.text("entity")
 
-    private val messages: Queue<String> = LinkedTransferQueue()
+    override val messages: Queue<String> = LinkedTransferQueue()
 
     private val permissionAttachments = mutableSetOf<PermissionAttachment>()
 
@@ -123,24 +133,12 @@ abstract class EntityMock(
     }
 
     /**
-     * Entity has been teleported or else since the last assert or [clearTeleported].
-     */
-    @VisibleForTesting
-    fun hasTeleported() = isTeleported
-
-    /**
      * Clears the teleported flag.
      */
     @VisibleForTesting
     fun clearTeleported() {
         isTeleported = false
     }
-
-    /**
-     * Get the cause of the last teleport.
-     */
-    @VisibleForTesting
-    fun getTeleportCause(): TeleportCause? = teleportCause
 
     override fun getUniqueId(): UUID = uuid
 
@@ -227,8 +225,6 @@ abstract class EntityMock(
             sendMessage(it)
         }
     }
-
-    override fun nextMessage(): String? = messages.poll()
 
     override fun isPermissionSet(name: String): Boolean =
         permissionAttachments.any { attachments ->

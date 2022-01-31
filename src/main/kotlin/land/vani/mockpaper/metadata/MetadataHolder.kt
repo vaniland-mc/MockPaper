@@ -15,10 +15,10 @@ class MetadataHolder : Metadatable {
         values[newMetadataValue.owningPlugin!!] = newMetadataValue
     }
 
-    override fun getMetadata(metadataKey: String): MutableList<MetadataValue> =
+    override fun getMetadata(metadataKey: String): List<MetadataValue> =
         metadata[metadataKey]?.values
             .orEmpty()
-            .toMutableList()
+            .toList()
 
     override fun hasMetadata(metadataKey: String): Boolean =
         metadataKey in metadata && !metadata[metadataKey].isNullOrEmpty()

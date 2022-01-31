@@ -4,6 +4,7 @@ import land.vani.mockpaper.internal.asUnmodifiable
 import org.bukkit.BanEntry
 import org.bukkit.BanList
 import java.util.Date
+import java.util.Objects
 
 /**
  * A simple mock of [BanList].
@@ -67,7 +68,13 @@ class BanListMock : BanList {
             throw UnimplementedOperationException()
         }
 
-        override fun hashCode(): Int = created.hashCode() + target.hashCode()
+        override fun hashCode(): Int = Objects.hash(
+            target,
+            expiration,
+            reason,
+            source,
+            created,
+        )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

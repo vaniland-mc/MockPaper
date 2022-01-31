@@ -4,11 +4,17 @@ import com.destroystokyo.paper.ClientOption
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import com.destroystokyo.paper.profile.PlayerProfile
 import com.google.common.collect.ImmutableSet
+import io.papermc.paper.event.player.AsyncChatEvent
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.entity.LivingEntityMock
 import land.vani.mockpaper.internal.toComponent
 import land.vani.mockpaper.internal.toLegacyString
+import land.vani.mockpaper.inventory.EnderChestInventoryMock
+import land.vani.mockpaper.inventory.InventoryMock
+import land.vani.mockpaper.inventory.InventoryViewMock
+import land.vani.mockpaper.inventory.PlayerInventoryMock
+import land.vani.mockpaper.inventory.PlayerInventoryViewMock
 import land.vani.mockpaper.sound.AudioExperience
 import land.vani.mockpaper.sound.SoundReceiver
 import land.vani.mockpaper.statistic.StatisticsMock
@@ -48,6 +54,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerKickEvent
 import org.bukkit.event.player.PlayerLevelChangeEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -63,7 +70,6 @@ import org.bukkit.inventory.InventoryView
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MainHand
 import org.bukkit.inventory.Merchant
-import org.bukkit.inventory.PlayerInventory
 import org.bukkit.map.MapView
 import org.bukkit.plugin.Plugin
 import org.bukkit.scoreboard.Scoreboard
@@ -80,7 +86,6 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     LivingEntityMock(server, uuid),
     Player,
     SoundReceiver {
-    private val sentMessages: Queue<String> = LinkedTransferQueue()
     override val heardSounds: MutableList<AudioExperience> = mutableListOf()
 
     private val statistics = StatisticsMock()
@@ -115,6 +120,9 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     private val hiddenPlayers = mutableMapOf<UUID, MutableSet<Plugin>>()
     private val hiddenPlayersDeprecated = mutableSetOf<UUID>()
 
+    private var firstPlayed: Long = 0
+    private var lastPlayed: Long = 0
+
     private var isFlying: Boolean = false
 
     private var foodLevel: Int = 20
@@ -122,13 +130,25 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
 
     private var cursorItem: ItemStack? = null
 
+    private val inventory: PlayerInventoryMock =
+        server.createInventory(this, InventoryType.PLAYER) as PlayerInventoryMock
+    private val enderChestInventory: EnderChestInventoryMock = EnderChestInventoryMock(this)
+    private var inventoryView: InventoryView = InventoryViewMock(
+        this,
+        InventoryMock.Crafting,
+        inventory,
+        InventoryType.CRAFTING,
+    )
+
     init {
         isOnline = true
         this.name = name
         displayName(name.toComponent())
 
-        // TODO add world when server has no world
-        // TODO set location
+        if (server.worlds.isEmpty()) {
+            server.addSimpleWorld("world")
+        }
+        location = server.worlds.first().spawnLocation.clone()
 
         compassTarget = location
     }
@@ -140,8 +160,6 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     ) {
         isOnline = false
     }
-
-    override fun nextMessage(): String? = sentMessages.poll()
 
     override fun getType(): EntityType = EntityType.PLAYER
 
@@ -186,8 +204,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun setPlayerListHeaderFooter(header: String?, footer: String?) {
-        playerListHeader = header?.toComponent()
-        playerListFooter = footer?.toComponent()
+        sendPlayerListHeaderAndFooter(
+            header?.toComponent() ?: Component.empty(),
+            footer?.toComponent() ?: Component.empty(),
+        )
+    }
+
+    override fun sendPlayerListHeaderAndFooter(header: Component, footer: Component) {
+        playerListHeader = header
+        playerListFooter = footer
     }
 
     override fun getCompassTarget(): Location = compassTarget
@@ -215,7 +240,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
 
         val event = PlayerRespawnEvent(
             this,
-            respawnLocation,
+            respawnLocation.clone(),
             isBedSpawn,
             isAnchorSpawn,
             ImmutableSet.builder()
@@ -261,17 +286,25 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
 
     override fun getPlayer(): Player? = this.takeIf { isOnline }
 
-    override fun getFirstPlayed(): Long {
-        throw UnimplementedOperationException()
+    override fun getFirstPlayed(): Long = firstPlayed
+
+    @VisibleForTesting
+    fun setFirstPlayed(firstPlayed: Long) {
+        this.firstPlayed = firstPlayed
     }
 
-    override fun getLastPlayed(): Long {
-        throw UnimplementedOperationException()
+    override fun getLastPlayed(): Long = lastPlayed
+
+    @VisibleForTesting
+    fun setLastPlayed(lastPlayed: Long) {
+        this.lastPlayed = lastPlayed
+
+        if (firstPlayed == 0L) {
+            firstPlayed = lastPlayed
+        }
     }
 
-    override fun hasPlayedBefore(): Boolean {
-        throw UnimplementedOperationException()
-    }
+    override fun hasPlayedBefore(): Boolean = firstPlayed > 0
 
     override fun getLastLogin(): Long {
         throw UnimplementedOperationException()
@@ -286,22 +319,14 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun getEquipment(): EntityEquipment {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
-    override fun getInventory(): PlayerInventory {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
-    }
+    override fun getInventory(): PlayerInventoryMock = inventory
 
-    override fun getEnderChest(): Inventory {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
-    }
+    override fun getEnderChest(): Inventory = enderChestInventory
 
     override fun getMainHand(): MainHand {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
@@ -309,79 +334,70 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
-    override fun getOpenInventory(): InventoryView {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
-    }
+    override fun getOpenInventory(): InventoryView = inventoryView
 
-    override fun openInventory(inventory: Inventory): InventoryView? {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+    override fun openInventory(inventory: Inventory): InventoryView {
+        closeInventory()
+        return PlayerInventoryViewMock(this, inventory).also {
+            inventoryView = it
+        }
     }
 
     override fun openWorkbench(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openEnchanting(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openInventory(inventory: InventoryView) {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+        closeInventory()
+        inventoryView = inventory
     }
 
     override fun openMerchant(merchant: Merchant, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openMerchant(trader: Villager, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openAnvil(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openCartographyTable(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openGrindstone(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openLoom(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openSmithingTable(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun openStonecutter(location: Location?, force: Boolean): InventoryView? {
-        // TODO: implement inventory
         throw UnimplementedOperationException()
     }
 
     override fun closeInventory() {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+        closeInventory(InventoryCloseEvent.Reason.PLUGIN)
     }
 
     override fun closeInventory(reason: InventoryCloseEvent.Reason) {
-        // TODO: implement inventory
-        throw UnimplementedOperationException()
+        val event = InventoryCloseEvent(inventoryView)
+        server.pluginManager.callEvent(event)
+
+        cursorItem = null
+        inventoryView = InventoryViewMock(this, InventoryMock.Crafting, inventory, InventoryType.CRAFTING)
     }
 
     override fun getItemInHand(): ItemStack = inventory.itemInMainHand
@@ -513,7 +529,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun kick(message: Component?) {
-        throw UnimplementedOperationException()
+        kick(message, PlayerKickEvent.Cause.PLUGIN)
     }
 
     override fun kick(message: Component?, cause: PlayerKickEvent.Cause) {
@@ -521,7 +537,40 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     }
 
     override fun chat(msg: String) {
-        sentMessages.offer(msg)
+        val players = server.onlinePlayers.toSet()
+
+        @Suppress("DEPRECATION")
+        val bukkitLegacyEvent = org.bukkit.event.player.PlayerChatEvent(
+            this,
+            msg,
+            "<%1\$s> %2\$s",
+            players,
+        )
+        server.pluginManager.callEvent(bukkitLegacyEvent)
+        if (bukkitLegacyEvent.isCancelled) return
+
+        @Suppress("DEPRECATION")
+        val bukkitEvent = org.bukkit.event.player.AsyncPlayerChatEvent(
+            true,
+            this,
+            bukkitLegacyEvent.message,
+            players
+        )
+        // TODO: call event async
+        if (bukkitEvent.isCancelled) return
+
+        val paperEvent = AsyncChatEvent(
+            true,
+            this,
+            players,
+            { _, _, message, _ -> message },
+            bukkitEvent.message.toComponent(),
+            bukkitEvent.message.toComponent(),
+        )
+        server.pluginManager.callEvent(paperEvent)
+        if (paperEvent.isCancelled) return
+
+        messages.offer(paperEvent.message().toLegacyString())
     }
 
     override fun performCommand(command: String): Boolean = server.dispatchCommand(this, command)
@@ -536,7 +585,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
      * Simulates the player sneaking with [PlayerToggleSneakEvent].
      */
     @VisibleForTesting
-    fun simulateSneak(sneak: Boolean): PlayerToggleSneakEvent {
+    fun simulateSneaking(sneak: Boolean): PlayerToggleSneakEvent {
         val event = PlayerToggleSneakEvent(this, sneak)
         server.pluginManager.callEvent(event)
         if (!event.isCancelled) {
@@ -662,9 +711,8 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
-    override fun breakBlock(block: Block): Boolean {
-        throw UnimplementedOperationException()
-    }
+    override fun breakBlock(block: Block): Boolean =
+        simulateBlockBreak(block) != null
 
     override fun sendBlockChange(loc: Location, material: Material, data: Byte) {
         throw UnimplementedOperationException()
@@ -1149,13 +1197,13 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
      * Returns the next title that was sent to the player.
      */
     @VisibleForTesting
-    fun nextTitle(): String = titles.poll()
+    fun nextTitle(): String? = titles.poll()
 
     /**
      * Returns the next subtitle that was sent to the player.
      */
     @VisibleForTesting
-    fun nextSubTitle(): String = subTitles.poll()
+    fun nextSubTitle(): String? = subTitles.poll()
 
     override fun spawnParticle(particle: Particle, location: Location, count: Int) {
         throw UnimplementedOperationException()
@@ -1521,15 +1569,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         foodLevel = value
     }
 
-    override fun sendMessage(component: BaseComponent) {
-        sentMessages.offer(component.toLegacyText())
-    }
-
     override fun sendMessage(vararg components: BaseComponent) {
         components.forEach {
             @Suppress("DEPRECATION")
             sendMessage(it)
         }
+    }
+
+    override fun sendMessage(component: BaseComponent) {
+        messages.offer(component.toLegacyText())
     }
 
     override fun getSaturatedRegenRate(): Int {
@@ -1555,6 +1603,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     override fun setStarvationRate(ticks: Int) {
         throw UnimplementedOperationException()
     }
+
+    override fun getEyeHeight(): Double = getEyeHeight(false)
+
+    override fun getEyeHeight(ignorePose: Boolean): Double =
+        if (isSneaking && !ignorePose) {
+            1.54
+        } else {
+            1.62
+        }
 
     override fun getListeningPluginChannels(): MutableSet<String> {
         throw UnimplementedOperationException()

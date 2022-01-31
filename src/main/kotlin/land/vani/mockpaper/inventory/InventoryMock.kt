@@ -20,6 +20,8 @@ open class InventoryMock(
     private val size: Int,
     private val type: InventoryType,
 ) : Inventory {
+    object Crafting : InventoryMock(null, InventoryType.CRAFTING)
+
     /**
      * Creates a new inventory with size inherited from [InventoryType.getDefaultSize].
      */
@@ -34,8 +36,10 @@ open class InventoryMock(
     private val items: Array<ItemStack?>
 
     init {
-        require(size in 9..54 && size % 9 == 0) {
-            "Size for custom inventory must be a multiple of 9 between 9 and 54 slots (got $size)"
+        if (size != type.defaultSize) {
+            require(size in 9..54 && size % 9 == 0) {
+                "Size for custom inventory must be a multiple of 9 between 9 and 54 slots (got $size)"
+            }
         }
         items = arrayOfNulls(size)
     }
@@ -44,8 +48,13 @@ open class InventoryMock(
      * Get the number of times a certain item is in the inventory.
      */
     @VisibleForTesting
-    fun getNumberOfItems(item: ItemStack?): Int = items.filterNotNull()
-        .count { it.isSimilar(item) }
+    fun getNumberOfItems(item: ItemStack?): Int = items.fold(0) { count, itemStack ->
+        if (item?.isSimilar(itemStack) == true) {
+            count + (itemStack?.amount ?: 0)
+        } else {
+            count
+        }
+    }
 
     override fun getSize(): Int = items.size
 
@@ -200,9 +209,7 @@ open class InventoryMock(
             holder
         }
 
-    override fun iterator(): MutableListIterator<ItemStack> {
-        throw UnimplementedOperationException()
-    }
+    override fun iterator(): MutableListIterator<ItemStack> = items.filterNotNull().toMutableList().listIterator()
 
     override fun iterator(index: Int): MutableListIterator<ItemStack> {
         throw UnimplementedOperationException()

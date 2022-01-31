@@ -27,6 +27,7 @@ import land.vani.mockpaper.player.OfflinePlayerMock
 import land.vani.mockpaper.player.PlayerMock
 import land.vani.mockpaper.player.randomPlayerName
 import land.vani.mockpaper.plugin.PluginManagerMock
+import land.vani.mockpaper.potion.registerPotionEffectTypes
 import land.vani.mockpaper.world.WorldMock
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
@@ -53,7 +54,6 @@ import org.bukkit.boss.BossBar
 import org.bukkit.boss.KeyedBossBar
 import org.bukkit.command.CommandMap
 import org.bukkit.command.CommandSender
-import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.command.PluginCommand
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.entity.Entity
@@ -87,7 +87,7 @@ import java.util.logging.Level
 import java.util.logging.LogManager
 import java.util.logging.Logger
 
-class ServerMock : Server, Server.Spigot() {
+open class ServerMock : Server, Server.Spigot() {
     companion object {
         private const val BUKKIT_VERSION = "1.18.1"
         private const val JOIN_MESSAGE = "%s has joined the server."
@@ -98,21 +98,27 @@ class ServerMock : Server, Server.Spigot() {
     private val _logger = Logger.getLogger("MockPaper")
 
     private val _entities: MutableSet<EntityMock> = mutableSetOf()
-    private val playerList: PlayerListMock = PlayerListMock(this)
+    private val playerList: PlayerListMock by lazy {
+        PlayerListMock(this)
+    }
 
-    private val pluginManager = PluginManagerMock(this)
+    private val pluginManagerMock: PluginManagerMock by lazy {
+        PluginManagerMock(this)
+    }
     private val unsafeValues = UnsafeValuesMock()
     private val worlds: MutableSet<WorldMock> = mutableSetOf()
     private val recipes: MutableSet<Recipe> = mutableSetOf()
 
     private var spawnRadius: Int = 16
 
-    private val consoleCommandSender: ConsoleCommandSender = ConsoleCommandSenderMock()
+    private val consoleCommandSender = ConsoleCommandSenderMock()
     private val helpMap = HelpMapMock()
 
     private val itemFactory = ItemFactoryMock()
     private val bossBars: MutableMap<NamespacedKey, KeyedBossBarMock> = mutableMapOf()
-    private val commandMap: CommandMap = CommandMapMock(this)
+    private val commandMap: CommandMapMock by lazy {
+        CommandMapMock(this)
+    }
 
     init {
         registerSerializables()
@@ -123,6 +129,7 @@ class ServerMock : Server, Server.Spigot() {
         // TODO: load tag
 
         registerDefaultEnchantments()
+        registerPotionEffectTypes()
 
         try {
             ClassLoader.getSystemResourceAsStream("logger.properties").use {
@@ -228,7 +235,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getWhitelistedPlayers(): MutableSet<OfflinePlayer> {
+    override fun getWhitelistedPlayers(): Set<OfflinePlayer> {
         throw UnimplementedOperationException()
     }
 
@@ -236,12 +243,10 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun broadcastMessage(message: String): Int {
-        onlinePlayers.forEach {
+    override fun broadcastMessage(message: String): Int =
+        onlinePlayers.onEach {
             it.sendMessage(message)
-        }
-        return onlinePlayers.size
-    }
+        }.count()
 
     override fun broadcast(vararg components: BaseComponent) {
         onlinePlayers.forEach {
@@ -250,32 +255,24 @@ class ServerMock : Server, Server.Spigot() {
         }
     }
 
-    override fun broadcast(message: String, permission: String): Int {
-        var count = 0
-        onlinePlayers.filter { it.hasPermission(permission) }
-            .forEach {
-                it.sendMessage(message)
-                count++
-            }
-        return count
-    }
-
-    override fun broadcast(message: Component): Int {
-        onlinePlayers.forEach {
+    override fun broadcast(message: String, permission: String): Int =
+        onlinePlayers.filter {
+            it.hasPermission(permission)
+        }.onEach {
             it.sendMessage(message)
-        }
-        return onlinePlayers.size
-    }
+        }.count()
 
-    override fun broadcast(message: Component, permission: String): Int {
-        var count = 0
-        onlinePlayers.filter { it.hasPermission(permission) }
-            .forEach {
-                it.sendMessage(message)
-                count++
-            }
-        return count
-    }
+    override fun broadcast(message: Component): Int =
+        onlinePlayers.onEach {
+            it.sendMessage(message)
+        }.count()
+
+    override fun broadcast(message: Component, permission: String): Int =
+        onlinePlayers.filter {
+            it.hasPermission(permission)
+        }.onEach {
+            it.sendMessage(message)
+        }.count()
 
     override fun getUpdateFolder(): String {
         throw UnimplementedOperationException()
@@ -321,9 +318,9 @@ class ServerMock : Server, Server.Spigot() {
 
     override fun matchPlayer(name: String): List<Player> = playerList.matchPlayers(name)
 
-    override fun getPlayerUniqueId(playerName: String): UUID? = playerList.getPlayerExact(playerName)?.uniqueId
+    override fun getPlayerUniqueId(playerName: String): UUID = playerList.getOfflinePlayer(playerName).uniqueId
 
-    override fun getPluginManager(): PluginManagerMock = pluginManager
+    override fun getPluginManager(): PluginManagerMock = pluginManagerMock
 
     override fun getScheduler(): BukkitScheduler {
         throw UnimplementedOperationException()
@@ -335,7 +332,7 @@ class ServerMock : Server, Server.Spigot() {
 
     override fun getWorlds(): List<World> = worlds.toList()
 
-    override fun createWorld(creator: WorldCreator): World = WorldMock(this, creator)
+    override fun createWorld(creator: WorldCreator): WorldMock = WorldMock(this, creator)
         .also {
             assertMainThread()
             worlds += it
@@ -349,11 +346,11 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getWorld(name: String): World? = worlds.find { it.name == name }
+    override fun getWorld(name: String): WorldMock? = worlds.find { it.name == name }
 
-    override fun getWorld(uid: UUID): World? = worlds.find { it.uid == uid }
+    override fun getWorld(uid: UUID): WorldMock? = worlds.find { it.uid == uid }
 
-    override fun getWorld(worldKey: NamespacedKey): World? = worlds.find { it.key == worldKey }
+    override fun getWorld(worldKey: NamespacedKey): WorldMock? = worlds.find { it.key == worldKey }
 
     override fun getMap(id: Int): MapView? {
         throw UnimplementedOperationException()
@@ -457,7 +454,7 @@ class ServerMock : Server, Server.Spigot() {
         }
     }
 
-    override fun getCommandAliases(): MutableMap<String, Array<String>> {
+    override fun getCommandAliases(): Map<String, Array<String>> {
         throw UnimplementedOperationException()
     }
 
@@ -489,7 +486,7 @@ class ServerMock : Server, Server.Spigot() {
 
     override fun getOfflinePlayer(name: String): OfflinePlayer = playerList.getOfflinePlayer(name)
 
-    override fun getOfflinePlayer(id: UUID): OfflinePlayer = playerList.getOfflinePlayer(id)!!
+    override fun getOfflinePlayer(id: UUID): OfflinePlayer = playerList.getOfflinePlayer(id)
 
     override fun getOfflinePlayerIfCached(name: String): OfflinePlayer {
         throw UnimplementedOperationException()
@@ -510,9 +507,13 @@ class ServerMock : Server, Server.Spigot() {
         playerList.ipBans.pardon(address)
     }
 
-    override fun getBannedPlayers(): Set<OfflinePlayer> {
-        throw UnimplementedOperationException()
-    }
+    override fun getBannedPlayers(): Set<OfflinePlayer> = playerList.profileBans
+        .banEntries
+        .map {
+            @Suppress("DEPRECATION")
+            getOfflinePlayer(it.target)
+        }
+        .toSet()
 
     override fun getBanList(type: BanList.Type): BanList =
         when (type) {
@@ -520,7 +521,9 @@ class ServerMock : Server, Server.Spigot() {
             BanList.Type.IP -> playerList.ipBans
         }
 
-    override fun getOperators(): Set<OfflinePlayer> = playerList.operators
+    override fun getOperators(): Set<OfflinePlayer> = playerList.offlinePlayers
+        .filter { it.isOp }
+        .toSet()
 
     override fun getDefaultGameMode(): GameMode {
         throw UnimplementedOperationException()
@@ -530,7 +533,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun getConsoleSender(): ConsoleCommandSender = consoleCommandSender
+    override fun getConsoleSender(): ConsoleCommandSenderMock = consoleCommandSender
 
     override fun getWorldContainer(): File {
         throw UnimplementedOperationException()
@@ -552,18 +555,19 @@ class ServerMock : Server, Server.Spigot() {
         createInventory(owner, type, -1)
 
     override fun createInventory(owner: InventoryHolder?, type: InventoryType, title: String): Inventory =
-        createInventory(owner, type)
+        createInventory(owner, type, -1)
 
     @Suppress("DEPRECATION")
     override fun createInventory(owner: InventoryHolder?, size: Int): Inventory =
         createInventory(owner, size, "inventory")
 
     override fun createInventory(owner: InventoryHolder?, size: Int, title: Component): Inventory =
-        createInventory(owner, size)
+        createInventory(owner, InventoryType.CHEST, size)
 
     override fun createInventory(owner: InventoryHolder?, size: Int, title: String): Inventory =
-        createInventory(owner, size)
+        createInventory(owner, InventoryType.CHEST, size)
 
+    @VisibleForTesting
     fun createInventory(owner: InventoryHolder?, type: InventoryType, size: Int): InventoryMock {
         assertMainThread()
 
@@ -622,9 +626,7 @@ class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    override fun isPrimaryThread(): Boolean {
-        throw UnimplementedOperationException()
-    }
+    override fun isPrimaryThread(): Boolean = isOnMainThread
 
     override fun motd(): Component = Component.text(MOTD)
 
@@ -817,6 +819,9 @@ class ServerMock : Server, Server.Spigot() {
         }
     }
 
+    open val currentServerTime: Long
+        get() = System.currentTimeMillis()
+
     val isOnMainThread: Boolean
         get() = mainThread == Thread.currentThread()
 
@@ -838,21 +843,21 @@ class ServerMock : Server, Server.Spigot() {
     val entities: Set<Entity>
         get() = _entities.asUnmodifiable()
 
-    fun registerEntity(entity: EntityMock) {
+    fun registerEntity(entity: EntityMock): EntityMock = entity.also {
         assertMainThread()
-        _entities += entity
+        _entities += it
     }
 
     /**
-     * Adds the given mocked world to this server.
+     * Adds the given mocked [world] to this server.
      */
-    fun addWorld(worldMock: WorldMock) {
+    fun addWorld(world: WorldMock): WorldMock = world.also {
         assertMainThread()
-        worlds += worldMock
+        worlds += it
     }
 
     /**
-     * Adds a very simple super flat world with a given name.
+     * Adds a very simple super flat world with a given [name].
      */
     fun addSimpleWorld(name: String): WorldMock {
         assertMainThread()
@@ -863,12 +868,13 @@ class ServerMock : Server, Server.Spigot() {
     }
 
     /**
-     * Add a specific player to the set.
+     * Add a specific [player] to the set.
      */
     @VisibleForTesting
-    fun addPlayer(player: PlayerMock) {
+    fun addPlayer(player: PlayerMock): PlayerMock {
         assertMainThread()
         playerList.addPlayer(player)
+        player.lastPlayed = currentServerTime
         @Suppress("DEPRECATION")
         val event = PlayerJoinEvent(
             player,
@@ -876,6 +882,8 @@ class ServerMock : Server, Server.Spigot() {
         )
         pluginManager.callEvent(event)
         registerEntity(player)
+
+        return player
     }
 
     /**
@@ -884,53 +892,92 @@ class ServerMock : Server, Server.Spigot() {
     @VisibleForTesting
     fun addPlayer(): PlayerMock {
         assertMainThread()
-        val player = PlayerMock(this, randomPlayerName(), UUID.randomUUID())
-        addPlayer(player)
-        return player
+        var playerName: String = randomPlayerName()
+        while (playerName in offlinePlayers.map { it.name }) {
+            playerName = randomPlayerName()
+        }
+        val player = PlayerMock(this, playerName, UUID.randomUUID())
+        return addPlayer(player)
     }
 
     /**
-     * Add a player with a given name and adds it.
+     * Add a player with a given [name] and adds it.
      */
     @VisibleForTesting
     fun addPlayer(name: String): PlayerMock {
         assertMainThread()
         val player = PlayerMock(this, name)
-        addPlayer(player)
-        return player
+        return addPlayer(player)
     }
 
     /**
-     * Set the numbers of mock players that are on this server.
+     * Set the [amount] of mock players that are on this server.
      *
      * Note that it will remove all players that are already on this server.
      */
     @VisibleForTesting
-    fun setPlayers(num: Int) {
+    fun setPlayers(amount: Int) {
+        require(amount >= 0) { "player amount is more or equals than 0" }
         assertMainThread()
         playerList.clearOnlinePlayers()
-        repeat(num) {
+        repeat(amount) {
             addPlayer()
         }
     }
 
     /**
-     * Set the numbers of mock offline players that are on this server.
+     * Add a specific offline [player] to the set.
+     */
+    @VisibleForTesting
+    fun addOfflinePlayer(player: OfflinePlayerMock): OfflinePlayerMock {
+        assertMainThread()
+        playerList.addOfflinePlayer(player)
+        return player
+    }
+
+    /**
+     * Add a random player and adds it.
+     */
+    @VisibleForTesting
+    fun addOfflinePlayer(): OfflinePlayerMock {
+        assertMainThread()
+        var playerName: String = randomPlayerName()
+        while (playerName in offlinePlayers.map { it.name }) {
+            playerName = randomPlayerName()
+        }
+        val player = OfflinePlayerMock(this, playerName, UUID.randomUUID())
+        addOfflinePlayer(player)
+        return player
+    }
+
+    /**
+     * Add a player with a given [name] and adds it.
+     */
+    @VisibleForTesting
+    fun addOfflinePlayer(name: String): OfflinePlayerMock {
+        assertMainThread()
+        val player = OfflinePlayerMock(this, name)
+        addOfflinePlayer(player)
+        return player
+    }
+
+    /**
+     * Set the [amount] of mock offline players that are on this server.
      *
      * Note that even players that are online are also
      * considered offline player because an [OfflinePlayer] really just refers to anyone that has at some point
      * in time played on the server.
      */
     @VisibleForTesting
-    fun setOfflinePlayers(num: Int) {
+    fun setOfflinePlayers(amount: Int) {
+        require(amount >= 0) { "player amount is more or equals than 0" }
         assertMainThread()
         playerList.clearOfflinePlayers()
         playerList.onlinePlayers.forEach {
             playerList.addPlayer(it)
         }
-        repeat(num) {
-            val player = OfflinePlayerMock(this, UUID.randomUUID(), randomPlayerName())
-            playerList.addOfflinePlayer(player)
+        repeat(amount) {
+            addOfflinePlayer()
         }
     }
 }

@@ -5,6 +5,7 @@ import land.vani.mockpaper.inventory.meta.BookMetaMock
 import land.vani.mockpaper.inventory.meta.EnchantedBookMetaMock
 import land.vani.mockpaper.inventory.meta.FireworkEffectMetaMock
 import land.vani.mockpaper.inventory.meta.FireworkMetaMock
+import land.vani.mockpaper.inventory.meta.ItemMetaMock
 import land.vani.mockpaper.inventory.meta.KnowledgeBookMetaMock
 import land.vani.mockpaper.inventory.meta.LeatherArmorMetaMock
 import land.vani.mockpaper.inventory.meta.PotionMetaMock
@@ -51,7 +52,7 @@ class ItemFactoryMock : ItemFactory {
             Material.PLAYER_HEAD -> SkullMetaMock::class
             Material.SUSPICIOUS_STEW -> SuspiciousStewMetaMock::class
             Material.TROPICAL_FISH_BUCKET -> throw UnimplementedOperationException()
-            else -> ItemMeta::class
+            else -> ItemMetaMock::class
         }
 
     override fun getItemMeta(material: Material): ItemMeta =
@@ -68,7 +69,7 @@ class ItemFactoryMock : ItemFactory {
 
     override fun equals(meta1: ItemMeta?, meta2: ItemMeta?): Boolean = meta1 == meta2
 
-    override fun asMetaFor(meta: ItemMeta, stack: ItemStack): ItemMeta? =
+    override fun asMetaFor(meta: ItemMeta, stack: ItemStack): ItemMeta =
         asMetaFor(meta, stack.type)
 
     override fun asMetaFor(meta: ItemMeta, material: Material): ItemMeta {

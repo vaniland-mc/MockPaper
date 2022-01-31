@@ -21,18 +21,23 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.Repairable
 import org.bukkit.persistence.PersistentDataContainer
 import java.util.EnumSet
+import java.util.Objects
 
-open class ItemMetaMock : ItemMeta {
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") // for clone()
+open class ItemMetaMock : ItemMeta, Damageable, Repairable, Object {
     private var displayName: Component? = null
     private var lore: MutableList<Component>? = null
-    private var customModelData: Int? = null
+    private var customModelData: Int = 0
     private var enchants: MutableMap<Enchantment, Int> = mutableMapOf()
     private var hideFlags: MutableSet<ItemFlag> = EnumSet.noneOf(ItemFlag::class.java)
     private var isUnbreakable: Boolean = false
 
-    constructor()
+    private var damage: Int = 0
+    private var repairCost: Int = 0
 
-    constructor(meta: ItemMeta) {
+    constructor() : super()
+
+    constructor(meta: ItemMeta) : super() {
         isUnbreakable = meta.isUnbreakable
         enchants = meta.enchants
         customModelData = meta.customModelData
@@ -54,7 +59,8 @@ open class ItemMetaMock : ItemMeta {
         this.displayName = displayName
     }
 
-    override fun getDisplayName(): String = displayName?.toLegacyString() ?: ""
+    override fun getDisplayName(): String = displayName?.toLegacyString()
+        ?: error("this item does not have display name")
 
     override fun getDisplayNameComponent(): Array<out BaseComponent> =
         displayName?.toBungeeComponents() ?: emptyArray()
@@ -83,10 +89,10 @@ open class ItemMetaMock : ItemMeta {
 
     override fun hasLore(): Boolean = lore != null
 
-    override fun lore(): MutableList<Component>? = lore
+    override fun lore(): List<Component>? = lore
 
-    override fun lore(lore: MutableList<Component>?) {
-        this.lore = lore
+    override fun lore(lore: List<Component>?) {
+        this.lore = lore?.toMutableList()
     }
 
     override fun getLore(): List<String>? = lore?.map { it.toLegacyString() }
@@ -102,13 +108,12 @@ open class ItemMetaMock : ItemMeta {
         this.lore = lore?.map { it.toComponent() }?.toMutableList()
     }
 
-    override fun hasCustomModelData(): Boolean = customModelData != null
+    override fun hasCustomModelData(): Boolean = customModelData != 0
 
     override fun getCustomModelData(): Int = customModelData
-        ?: error("Custom model data is not set")
 
     override fun setCustomModelData(data: Int?) {
-        customModelData = data
+        customModelData = data ?: 0
     }
 
     override fun hasEnchants(): Boolean = enchants.isNotEmpty()
@@ -201,7 +206,7 @@ open class ItemMetaMock : ItemMeta {
         throw UnimplementedOperationException()
     }
 
-    override fun clone(): ItemMeta = ItemMetaMock().let {
+    override fun clone(): ItemMetaMock = (super.clone() as ItemMetaMock).let {
         it.displayName = displayName
         it.lore = lore
         it.isUnbreakable = isUnbreakable
@@ -253,6 +258,22 @@ open class ItemMetaMock : ItemMeta {
         throw UnimplementedOperationException()
     }
 
+    override fun hasDamage(): Boolean = damage > 0
+
+    override fun getDamage(): Int = damage
+
+    override fun setDamage(damage: Int) {
+        this.damage = damage
+    }
+
+    override fun hasRepairCost(): Boolean = repairCost > 0
+
+    override fun getRepairCost(): Int = repairCost
+
+    override fun setRepairCost(cost: Int) {
+        this.repairCost = cost
+    }
+
     override fun getPersistentDataContainer(): PersistentDataContainer =
         persistentDataContainer
 
@@ -263,21 +284,21 @@ open class ItemMetaMock : ItemMeta {
         if (lore != null) {
             put("lore", lore!!.map { it.toLegacyString() })
         }
-        if (customModelData != null) {
-            put("customModelData", customModelData!!)
+        if (customModelData != 0) {
+            put("customModelData", customModelData)
         }
         put("enchants", enchants)
 
         // Not implemented: attributeModifiers
 
-        if (this is Repairable) {
+        if (hasRepairCost()) {
             put("repairCost", repairCost)
         }
 
         put("itemFlags", hideFlags)
         put("unbreakable", isUnbreakable)
 
-        if (this is Damageable) {
+        if (hasDamage()) {
             put("damage", damage)
         }
 
@@ -286,8 +307,40 @@ open class ItemMetaMock : ItemMeta {
         put("persistentDataContainer", persistentDataContainer.serialize())
     }
 
+    override fun hashCode(): Int = Objects.hash(
+        displayName,
+        lore,
+        customModelData,
+        enchants,
+        hideFlags,
+        isUnbreakable,
+        damage,
+        repairCost,
+        persistentDataContainer,
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ItemMetaMock
+
+        if (displayName != other.displayName) return false
+        if (lore != other.lore) return false
+        if (customModelData != other.customModelData) return false
+        if (enchants != other.enchants) return false
+        if (hideFlags != other.hideFlags) return false
+        if (isUnbreakable != other.isUnbreakable) return false
+        if (damage != other.damage) return false
+        if (repairCost != other.repairCost) return false
+        if (persistentDataContainer != other.persistentDataContainer) return false
+
+        return true
+    }
+
     companion object {
         @Suppress("UNCHECKED_CAST")
+        @JvmStatic
         fun deserialize(args: Map<String, Any>): ItemMeta =
             ItemMetaMock().apply {
                 displayName = (args["displayName"] as String?)?.toComponent()
@@ -296,10 +349,12 @@ open class ItemMetaMock : ItemMeta {
                 enchants = args["enchants"] as MutableMap<Enchantment, Int>
                 hideFlags = args["itemFlags"] as MutableSet<ItemFlag>
                 isUnbreakable = args["unbreakable"] as Boolean
+                damage = args["damage"] as Int? ?: 0
+                repairCost = args["repairCost"] as Int? ?: 0
 
                 // attributeModifier and customTagContainer are not supported
 
-                customModelData = args["customModelData"] as Int?
+                customModelData = args["customModelData"] as? Int ?: 0
                 persistentDataContainer = (args["persistentDataContainer"] as Map<String, Any>)
                     .let {
                         PersistentDataContainerMock.deserialize(it)

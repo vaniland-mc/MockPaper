@@ -2,6 +2,7 @@ package land.vani.mockpaper.inventory.meta
 
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
+import java.util.Objects
 
 class EnchantedBookMetaMock : ItemMetaMock, EnchantmentStorageMeta {
     private val storedEnchantments: MutableMap<Enchantment, Int> = mutableMapOf()
@@ -38,4 +39,16 @@ class EnchantedBookMetaMock : ItemMetaMock, EnchantmentStorageMeta {
         .apply {
             storedEnchantments += this@EnchantedBookMetaMock.storedEnchantments
         }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(storedEnchantments)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is EnchantedBookMetaMock) return false
+
+        if (storedEnchantments != other.storedEnchantments) return false
+
+        return true
+    }
 }

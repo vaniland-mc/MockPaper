@@ -9,13 +9,13 @@ import org.jetbrains.annotations.VisibleForTesting
 open class InventoryViewMock(
     private var player: HumanEntity,
     private var name: String,
-    private var topInventory: Inventory,
+    private var topInventory: Inventory = InventoryMock.Crafting,
     private var bottomInventory: Inventory,
     private var type: InventoryType,
 ) : InventoryView() {
     constructor(
         player: HumanEntity,
-        topInventory: Inventory,
+        topInventory: Inventory = InventoryMock.Crafting,
         bottomInventory: Inventory,
         type: InventoryType,
     ) : this(player, "Inventory", topInventory, bottomInventory, type)

@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionData
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.potion.PotionType
+import java.util.Objects
 
 class PotionMetaMock : ItemMetaMock, PotionMeta {
     private val effects: MutableList<PotionEffect> = mutableListOf()
@@ -56,14 +57,8 @@ class PotionMetaMock : ItemMetaMock, PotionMeta {
     override fun hasCustomEffect(type: PotionEffectType): Boolean =
         indexOf(type) != -1
 
-    private fun indexOf(type: PotionEffectType): Int {
-        for (i in effects.indices) {
-            if (effects[i].type == type) {
-                return i
-            }
-        }
-        return -1
-    }
+    private fun indexOf(type: PotionEffectType): Int =
+        effects.indexOfFirst { it.type == type }
 
     override fun setMainEffect(type: PotionEffectType): Boolean {
         throw UnimplementedOperationException()
@@ -88,4 +83,22 @@ class PotionMetaMock : ItemMetaMock, PotionMeta {
             basePotionData = this@PotionMetaMock.basePotionData
             color = this@PotionMetaMock.color
         }
+
+    override fun hashCode(): Int = super.hashCode() + Objects.hash(
+        effects,
+        basePotionData,
+        color
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (!super.equals(other)) return false
+        if (other !is PotionMetaMock) return false
+
+        if (effects != other.effects) return false
+        if (basePotionData != other.basePotionData) return false
+        if (color != other.color) return false
+
+        return true
+    }
 }

@@ -20,19 +20,20 @@ import java.util.UUID
  */
 class OfflinePlayerMock(
     private val server: ServerMock,
+    private val name: String,
     private val uuid: UUID,
-    private var name: String,
 ) : OfflinePlayer {
     constructor(server: ServerMock, name: String) : this(
         server,
+        name,
         UUID.nameUUIDFromBytes("OfflinePlayer:$name".toByteArray()),
-        name
     )
 
-    fun join(server: ServerMock): PlayerMock {
-        return PlayerMock(server, name, uuid).also {
-            // TODO: Add a player mock to server
-        }
+    /**
+     *
+     */
+    fun join(server: ServerMock): PlayerMock = PlayerMock(server, name, uuid).also {
+        server.addPlayer(it)
     }
 
     override fun isOnline(): Boolean = false
@@ -53,7 +54,7 @@ class OfflinePlayerMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getPlayer(): Player? = server.getPlayer(name)
+    override fun getPlayer(): Player? = server.getPlayer(uniqueId)
 
     override fun getFirstPlayed(): Long {
         throw UnimplementedOperationException()
@@ -159,7 +160,7 @@ class OfflinePlayerMock(
         throw UnimplementedOperationException()
     }
 
-    override fun serialize(): MutableMap<String, Any> {
+    override fun serialize(): Map<String, Any> {
         throw UnimplementedOperationException()
     }
 }
