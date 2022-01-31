@@ -758,8 +758,7 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    @Suppress("DEPRECATION")
-    override fun getUnsafe(): org.bukkit.UnsafeValues = unsafeValues
+    override fun getUnsafe(): UnsafeValuesMock = unsafeValues
 
     override fun spigot(): Server.Spigot {
         throw UnimplementedOperationException()
