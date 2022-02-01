@@ -556,7 +556,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             bukkitLegacyEvent.message,
             players
         )
-        server.scheduler.callEventAsync(bukkitEvent)
+        server.scheduler.callEventAsync(bukkitEvent).get()
 
         if (bukkitEvent.isCancelled) return
 
@@ -568,7 +568,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             bukkitEvent.message.toComponent(),
             bukkitEvent.message.toComponent(),
         )
-        server.scheduler.callEventAsync(paperEvent)
+        server.scheduler.callEventAsync(paperEvent).get()
         if (paperEvent.isCancelled) return
 
         messages.offer(paperEvent.message().toLegacyString())
