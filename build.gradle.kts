@@ -7,7 +7,7 @@ plugins {
     kotlin("jvm") version "1.6.10"
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
-    id("org.jetbrains.kotlinx.kover") version "0.5.0-RC2"
+    id("org.jetbrains.kotlinx.kover") version "0.5.0"
 }
 
 group = "land.vani.mockpaper"
