@@ -1,72 +1,100 @@
 package land.vani.mockpaper.scheduler
 
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.UnimplementedOperationException
+import org.bukkit.event.Event
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scheduler.BukkitTask
 import org.bukkit.scheduler.BukkitWorker
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.concurrent.Callable
 import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import java.util.concurrent.SynchronousQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
+import java.util.logging.Logger
 import kotlin.math.max
 
-class BukkitSchedulerMock : BukkitScheduler {
+class BukkitSchedulerMock(
+    private val server: ServerMock,
+) : BukkitScheduler {
     companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger("BukkitSchedulerMock")
+        private val LOGGER: Logger = Logger.getLogger("BukkitSchedulerMock")
     }
+
+    private val mainThreadExecutor = ThreadPoolExecutor(
+        0,
+        Integer.MAX_VALUE,
+        60L,
+        TimeUnit.SECONDS,
+        SynchronousQueue()
+    )
+    private val asyncEventExecutor = Executors.newCachedThreadPool()
 
     private val tasks = TaskList()
 
     private var lastId: Int = 0
     private var currentTick: Long = 0
 
+    @set:VisibleForTesting
+    var executorTimeout: Long = 60000
+        set(value) {
+            require(value > 0)
+            field = value
+        }
+
     override fun scheduleSyncDelayedTask(plugin: Plugin, task: Runnable, delay: Long): Int =
         runTaskLater(plugin, task, delay).taskId.also {
-            LOGGER.warn("Consider using runTaskLater instead of scheduleSyncDelayTask")
+            LOGGER.warning("Consider using runTaskLater instead of scheduleSyncDelayTask")
         }
 
     override fun scheduleSyncDelayedTask(plugin: Plugin, task: BukkitRunnable, delay: Long): Int =
         runTaskLater(plugin, task as Runnable, delay).taskId.also {
-            LOGGER.warn("Consider using runTaskLater instead of scheduleSyncDelayTask")
+            LOGGER.warning("Consider using runTaskLater instead of scheduleSyncDelayTask")
         }
 
     override fun scheduleSyncDelayedTask(plugin: Plugin, task: Runnable): Int =
         runTask(plugin, task).taskId.also {
-            LOGGER.warn("Consider using runTask instead of scheduleSyncDelayedTask")
+            LOGGER.warning("Consider using runTask instead of scheduleSyncDelayedTask")
         }
 
     override fun scheduleSyncDelayedTask(plugin: Plugin, task: BukkitRunnable): Int =
         runTask(plugin, task as Runnable).taskId.also {
-            LOGGER.warn("Consider using runTask instead of scheduleSyncDelayedTask")
+            LOGGER.warning("Consider using runTask instead of scheduleSyncDelayedTask")
         }
 
     override fun scheduleSyncRepeatingTask(plugin: Plugin, task: Runnable, delay: Long, period: Long): Int =
         runTaskTimer(plugin, task, delay, period).taskId.also {
-            LOGGER.warn("Consider using runTaskTimer instead of scheduleSyncRepeatingTask")
+            LOGGER.warning("Consider using runTaskTimer instead of scheduleSyncRepeatingTask")
         }
 
     override fun scheduleSyncRepeatingTask(plugin: Plugin, task: BukkitRunnable, delay: Long, period: Long): Int =
         runTaskTimer(plugin, task as Runnable, delay, period).taskId.also {
-            LOGGER.warn("Consider using runTaskTimer instead of scheduleSyncRepeatingTask")
+            LOGGER.warning("Consider using runTaskTimer instead of scheduleSyncRepeatingTask")
         }
 
     override fun scheduleAsyncDelayedTask(plugin: Plugin, task: Runnable, delay: Long): Int =
         runTaskLaterAsynchronously(plugin, task, delay).taskId.also {
-            LOGGER.warn("Consider using runTaskLaterAsynchronously instead of scheduleAsyncDelayedTask")
+            LOGGER.warning("Consider using runTaskLaterAsynchronously instead of scheduleAsyncDelayedTask")
         }
 
     override fun scheduleAsyncDelayedTask(plugin: Plugin, task: Runnable): Int =
         runTaskAsynchronously(plugin, task).taskId.also {
-            LOGGER.warn("Consider using runTaskAsynchronously instead of scheduleAsyncDelayedTask")
+            LOGGER.warning("Consider using runTaskAsynchronously instead of scheduleAsyncDelayedTask")
         }
 
     override fun scheduleAsyncRepeatingTask(plugin: Plugin, task: Runnable, delay: Long, period: Long): Int =
         runTaskTimerAsynchronously(plugin, task, delay, period).taskId.also {
-            LOGGER.warn("Consider using runTaskTimerAsynchronously instead of scheduleAsyncRepeatingTask")
+            LOGGER.warning("Consider using runTaskTimerAsynchronously instead of scheduleAsyncRepeatingTask")
         }
 
     override fun <T : Any?> callSyncMethod(plugin: Plugin, task: Callable<T>): Future<T> {
@@ -192,7 +220,124 @@ class BukkitSchedulerMock : BukkitScheduler {
         period: Long,
     ): BukkitTask = runTaskTimerAsynchronously(plugin, task as Runnable, delay, period)
 
-    override fun getMainThreadExecutor(plugin: Plugin): Executor {
-        throw UnimplementedOperationException()
+    override fun getMainThreadExecutor(plugin: Plugin): Executor = mainThreadExecutor
+
+    private fun wrapTask(task: ScheduledTaskMock): () -> Unit = {
+        task.isRunning = true
+        task.run()
+        task.isRunning = false
+    }
+
+    /**
+     * Perform one tick on the server.
+     */
+    @VisibleForTesting
+    fun performTicks(tick: Int = 1) {
+        repeat(tick) {
+            currentTick++
+            val oldTasks = tasks.currentTasks
+
+            oldTasks.filter { it.scheduledTick == currentTick && !it.isCancelled }.forEach { task ->
+                if (task.isSync) {
+                    wrapTask(task)()
+                } else {
+                    mainThreadExecutor.submit(wrapTask(task))
+                }
+
+                if (task is RepeatedTaskMock && !task.isCancelled) {
+                    task.updateScheduledTick()
+                    tasks.addTask(task)
+                }
+            }
+        }
+    }
+
+    @get:VisibleForTesting
+    val queuedAsyncTaskCount: Int
+        get() = tasks.currentTasks
+            .filterNot { it.isSync || it.isCancelled || it.isRunning }
+            .count()
+
+    /**
+     * Call [event] from async thread.
+     */
+    @VisibleForTesting
+    fun callEventAsync(event: Event): Future<*> = asyncEventExecutor.submit {
+        server.pluginManager.callEvent(event)
+    }
+
+    @VisibleForTesting
+    @JvmSynthetic
+    suspend fun callEventAsyncSuspend(event: Event) {
+        withContext(asyncEventExecutor.asCoroutineDispatcher()) {
+            server.pluginManager.callEvent(event)
+        }
+    }
+
+    private suspend fun waitAsyncTasks(waiter: suspend (Long) -> Unit) {
+        while (tasks.currentTasks.isNotEmpty()) {
+            performTicks()
+        }
+
+        val systemTime = System.currentTimeMillis()
+        while (mainThreadExecutor.activeCount > 0) {
+            waiter(10)
+
+            if (systemTime + executorTimeout > System.currentTimeMillis()) {
+                continue
+            }
+
+            tasks.currentTasks.forEach { task ->
+                if (!task.isRunning) {
+                    return@forEach
+                }
+
+                task.cancel()
+                throw AsyncTaskForceCancellationException(
+                    "Forced cancellation of task owned by ${task.owner.name}"
+                )
+            }
+            mainThreadExecutor.shutdownNow()
+        }
+    }
+
+    /**
+     * Waits until all asynchronous tasks have finished executing. If you have an asynchronous task that runs
+     * indefinitely, this function will never return.
+     */
+    @Suppress("BlockingMethodInNonBlockingContext")
+    @VisibleForTesting
+    fun waitAsyncTaskFinished() {
+        runBlocking {
+            waitAsyncTasks {
+                try {
+                    Thread.sleep(it)
+                } catch (ex: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    return@waitAsyncTasks
+                }
+            }
+        }
+    }
+
+    /**
+     * Waits until all asynchronous tasks have finished executing. If you have an asynchronous task that runs
+     * indefinitely, this function will never return.
+     */
+    @VisibleForTesting
+    @JvmSynthetic
+    suspend fun waitAsyncTaskFinishedSuspend() {
+        waitAsyncTasks {
+            delay(it)
+        }
+    }
+
+    /**
+     * Shut the scheduler down.
+     */
+    @VisibleForTesting
+    fun shutdown() {
+        mainThreadExecutor.shutdown()
+        asyncEventExecutor.shutdownNow()
     }
 }

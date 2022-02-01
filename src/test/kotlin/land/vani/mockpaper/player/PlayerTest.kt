@@ -47,7 +47,6 @@ import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerToggleFlightEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.event.player.PlayerToggleSprintEvent
-import org.intellij.lang.annotations.Language
 import java.util.UUID
 
 class PlayerTest : ShouldSpec({
@@ -325,8 +324,7 @@ class PlayerTest : ShouldSpec({
         }
     }
 
-    // TODO: async event call is not supported yet.
-    xshould("chat") {
+    should("chat") {
         player.chat("some message")
 
         player.assertSaid("some message")
@@ -339,7 +337,6 @@ class PlayerTest : ShouldSpec({
     }
 
     should("perform command") {
-        @Language("yaml")
         val plugin = server.pluginManager.loadPlugin<MockPlugin>(
             """
                 name: MockPlugin

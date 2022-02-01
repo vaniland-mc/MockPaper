@@ -556,7 +556,8 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             bukkitLegacyEvent.message,
             players
         )
-        // TODO: call event async
+        server.scheduler.callEventAsync(bukkitEvent)
+
         if (bukkitEvent.isCancelled) return
 
         val paperEvent = AsyncChatEvent(
@@ -567,7 +568,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             bukkitEvent.message.toComponent(),
             bukkitEvent.message.toComponent(),
         )
-        server.pluginManager.callEvent(paperEvent)
+        server.scheduler.callEventAsync(paperEvent)
         if (paperEvent.isCancelled) return
 
         messages.offer(paperEvent.message().toLegacyString())
@@ -791,6 +792,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             true,
             EquipmentSlot.HAND,
         )
+        // TODO: server.pluginManager.callEvent(event)
         if (!event.isCancelled) {
             block.type = material
         }

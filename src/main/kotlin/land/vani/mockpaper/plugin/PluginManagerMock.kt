@@ -26,6 +26,7 @@ import org.bukkit.plugin.RegisteredListener
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.java.JavaPluginLoader
 import org.bukkit.plugin.java.isEnabledPublic
+import org.intellij.lang.annotations.Language
 import java.io.File
 import java.io.FileNotFoundException
 import java.lang.reflect.Constructor
@@ -464,6 +465,7 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
      */
     fun <T : JavaPlugin> loadPlugin(
         clazz: Class<T>,
+        @Language("yaml")
         description: String,
         parameters: Array<Any> = arrayOf(),
     ): T = loadPlugin(clazz, PluginDescriptionFile(description.reader()), parameters)
@@ -472,6 +474,7 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
      * Load a plugin [T] with [description].
      */
     inline fun <reified T : JavaPlugin> loadPlugin(
+        @Language("yaml")
         description: String,
         parameters: Array<Any> = arrayOf(),
     ): T = loadPlugin(T::class.java, description, parameters)

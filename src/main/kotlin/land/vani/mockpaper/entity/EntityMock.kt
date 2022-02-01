@@ -13,7 +13,6 @@ import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.EntityEffect
 import org.bukkit.Location
 import org.bukkit.Nameable
-import org.bukkit.Server
 import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.block.PistonMoveReaction
@@ -352,7 +351,7 @@ abstract class EntityMock(
 
     override fun isValid(): Boolean = !isDead
 
-    override fun getServer(): Server = server
+    override fun getServer(): ServerMock = server
 
     override fun getPassenger(): Entity? {
         throw UnimplementedOperationException()
