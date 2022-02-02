@@ -2,6 +2,7 @@ package land.vani.mockpaper.scheduler
 
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitTask
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.concurrent.CancellationException
 
 open class ScheduledTaskMock(
@@ -9,7 +10,7 @@ open class ScheduledTaskMock(
     private val plugin: Plugin,
     private val isSync: Boolean,
     var scheduledTick: Long,
-    private val runnable: Runnable,
+    val runnable: Runnable,
 ) : BukkitTask {
     var isRunning: Boolean = false
     private var isCancelled: Boolean = false
@@ -29,6 +30,7 @@ open class ScheduledTaskMock(
         cancelListeners.forEach { it() }
     }
 
+    @VisibleForTesting
     fun run() {
         if (isCancelled) throw CancellationException("Task is cancelled")
 
@@ -38,6 +40,7 @@ open class ScheduledTaskMock(
     /**
      * Adds a callback which is executed when the task is cancelled.
      */
+    @VisibleForTesting
     fun onCancel(block: () -> Unit) {
         cancelListeners += block
     }
