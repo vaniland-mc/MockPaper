@@ -10,6 +10,7 @@ import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
@@ -37,6 +38,11 @@ class EntityTest : ShouldSpec({
         server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         entity = SimpleEntityMock(server)
+    }
+
+    should("server") {
+        entity.server shouldBe server
+        entity.server.shouldBeInstanceOf<ServerMock>()
     }
 
     should("get the location is equal") {

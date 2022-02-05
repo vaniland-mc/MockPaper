@@ -28,6 +28,7 @@ import land.vani.mockpaper.player.PlayerMock
 import land.vani.mockpaper.player.randomPlayerName
 import land.vani.mockpaper.plugin.PluginManagerMock
 import land.vani.mockpaper.potion.registerPotionEffectTypes
+import land.vani.mockpaper.scheduler.BukkitSchedulerMock
 import land.vani.mockpaper.world.WorldMock
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
@@ -73,7 +74,6 @@ import org.bukkit.map.MapView
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicesManager
 import org.bukkit.plugin.messaging.Messenger
-import org.bukkit.scheduler.BukkitScheduler
 import org.bukkit.scoreboard.ScoreboardManager
 import org.bukkit.structure.StructureManager
 import org.bukkit.util.CachedServerIcon
@@ -118,6 +118,9 @@ open class ServerMock : Server, Server.Spigot() {
     private val bossBars: MutableMap<NamespacedKey, KeyedBossBarMock> = mutableMapOf()
     private val commandMap: CommandMapMock by lazy {
         CommandMapMock(this)
+    }
+    private val schedulerMock: BukkitSchedulerMock by lazy {
+        BukkitSchedulerMock(this)
     }
 
     init {
@@ -322,9 +325,7 @@ open class ServerMock : Server, Server.Spigot() {
 
     override fun getPluginManager(): PluginManagerMock = pluginManagerMock
 
-    override fun getScheduler(): BukkitScheduler {
-        throw UnimplementedOperationException()
-    }
+    override fun getScheduler(): BukkitSchedulerMock = schedulerMock
 
     override fun getServicesManager(): ServicesManager {
         throw UnimplementedOperationException()
@@ -757,8 +758,7 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
-    @Suppress("DEPRECATION")
-    override fun getUnsafe(): org.bukkit.UnsafeValues = unsafeValues
+    override fun getUnsafe(): UnsafeValuesMock = unsafeValues
 
     override fun spigot(): Server.Spigot {
         throw UnimplementedOperationException()
