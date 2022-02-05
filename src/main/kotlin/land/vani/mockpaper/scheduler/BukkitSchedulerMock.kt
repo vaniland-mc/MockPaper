@@ -43,9 +43,10 @@ class BukkitSchedulerMock(
     private val tasks = TaskList()
 
     private var lastId: Int = 0
-    private var currentTick: Long = 0
+    var currentTick: Long = 0
+        private set
 
-    @set:VisibleForTesting
+    @VisibleForTesting
     var executorTimeout: Long = 60000
         set(value) {
             require(value > 0)
