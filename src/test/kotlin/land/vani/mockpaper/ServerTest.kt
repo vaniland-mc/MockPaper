@@ -19,6 +19,7 @@ import land.vani.mockpaper.entity.SimpleEntityMock
 import land.vani.mockpaper.internal.toBungeeComponents
 import land.vani.mockpaper.player.OfflinePlayerMock
 import land.vani.mockpaper.player.PlayerMock
+import land.vani.mockpaper.scheduler.BukkitSchedulerMock
 import land.vani.mockpaper.world.WorldMock
 import net.kyori.adventure.text.Component
 import org.bukkit.BanList
@@ -238,6 +239,10 @@ class ServerTest : ShouldSpec({
         val uniqueId = server.getPlayerUniqueId(player.name)
 
         uniqueId shouldBe player.uniqueId
+    }
+
+    should("scheduler") {
+        server.scheduler.shouldBeInstanceOf<BukkitSchedulerMock>()
     }
 
     context("getWorlds") {
