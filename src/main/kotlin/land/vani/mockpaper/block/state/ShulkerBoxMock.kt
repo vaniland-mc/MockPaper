@@ -19,7 +19,7 @@ import java.util.UUID
 class ShulkerBoxMock : ContainerMock, ShulkerBox {
     private val color: DyeColor?
 
-    constructor(block: Block? = null, material: Material) : super(block, material) {
+    constructor(material: Material, block: Block? = null) : super(material, block) {
         color = getColorFromMaterial(material)
     }
 

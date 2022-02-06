@@ -19,9 +19,9 @@ import java.util.UUID
  * @author TheBusyBiscuit
  */
 class ChestMock : ContainerMock, Chest {
-    constructor(block: Block?, material: Material) : super(block, material)
+    constructor(material: Material, block: Block? = null) : super(material, block)
 
-    constructor(block: Block) : this(block, block.type)
+    constructor(block: Block) : this(block.type, block)
 
     constructor(state: ChestMock) : super(state)
 

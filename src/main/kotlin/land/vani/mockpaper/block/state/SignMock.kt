@@ -18,7 +18,7 @@ import org.bukkit.block.Sign
 class SignMock : TileStateMock, Sign {
     private val lines: Array<String> = arrayOf("", "", "", "")
 
-    constructor(block: Block?, material: Material) : super(block, material)
+    constructor(material: Material, block: Block? = null) : super(material, block)
 
     constructor(block: Block) : super(block)
 

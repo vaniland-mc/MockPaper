@@ -17,7 +17,7 @@ import java.util.UUID
  * @author TheBusyBiscuit
  */
 class DispenserMock : ContainerMock, Dispenser {
-    constructor(block: Block? = null, material: Material) : super(block, material)
+    constructor(material: Material, block: Block? = null) : super(material, block)
 
     constructor(block: Block) : super(block)
 

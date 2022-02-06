@@ -15,7 +15,7 @@ import kotlin.math.min
  * This [ContainerMock] represents a [Lectern].
  */
 class LecternMock : ContainerMock, Lectern {
-    constructor(block: Block? = null, material: Material) : super(block, material)
+    constructor(material: Material, block: Block? = null) : super(material, block)
 
     constructor(block: Block) : super(block)
 

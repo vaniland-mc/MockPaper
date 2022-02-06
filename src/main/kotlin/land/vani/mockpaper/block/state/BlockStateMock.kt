@@ -13,15 +13,15 @@ import org.bukkit.block.data.BlockData
 import org.bukkit.metadata.Metadatable
 
 open class BlockStateMock(
-    private var block: Block? = null,
     private var material: Material,
+    private var block: Block? = null,
 ) : BlockState, Metadatable by MetadataHolder() {
-    constructor(block: Block) : this(block, block.type)
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(state: BlockStateMock) : this(state.block, state.material)
+    constructor(state: BlockStateMock) : this(state.material, state.block)
 
     override fun getBlock(): Block = block
-        ?: throw IllegalStateException("block is not placed")
+        ?: error("block is not placed")
 
     @Suppress("DEPRECATION")
     override fun getData(): org.bukkit.material.MaterialData =
@@ -35,14 +35,13 @@ open class BlockStateMock(
 
     override fun getLightLevel(): Byte = block?.lightLevel ?: 0
 
-    override fun getWorld(): World = block?.world
-        ?: throw IllegalStateException("block is not placed")
+    override fun getWorld(): World = block?.world ?: error("block is not placed")
 
-    override fun getX(): Int = block!!.x
+    override fun getX(): Int = block?.x ?: error("block is not placed")
 
-    override fun getY(): Int = block!!.y
+    override fun getY(): Int = block?.y ?: error("block is not placed")
 
-    override fun getZ(): Int = block!!.z
+    override fun getZ(): Int = block?.z ?: error("block is not placed")
 
     override fun getLocation(): Location = block?.location
         ?: Location(null, 0.0, 0.0, 0.0)
@@ -54,8 +53,7 @@ open class BlockStateMock(
             z = this@BlockStateMock.location.z
         }
 
-    override fun getChunk(): Chunk = block?.chunk
-        ?: throw IllegalStateException("block is not placed")
+    override fun getChunk(): Chunk = block?.chunk ?: error("block is not placed")
 
     @Suppress("DEPRECATION")
     override fun setData(data: org.bukkit.material.MaterialData) {

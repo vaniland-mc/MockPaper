@@ -14,9 +14,9 @@ import org.bukkit.persistence.PersistentDataContainer
  * @author TheBusyBiscuit
  */
 abstract class TileStateMock : BlockStateMock, TileState {
-    constructor(block: Block? = null, material: Material) : super(block, material)
+    constructor(material: Material, block: Block? = null) : super(material, block)
 
-    protected constructor(block: Block) : this(block, block.type)
+    protected constructor(block: Block) : this(block.type, block)
 
     protected constructor(state: TileStateMock) : super(state)
 

@@ -16,9 +16,9 @@ import org.bukkit.inventory.Inventory
  * @author TheBusyBiscuit
  */
 abstract class ContainerMock : TileStateMock, Container {
-    constructor(block: Block? = null, material: Material) : super(block, material)
+    constructor(material: Material, block: Block? = null) : super(material, block)
 
-    protected constructor(block: Block) : this(block, block.type)
+    protected constructor(block: Block) : this(block.type, block)
 
     protected constructor(state: ContainerMock) : super(state)
 
