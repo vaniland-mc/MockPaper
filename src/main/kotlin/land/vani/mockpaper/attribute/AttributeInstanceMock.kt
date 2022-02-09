@@ -19,7 +19,7 @@ class AttributeInstanceMock(
         this.value = value
     }
 
-    override fun getModifiers(): MutableCollection<AttributeModifier> {
+    override fun getModifiers(): Collection<AttributeModifier> {
         throw UnimplementedOperationException()
     }
 
