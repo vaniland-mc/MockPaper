@@ -11,9 +11,11 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockState
 import org.bukkit.block.data.BlockData
 import org.bukkit.metadata.Metadatable
+import org.jetbrains.annotations.VisibleForTesting
 
 open class BlockStateMock(
-    private var material: Material,
+    @VisibleForTesting
+    var material: Material,
     private var block: Block? = null,
 ) : BlockState, Metadatable by MetadataHolder() {
     constructor(block: Block) : this(block.type, block)

@@ -20,6 +20,25 @@ class BlockStateTest : ShouldSpec({
         server = MockPaper.mock()
     }
 
+    context("constructor") {
+        should("constructor(state)") {
+            val block = BlockMock(randomLocation(null))
+            val state1 = BlockStateMock(Material.SAND, block)
+            val state2 = BlockStateMock(state1)
+
+            state1.material shouldBe state2.material
+            state1.block shouldBe state2.block
+        }
+
+        should("constructor(block)") {
+            val block = BlockMock(randomLocation(null))
+            val state = BlockStateMock(block)
+
+            state.block shouldBe block
+            state.material shouldBe block.type
+        }
+    }
+
     context("on placed") {
         lateinit var location: Location
         lateinit var block: BlockMock
@@ -41,6 +60,11 @@ class BlockStateTest : ShouldSpec({
         }
         should("location is same") {
             state.location shouldBe block.location
+        }
+        should("getLocation(Location)") {
+            val location2 = randomLocation(state.world)
+            state.getLocation(location2) shouldBe location
+            location2 shouldBe location
         }
         should("chunk is same") {
             state.chunk shouldBe block.chunk
