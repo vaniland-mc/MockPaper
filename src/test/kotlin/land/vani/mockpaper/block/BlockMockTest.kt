@@ -1,17 +1,24 @@
 package land.vani.mockpaper.block
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowUnit
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.ServerMock
+import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.block.data.BlockDataMock
 import land.vani.mockpaper.randomLocation
 import land.vani.mockpaper.world.WorldMock
+import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.Biome
 import org.bukkit.block.BlockFace
+import org.bukkit.inventory.ItemStack
+import org.bukkit.util.Vector
 
 class BlockMockTest : ShouldSpec({
     lateinit var server: ServerMock
@@ -21,6 +28,24 @@ class BlockMockTest : ShouldSpec({
         server = MockPaper.mock()
         val world = WorldMock(server)
         block = BlockMock(randomLocation(world))
+    }
+
+    context("constructor") {
+        should("location only constructor") {
+            val world = WorldMock(server)
+            val location = randomLocation(world)
+            block = BlockMock(location)
+
+            block.type shouldBe Material.AIR
+            block.location shouldBe location
+        }
+
+        should("custom location on constructor and location is same") {
+            val world = WorldMock(server)
+            val location = randomLocation(world)
+            block = BlockMock(Material.AIR, location)
+            block.location shouldBe location
+        }
     }
 
     should("type default is air") {
@@ -34,13 +59,6 @@ class BlockMockTest : ShouldSpec({
 
     should("default location is Location(null, 0, 0, 0)") {
         BlockMock().location shouldBe Location(null, 0.0, 0.0, 0.0)
-    }
-
-    should("custom location on constructor and location is same") {
-        val world = WorldMock(server)
-        val location = randomLocation(world)
-        block = BlockMock(Material.AIR, location)
-        block.location shouldBe location
     }
 
     should("chunk is matches") {
@@ -136,5 +154,211 @@ class BlockMockTest : ShouldSpec({
         block.type = Material.STONE
         block.breakNaturally()
         block.isEmpty shouldBe true
+    }
+
+    context("lightLevel") {
+        should("getLightLevel is not implemented yet") {
+            shouldThrow<UnimplementedOperationException> {
+                block.lightLevel
+            }
+        }
+        should("getLightFromSky is not implemented yet") {
+            shouldThrow<UnimplementedOperationException> {
+                block.lightFromSky
+            }
+        }
+        should("getLightFromBlocks is not implemented yet") {
+            shouldThrow<UnimplementedOperationException> {
+                block.lightFromBlocks
+            }
+        }
+    }
+
+    should("isValidTool is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isValidTool(ItemStack(Material.DIAMOND_PICKAXE))
+        }
+    }
+
+    should("getFace is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.getFace(BlockMock())
+        }
+    }
+
+    should("getBiome is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.biome
+        }
+    }
+
+    should("setBiome is not implemented yet") {
+        shouldThrowUnit<UnimplementedOperationException> {
+            block.biome = Biome.BADLANDS
+        }
+    }
+
+    should("isBlockPowered is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isBlockPowered
+        }
+    }
+
+    should("isBlockIndirectlyPowered is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isBlockIndirectlyPowered
+        }
+    }
+
+    should("isBlockFacePowered is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isBlockFacePowered(BlockFace.EAST)
+        }
+    }
+
+    should("isBlockFaceIndirectlyPowered is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isBlockFaceIndirectlyPowered(BlockFace.EAST)
+        }
+    }
+
+    should("getBlockPower is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.blockPower
+        }
+    }
+
+    should("getBlockPower(BlockFace) is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.getBlockPower(BlockFace.EAST)
+        }
+    }
+
+    should("isBuildable is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isBuildable
+        }
+    }
+
+    should("isReplaceable is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isBuildable
+        }
+    }
+
+    should("getTemperature is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.temperature
+        }
+    }
+
+    should("getHumidity is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.humidity
+        }
+    }
+
+    should("getPistonMoveReaction is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.pistonMoveReaction
+        }
+    }
+
+    should("applyBoneMeal is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.applyBoneMeal(BlockFace.EAST)
+        }
+    }
+
+    should("getDrops is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.drops
+        }
+    }
+
+    should("getDrops(ItemStack?) is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.getDrops(ItemStack(Material.DIAMOND_PICKAXE))
+        }
+    }
+
+    should("getDrops(ItemStack?, Entity?) is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.getDrops(
+                ItemStack(Material.DIAMOND_PICKAXE),
+                server.addPlayer(),
+            )
+        }
+    }
+
+    should("isPreferredTool is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isPreferredTool(ItemStack(Material.DIAMOND_PICKAXE))
+        }
+    }
+
+    should("setBlockData(BlockData, Boolean) is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.setBlockData(BlockDataMock(Material.DIRT), true)
+        }
+    }
+
+    should("isPassable is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.isPassable
+        }
+    }
+
+    should("rayTrace(Location, Vector, Double, FluidCollisionMode) is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.rayTrace(
+                randomLocation(null),
+                Vector(1, 0, 0),
+                1.0,
+                FluidCollisionMode.ALWAYS
+            )
+        }
+    }
+
+    should("getBoundingBox is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.boundingBox
+        }
+    }
+
+    should("getCollisionShape is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.collisionShape
+        }
+    }
+
+    should("canPlace is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.canPlace(BlockDataMock(Material.DIRT))
+        }
+    }
+
+    should("getSoundGroup is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.soundGroup
+        }
+    }
+
+    should("getDestroySpeed is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.getDestroySpeed(ItemStack(Material.DIAMOND_PICKAXE), true)
+        }
+    }
+
+    should("getBreakSpeed is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.getBreakSpeed(server.addPlayer())
+        }
+    }
+
+    should("translationKey is not implemented yet") {
+        shouldThrow<UnimplementedOperationException> {
+            block.translationKey()
+        }
     }
 })
