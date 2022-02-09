@@ -6,7 +6,6 @@ import land.vani.mockpaper.inventory.InventoryMock
 import org.bukkit.Material
 import org.bukkit.block.Barrel
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.loot.LootTable
 
 /**
@@ -51,5 +50,5 @@ class BarrelMock : ContainerMock, Barrel {
 
     override fun createInventory(): InventoryMock = BarrelInventoryMock(this)
 
-    override fun getSnapshot(): BlockState = BarrelMock(this)
+    override fun getSnapshot(): BlockStateMock = BarrelMock(this)
 }

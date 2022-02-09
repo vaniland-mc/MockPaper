@@ -5,7 +5,6 @@ import land.vani.mockpaper.inventory.HopperInventoryMock
 import land.vani.mockpaper.inventory.InventoryMock
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Hopper
 import org.bukkit.loot.LootTable
 import java.util.UUID
@@ -24,7 +23,7 @@ class HopperMock : ContainerMock, Hopper {
 
     override fun createInventory(): InventoryMock = HopperInventoryMock(this)
 
-    override fun getSnapshot(): BlockState = HopperMock(this)
+    override fun getSnapshot(): BlockStateMock = HopperMock(this)
 
     override fun setLootTable(table: LootTable?) {
         throw UnimplementedOperationException()

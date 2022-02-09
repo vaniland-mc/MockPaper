@@ -7,7 +7,6 @@ import land.vani.mockpaper.inventory.InventoryMock
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Chest
 import org.bukkit.inventory.Inventory
 import org.bukkit.loot.LootTable
@@ -59,7 +58,7 @@ class ChestMock : ContainerMock, Chest {
 
     override fun createInventory(): InventoryMock = ChestInventoryMock(this, 27)
 
-    override fun getSnapshot(): BlockState = ChestMock(this)
+    override fun getSnapshot(): BlockStateMock = ChestMock(this)
 
     override fun customName(): Component? = nameable.customName()
 

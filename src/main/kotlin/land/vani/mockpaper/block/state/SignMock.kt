@@ -7,7 +7,6 @@ import net.kyori.adventure.text.Component
 import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Sign
 
 /**
@@ -28,7 +27,7 @@ class SignMock : TileStateMock, Sign {
         }
     }
 
-    override fun getSnapshot(): BlockState = SignMock(this)
+    override fun getSnapshot(): BlockStateMock = SignMock(this)
 
     override fun getColor(): DyeColor? {
         throw UnimplementedOperationException()

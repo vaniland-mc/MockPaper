@@ -3,7 +3,6 @@ package land.vani.mockpaper.block.state
 import land.vani.mockpaper.persistence.PersistentDataContainerMock
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.TileState
 import org.bukkit.persistence.PersistentDataContainer
 
@@ -24,5 +23,5 @@ abstract class TileStateMock : BlockStateMock, TileState {
 
     override fun getPersistentDataContainer(): PersistentDataContainer = container
 
-    abstract fun getSnapshot(): BlockState
+    abstract fun getSnapshot(): BlockStateMock
 }

@@ -4,7 +4,6 @@ import land.vani.mockpaper.inventory.InventoryMock
 import land.vani.mockpaper.inventory.LecternInventoryMock
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Lectern
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
@@ -25,7 +24,7 @@ class LecternMock : ContainerMock, Lectern {
 
     override fun createInventory(): InventoryMock = LecternInventoryMock(this)
 
-    override fun getSnapshot(): BlockState = LecternMock(this)
+    override fun getSnapshot(): BlockStateMock = LecternMock(this)
 
     override fun getPage(): Int = currentPage
 

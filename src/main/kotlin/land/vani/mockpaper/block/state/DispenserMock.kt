@@ -5,7 +5,6 @@ import land.vani.mockpaper.inventory.DispenserInventoryMock
 import land.vani.mockpaper.inventory.InventoryMock
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Dispenser
 import org.bukkit.loot.LootTable
 import org.bukkit.projectiles.BlockProjectileSource
@@ -77,7 +76,7 @@ class DispenserMock : ContainerMock, Dispenser {
 
     override fun createInventory(): InventoryMock = DispenserInventoryMock(this)
 
-    override fun getSnapshot(): BlockState = DispenserMock(this)
+    override fun getSnapshot(): BlockStateMock = DispenserMock(this)
 
     override fun getBlockProjectileSource(): BlockProjectileSource? =
         if (isPlaced) {

@@ -5,7 +5,6 @@ import land.vani.mockpaper.inventory.InventoryMock
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.Container
 import org.bukkit.inventory.Inventory
 
@@ -30,7 +29,7 @@ abstract class ContainerMock : TileStateMock, Container {
 
     protected abstract fun createInventory(): InventoryMock
 
-    abstract override fun getSnapshot(): BlockState
+    abstract override fun getSnapshot(): BlockStateMock
 
     override fun isLocked(): Boolean = lock.isNotEmpty()
 

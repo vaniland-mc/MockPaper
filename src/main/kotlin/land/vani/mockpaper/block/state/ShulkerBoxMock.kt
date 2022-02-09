@@ -6,7 +6,6 @@ import land.vani.mockpaper.inventory.ShulkerBoxInventoryMock
 import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import org.bukkit.block.ShulkerBox
 import org.bukkit.loot.LootTable
 import java.util.UUID
@@ -55,7 +54,7 @@ class ShulkerBoxMock : ContainerMock, ShulkerBox {
 
     override fun createInventory(): InventoryMock = ShulkerBoxInventoryMock(this)
 
-    override fun getSnapshot(): BlockState = ShulkerBoxMock(this)
+    override fun getSnapshot(): BlockStateMock = ShulkerBoxMock(this)
 
     override fun setLootTable(table: LootTable?) {
         throw UnimplementedOperationException()
