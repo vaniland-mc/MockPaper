@@ -1,9 +1,12 @@
 package land.vani.mockpaper.attribute
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.shouldBe
+import land.vani.mockpaper.UnimplementedOperationException
 import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 
 class AttributeInstanceMockTest : ShouldSpec({
     lateinit var attribute: AttributeInstanceMock
@@ -38,6 +41,36 @@ class AttributeInstanceMockTest : ShouldSpec({
         }
         should("getDefaultValue is 5.0") {
             attribute.defaultValue shouldBeExactly 5.0
+        }
+    }
+
+    context("modifiers") {
+        should("getModifiers is not implemented yet") {
+            shouldThrow<UnimplementedOperationException> {
+                attribute.modifiers
+            }
+        }
+        should("addModifier is not implemented yet") {
+            shouldThrow<UnimplementedOperationException> {
+                attribute.addModifier(
+                    AttributeModifier(
+                        "some",
+                        1.0,
+                        AttributeModifier.Operation.ADD_NUMBER,
+                    )
+                )
+            }
+        }
+        should("removeModifier is not implemented yet") {
+            shouldThrow<UnimplementedOperationException> {
+                attribute.removeModifier(
+                    AttributeModifier(
+                        "some",
+                        1.0,
+                        AttributeModifier.Operation.ADD_NUMBER,
+                    )
+                )
+            }
         }
     }
 })
