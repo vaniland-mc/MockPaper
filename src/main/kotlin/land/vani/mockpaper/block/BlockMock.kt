@@ -30,7 +30,7 @@ import org.jetbrains.annotations.VisibleForTesting
  */
 class BlockMock(
     private var material: Material,
-    private val location: Location,
+    private val location: Location = Location(null, 0.0, 0.0, 0.0),
 ) : Block, Metadatable by MetadataHolder() {
     private var data: Byte = 0
 
