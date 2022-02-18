@@ -2,8 +2,8 @@ package land.vani.mockpaper.block.state
 
 import land.vani.mockpaper.NameableHolder
 import land.vani.mockpaper.inventory.InventoryMock
-import net.kyori.adventure.text.Component
 import org.bukkit.Material
+import org.bukkit.Nameable
 import org.bukkit.block.Block
 import org.bukkit.block.Container
 import org.bukkit.inventory.Inventory
@@ -14,18 +14,18 @@ import org.bukkit.inventory.Inventory
  *
  * @author TheBusyBiscuit
  */
-abstract class ContainerMock : TileStateMock, Container {
-    constructor(material: Material, block: Block? = null) : super(material, block)
-
+abstract class ContainerMock(material: Material, block: Block? = null) :
+    TileStateMock(material, block),
+    Container,
+    Nameable by NameableHolder() {
     protected constructor(block: Block) : this(block.type, block)
 
-    protected constructor(state: ContainerMock) : super(state)
+    protected constructor(state: ContainerMock) : this(state.material, state.block)
 
     private val inventory: InventoryMock by lazy {
         createInventory()
     }
     private var lock = ""
-    private val nameable = NameableHolder()
 
     protected abstract fun createInventory(): InventoryMock
 
@@ -42,16 +42,4 @@ abstract class ContainerMock : TileStateMock, Container {
     override fun getInventory(): Inventory = inventory
 
     override fun getSnapshotInventory(): Inventory = inventory.getSnapshot()
-
-    override fun customName(): Component? = nameable.customName()
-
-    override fun customName(customName: Component?) {
-        nameable.customName(customName)
-    }
-
-    override fun getCustomName(): String? = nameable.customName
-
-    override fun setCustomName(name: String?) {
-        nameable.customName = name
-    }
 }

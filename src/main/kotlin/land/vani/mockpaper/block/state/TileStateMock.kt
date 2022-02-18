@@ -17,7 +17,7 @@ abstract class TileStateMock : BlockStateMock, TileState {
 
     protected constructor(block: Block) : this(block.type, block)
 
-    protected constructor(state: TileStateMock) : super(state)
+    protected constructor(state: TileStateMock) : this(state.material, state.block)
 
     private val container = PersistentDataContainerMock()
 

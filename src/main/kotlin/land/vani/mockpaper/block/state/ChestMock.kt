@@ -1,10 +1,8 @@
 package land.vani.mockpaper.block.state
 
-import land.vani.mockpaper.NameableHolder
 import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.inventory.ChestInventoryMock
 import land.vani.mockpaper.inventory.InventoryMock
-import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.Chest
@@ -17,14 +15,10 @@ import java.util.UUID
  *
  * @author TheBusyBiscuit
  */
-class ChestMock : ContainerMock, Chest {
-    constructor(material: Material, block: Block? = null) : super(material, block)
-
+class ChestMock(material: Material, block: Block? = null) : ContainerMock(material, block), Chest {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: ChestMock) : super(state)
-
-    private val nameable = NameableHolder()
+    constructor(state: ChestMock) : this(state.material, state.block)
 
     override fun getLootTable(): LootTable? {
         throw UnimplementedOperationException()
@@ -59,18 +53,6 @@ class ChestMock : ContainerMock, Chest {
     override fun createInventory(): InventoryMock = ChestInventoryMock(this, 27)
 
     override fun getSnapshot(): BlockStateMock = ChestMock(this)
-
-    override fun customName(): Component? = nameable.customName()
-
-    override fun customName(customName: Component?) {
-        nameable.customName(customName)
-    }
-
-    override fun getCustomName(): String? = nameable.customName
-
-    override fun setCustomName(name: String?) {
-        nameable.customName = name
-    }
 
     override fun isRefillEnabled(): Boolean {
         throw UnimplementedOperationException()

@@ -10,12 +10,10 @@ import org.bukkit.block.EnderChest
  *
  * @author TheBusyBiscuit
  */
-class EnderChestMock : TileStateMock, EnderChest {
-    constructor(material: Material, block: Block? = null) : super(material, block)
+class EnderChestMock(material: Material, block: Block? = null) : TileStateMock(material, block), EnderChest {
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(block: Block) : super(block)
-
-    constructor(state: EnderChestMock) : super(state)
+    constructor(state: EnderChestMock) : this(state.material, state.block)
 
     override fun getSnapshot(): BlockStateMock = EnderChestMock(this)
 

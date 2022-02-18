@@ -13,12 +13,10 @@ import org.bukkit.loot.LootTable
  *
  * @author TheBusyBiscuit
  */
-class BarrelMock : ContainerMock, Barrel {
-    constructor(material: Material, block: Block? = null) : super(material, block)
+class BarrelMock(material: Material, block: Block? = null) : ContainerMock(material, block), Barrel {
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(block: Block) : super(block)
-
-    constructor(state: BarrelMock) : super(state)
+    constructor(state: BarrelMock) : this(state.material, state.block)
 
     override fun getLootTable(): LootTable? {
         throw UnimplementedOperationException()

@@ -14,12 +14,10 @@ import java.util.UUID
  *
  * @author TheBusyBiscuit
  */
-class HopperMock : ContainerMock, Hopper {
-    constructor(material: Material, block: Block? = null) : super(material, block)
+class HopperMock(material: Material, block: Block? = null) : ContainerMock(material, block), Hopper {
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(block: Block) : super(block)
-
-    constructor(state: HopperMock) : super(state)
+    constructor(state: HopperMock) : this(state.material, state.block)
 
     override fun createInventory(): InventoryMock = HopperInventoryMock(this)
 

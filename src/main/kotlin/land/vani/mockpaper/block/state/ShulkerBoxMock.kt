@@ -15,18 +15,16 @@ import java.util.UUID
  *
  * @author TheBusyBiscuit
  */
-class ShulkerBoxMock : ContainerMock, ShulkerBox {
-    private val color: DyeColor?
+class ShulkerBoxMock(material: Material, block: Block? = null) : ContainerMock(material, block), ShulkerBox {
+    private var color: DyeColor?
 
-    constructor(material: Material, block: Block? = null) : super(material, block) {
+    init {
         color = getColorFromMaterial(material)
     }
 
-    constructor(block: Block) : super(block) {
-        color = getColorFromMaterial(block.type)
-    }
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(state: ShulkerBoxMock) : super(state) {
+    constructor(state: ShulkerBoxMock) : this(state.material, state.block) {
         color = state.color
     }
 

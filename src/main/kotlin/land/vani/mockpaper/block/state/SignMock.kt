@@ -14,14 +14,12 @@ import org.bukkit.block.Sign
  *
  * @author TheBusyBiscuit
  */
-class SignMock : TileStateMock, Sign {
+class SignMock(material: Material, block: Block? = null) : TileStateMock(material, block), Sign {
     private val lines: Array<String> = arrayOf("", "", "", "")
 
-    constructor(material: Material, block: Block? = null) : super(material, block)
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(block: Block) : super(block)
-
-    constructor(state: SignMock) : super(state) {
+    constructor(state: SignMock) : this(state.material, state.block) {
         repeat(4) {
             lines[it] = state.lines[it]
         }

@@ -13,12 +13,10 @@ import kotlin.math.min
 /**
  * This [ContainerMock] represents a [Lectern].
  */
-class LecternMock : ContainerMock, Lectern {
-    constructor(material: Material, block: Block? = null) : super(material, block)
+class LecternMock(material: Material, block: Block? = null) : ContainerMock(material, block), Lectern {
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(block: Block) : super(block)
-
-    constructor(state: LecternMock) : super(state)
+    constructor(state: LecternMock) : this(state.material, state.block)
 
     private var currentPage: Int = 0
 

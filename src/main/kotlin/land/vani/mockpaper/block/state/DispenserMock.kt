@@ -15,12 +15,11 @@ import java.util.UUID
  *
  * @author TheBusyBiscuit
  */
-class DispenserMock : ContainerMock, Dispenser {
-    constructor(material: Material, block: Block? = null) : super(material, block)
+class DispenserMock(material: Material, block: Block? = null) : ContainerMock(material, block), Dispenser {
 
-    constructor(block: Block) : super(block)
+    constructor(block: Block) : this(block.type, block)
 
-    constructor(state: DispenserMock) : super(state)
+    constructor(state: DispenserMock) : this(state.material, state.block)
 
     override fun getLootTable(): LootTable? {
         throw UnimplementedOperationException()
