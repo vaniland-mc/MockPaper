@@ -16,7 +16,12 @@ import org.bukkit.loot.LootTable
 class BarrelMock(material: Material, block: Block? = null) : ContainerMock(material, block), Barrel {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: BarrelMock) : this(state.material, state.block)
+    constructor(state: BarrelMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else null
+    )
 
     override fun getLootTable(): LootTable? {
         throw UnimplementedOperationException()

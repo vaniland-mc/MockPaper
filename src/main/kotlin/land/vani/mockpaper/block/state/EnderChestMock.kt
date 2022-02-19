@@ -13,7 +13,14 @@ import org.bukkit.block.EnderChest
 class EnderChestMock(material: Material, block: Block? = null) : TileStateMock(material, block), EnderChest {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: EnderChestMock) : this(state.material, state.block)
+    constructor(state: EnderChestMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else {
+            null
+        }
+    )
 
     override fun getSnapshot(): BlockStateMock = EnderChestMock(this)
 

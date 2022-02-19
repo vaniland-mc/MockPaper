@@ -16,7 +16,14 @@ import kotlin.math.min
 class LecternMock(material: Material, block: Block? = null) : ContainerMock(material, block), Lectern {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: LecternMock) : this(state.material, state.block)
+    constructor(state: LecternMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else {
+            null
+        }
+    )
 
     private var currentPage: Int = 0
 

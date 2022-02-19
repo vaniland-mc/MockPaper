@@ -17,7 +17,14 @@ import java.util.UUID
 class HopperMock(material: Material, block: Block? = null) : ContainerMock(material, block), Hopper {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: HopperMock) : this(state.material, state.block)
+    constructor(state: HopperMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else {
+            null
+        }
+    )
 
     override fun createInventory(): InventoryMock = HopperInventoryMock(this)
 

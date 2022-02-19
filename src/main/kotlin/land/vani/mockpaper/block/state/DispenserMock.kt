@@ -19,7 +19,14 @@ class DispenserMock(material: Material, block: Block? = null) : ContainerMock(ma
 
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: DispenserMock) : this(state.material, state.block)
+    constructor(state: DispenserMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else {
+            null
+        }
+    )
 
     override fun getLootTable(): LootTable? {
         throw UnimplementedOperationException()

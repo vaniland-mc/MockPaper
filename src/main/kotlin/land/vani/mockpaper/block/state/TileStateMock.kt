@@ -12,13 +12,8 @@ import org.bukkit.persistence.PersistentDataContainer
  *
  * @author TheBusyBiscuit
  */
-abstract class TileStateMock : BlockStateMock, TileState {
-    constructor(material: Material, block: Block? = null) : super(material, block)
-
-    protected constructor(block: Block) : this(block.type, block)
-
-    protected constructor(state: TileStateMock) : this(state.material, state.block)
-
+abstract class TileStateMock(material: Material, block: Block? = null) :
+    BlockStateMock(material, block), TileState {
     private val container = PersistentDataContainerMock()
 
     override fun getPersistentDataContainer(): PersistentDataContainer = container

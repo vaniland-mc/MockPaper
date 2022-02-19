@@ -20,7 +20,14 @@ open class BlockStateMock(
 ) : BlockState, Metadatable by MetadataHolder() {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: BlockStateMock) : this(state.material, state.block)
+    constructor(state: BlockStateMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else {
+            null
+        }
+    )
 
     override fun getBlock(): Block = block
         ?: error("block is not placed")

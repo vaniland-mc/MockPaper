@@ -17,7 +17,14 @@ import java.util.UUID
 class DropperMock(material: Material, block: Block? = null) : ContainerMock(material, block), Dropper {
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: DropperMock) : this(state.material, state.block)
+    constructor(state: DropperMock) : this(
+        state.material,
+        if (state.isPlaced) {
+            state.block
+        } else {
+            null
+        }
+    )
 
     override fun createInventory(): InventoryMock = DropperInventoryMock(this)
 

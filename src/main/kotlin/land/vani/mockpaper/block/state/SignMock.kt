@@ -19,7 +19,10 @@ class SignMock(material: Material, block: Block? = null) : TileStateMock(materia
 
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: SignMock) : this(state.material, state.block) {
+    constructor(state: SignMock) : this(
+        state.material,
+        if (state.isPlaced) state.block else null
+    ) {
         repeat(4) {
             lines[it] = state.lines[it]
         }

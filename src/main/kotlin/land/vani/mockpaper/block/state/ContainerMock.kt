@@ -18,10 +18,6 @@ abstract class ContainerMock(material: Material, block: Block? = null) :
     TileStateMock(material, block),
     Container,
     Nameable by NameableHolder() {
-    protected constructor(block: Block) : this(block.type, block)
-
-    protected constructor(state: ContainerMock) : this(state.material, state.block)
-
     private val inventory: InventoryMock by lazy {
         createInventory()
     }

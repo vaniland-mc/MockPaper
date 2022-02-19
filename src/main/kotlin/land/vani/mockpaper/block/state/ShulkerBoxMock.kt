@@ -19,12 +19,18 @@ class ShulkerBoxMock(material: Material, block: Block? = null) : ContainerMock(m
     private var color: DyeColor?
 
     init {
+        require(material.name.endsWith("SHULKER_BOX"))
+        require(!material.name.startsWith("LEGACY_"))
+
         color = getColorFromMaterial(material)
     }
 
     constructor(block: Block) : this(block.type, block)
 
-    constructor(state: ShulkerBoxMock) : this(state.material, state.block) {
+    constructor(state: ShulkerBoxMock) : this(
+        state.material,
+        if (state.isPlaced) state.block else null
+    ) {
         color = state.color
     }
 
