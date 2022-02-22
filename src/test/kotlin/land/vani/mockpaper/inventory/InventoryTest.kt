@@ -162,7 +162,7 @@ class InventoryTest : ShouldSpec({
         should("add air") {
             inventory.setContents(arrayOf(ItemStack(Material.AIR)))
 
-            inventory.getItem(0)!!.type shouldBe Material.AIR
+            inventory.getItem(0)?.type shouldBe null
         }
     }
 

@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.annotations.VisibleForTesting
+import java.util.Objects
 import kotlin.math.min
 
 /**
@@ -123,6 +124,7 @@ open class InventoryMock(
         for (i in this.items.indices) {
             if (i < items.size) {
                 this.items[i] = items[i].clone()
+                    .takeUnless { it.type == Material.AIR }
             } else {
                 this.items[i] = null
             }
@@ -223,4 +225,22 @@ open class InventoryMock(
         .apply {
             setContents(contents.fallbackNull())
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is InventoryMock) return false
+
+        if (type != other.type) return false
+        if (holder != other.holder) return false
+        if (size != other.size) return false
+        if (!contents.contentEquals(other.contents)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int = Objects.hash(
+        type,
+        holder,
+        size,
+        contents
+    )
 }

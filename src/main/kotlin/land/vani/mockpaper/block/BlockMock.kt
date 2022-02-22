@@ -3,6 +3,7 @@ package land.vani.mockpaper.block
 import com.destroystokyo.paper.block.BlockSoundGroup
 import land.vani.mockpaper.UnimplementedOperationException
 import land.vani.mockpaper.block.data.BlockDataMock
+import land.vani.mockpaper.block.state.BlockStateMock
 import land.vani.mockpaper.metadata.MetadataHolder
 import org.bukkit.Chunk
 import org.bukkit.FluidCollisionMode
@@ -12,7 +13,6 @@ import org.bukkit.World
 import org.bukkit.block.Biome
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
-import org.bukkit.block.BlockState
 import org.bukkit.block.PistonMoveReaction
 import org.bukkit.block.data.BlockData
 import org.bukkit.entity.Entity
@@ -23,14 +23,20 @@ import org.bukkit.util.BoundingBox
 import org.bukkit.util.RayTraceResult
 import org.bukkit.util.Vector
 import org.bukkit.util.VoxelShape
+import org.jetbrains.annotations.VisibleForTesting
 
 /**
  * @constructor Creates a basic block with a given [material] that's also linked to a specific [location].
  */
 class BlockMock(
     private var material: Material,
-    private val location: Location,
+    private val location: Location = Location(null, 0.0, 0.0, 0.0),
 ) : Block, Metadatable by MetadataHolder() {
+    private var data: Byte = 0
+
+    private var blockData: BlockData = BlockDataMock(material)
+    private var state: BlockStateMock = BlockStateMock.mock(this)
+
     /**
      * Creates a basic block made of air at a certain [location].
      */
@@ -40,10 +46,6 @@ class BlockMock(
      * Creates a basic block made of air.
      */
     constructor() : this(Material.AIR, Location(null, 0.0, 0.0, 0.0))
-
-    private var data: Byte = 0
-
-    private var blockData: BlockData = BlockDataMock(material)
 
     override fun getData(): Byte = data
 
@@ -107,12 +109,15 @@ class BlockMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getState(): BlockState {
+    override fun getState(): BlockStateMock = state
+
+    override fun getState(useSnapshot: Boolean): BlockStateMock {
         throw UnimplementedOperationException()
     }
 
-    override fun getState(useSnapshot: Boolean): BlockState {
-        throw UnimplementedOperationException()
+    @VisibleForTesting
+    fun setState(state: BlockStateMock) {
+        this.state = state
     }
 
     override fun getBiome(): Biome {

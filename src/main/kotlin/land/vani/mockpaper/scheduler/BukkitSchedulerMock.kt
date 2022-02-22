@@ -36,7 +36,7 @@ class BukkitSchedulerMock(
         Integer.MAX_VALUE,
         60L,
         TimeUnit.SECONDS,
-        SynchronousQueue()
+        SynchronousQueue(),
     )
     private val asyncEventExecutor = Executors.newCachedThreadPool()
 
