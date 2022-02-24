@@ -1,10 +1,11 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import kotlinx.kover.api.KoverTaskExtension
-import kotlinx.kover.api.VerificationValueType
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.dokka") version "1.6.10"
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
@@ -63,6 +64,10 @@ tasks {
         }
     }
 
+    assemble {
+        dependsOn("javadocJar", "sourcesJar")
+    }
+
     withType<Test> {
         useJUnitPlatform()
         maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 + 1
@@ -84,12 +89,19 @@ tasks {
         isEnabled = true
     }
 
-    koverVerify {
-        rule {
-            bound {
-                minValue = 80
-                valueType = VerificationValueType.COVERED_LINES_PERCENTAGE
-            }
-        }
+    getByName<DokkaTask>("dokkaJavadoc") {
+        outputDirectory.set(javadoc.get().destinationDir)
+    }
+
+    register<Jar>("javadocJar") {
+        dependsOn("dokkaJavadoc")
+
+        archiveClassifier.set("javadoc")
+        from(javadoc.get().destinationDir)
+    }
+
+    register<Jar>("sourcesJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets["main"].allSource)
     }
 }
