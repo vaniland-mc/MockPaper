@@ -1,4 +1,4 @@
-rootProject.name = "MockPaper"
+rootProject.name = "MockPaper-1.18.1"
 
 pluginManagement {
     repositories {

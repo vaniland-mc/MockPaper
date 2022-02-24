@@ -9,6 +9,8 @@ plugins {
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
+
+    id("publishing")
 }
 
 group = "land.vani.mockpaper"
