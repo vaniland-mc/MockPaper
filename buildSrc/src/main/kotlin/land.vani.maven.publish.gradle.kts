@@ -1,12 +1,36 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+
 plugins {
     `maven-publish`
     signing
+    id("org.jetbrains.dokka")
+}
+
+val sourceSets = extensions.getByType<SourceSetContainer>()
+
+tasks {
+    val javadoc = getByName<Javadoc>("javadoc")
+    getByName<DokkaTask>("dokkaJavadoc") {
+        outputDirectory.set(javadoc.destinationDir)
+    }
+
+    register<Jar>("javadocJar") {
+        dependsOn("dokkaJavadoc")
+
+        archiveClassifier.set("javadoc")
+        from(javadoc.destinationDir)
+    }
+
+    register<Jar>("sourcesJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets["main"].allSource)
+    }
 }
 
 val publishing = extensions.getByName<PublishingExtension>("publishing").apply {
     publications {
         create<MavenPublication>("ossrh") {
-            artifact(components["kotlin"])
+            from(components["kotlin"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
 
@@ -42,7 +66,7 @@ val publishing = extensions.getByName<PublishingExtension>("publishing").apply {
             repositories {
                 maven {
                     url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
-                    name = "OSSRH Staging"
+                    name = "OSSRH"
                     credentials {
                         username = System.getenv("OSSRH_USERNAME")
                         password = System.getenv("OSSRH_PASSWORD")
