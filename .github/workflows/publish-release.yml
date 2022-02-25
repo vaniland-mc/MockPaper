@@ -3,6 +3,11 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - reopened
+      - closed
+      - synchronize
 
 jobs:
   publish-release:
