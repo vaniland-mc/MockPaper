@@ -29,7 +29,7 @@ tasks {
 
 val publishing = extensions.getByName<PublishingExtension>("publishing").apply {
     publications {
-        create<MavenPublication>("ossrh") {
+        create<MavenPublication>("maven") {
             from(components["kotlin"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
@@ -83,5 +83,5 @@ extensions.configure<SigningExtension>("signing") {
         System.getenv("SIGNING_SECRET_KEY"),
         System.getenv("SIGNING_PASSWORD"),
     )
-    sign(publishing.publications["ossrh"])
+    sign(publishing.publications["maven"])
 }
