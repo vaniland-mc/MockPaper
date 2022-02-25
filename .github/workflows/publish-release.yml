@@ -66,7 +66,7 @@ jobs:
         if: ${{ steps.release-label.outputs.level != null }}
         uses: actions-ecosystem/action-get-latest-tag@v1
         with:
-          sember_only: true
+          semver_only: true
       - name: Bump sember
         id: bump-semver
         if: ${{ steps.release-label.outputs.level != null }}
@@ -85,3 +85,9 @@ jobs:
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_SECRET_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      - name: Push tag
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.bump-semver.outputs.new_version }}
+          message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
