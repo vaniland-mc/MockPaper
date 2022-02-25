@@ -1,16 +1,14 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import kotlinx.kover.api.KoverTaskExtension
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.dokka") version "1.6.10"
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
 
-    id("publishing")
+    id("land.vani.maven.publish")
 }
 
 group = "land.vani.mockpaper"
@@ -89,21 +87,5 @@ tasks {
 
     koverXmlReport {
         isEnabled = true
-    }
-
-    getByName<DokkaTask>("dokkaJavadoc") {
-        outputDirectory.set(javadoc.get().destinationDir)
-    }
-
-    register<Jar>("javadocJar") {
-        dependsOn("dokkaJavadoc")
-
-        archiveClassifier.set("javadoc")
-        from(javadoc.get().destinationDir)
-    }
-
-    register<Jar>("sourcesJar") {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
     }
 }
