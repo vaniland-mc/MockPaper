@@ -54,5 +54,10 @@ val publishing = extensions.getByName<PublishingExtension>("publishing").apply {
 }
 
 extensions.configure<SigningExtension>("signing") {
+    useInMemoryPgpKeys(
+        System.getenv("SIGNING_KEY_ID"),
+        System.getenv("SIGNING_SECRET_KEY"),
+        System.getenv("SIGNING_PASSWORD"),
+    )
     sign(publishing.publications["ossrh"])
 }
