@@ -227,8 +227,7 @@ abstract class EntityMock(
 
     override fun isPermissionSet(name: String): Boolean =
         permissionAttachments.any { attachments ->
-            val permissions = attachments.permissions
-            name in permissions && permissions[name] == true
+            name in attachments.permissions
         }
 
     override fun isPermissionSet(perm: Permission): Boolean =
@@ -242,7 +241,9 @@ abstract class EntityMock(
     }
 
     override fun hasPermission(perm: Permission): Boolean =
-        isPermissionSet(perm) || perm.default.getValue(isOp)
+        permissionAttachments.any { attachment ->
+            attachment.permissions[perm.name] == true
+        } || perm.default.getValue(isOp)
 
     override fun addAttachment(plugin: Plugin, name: String, value: Boolean): PermissionAttachment =
         addAttachment(plugin).apply {
