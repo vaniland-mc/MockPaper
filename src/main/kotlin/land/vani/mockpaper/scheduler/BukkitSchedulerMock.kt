@@ -137,7 +137,9 @@ class BukkitSchedulerMock(
         runTask(plugin, task as Runnable)
 
     override fun runTaskAsynchronously(plugin: Plugin, task: Runnable): BukkitTask =
-        runTaskLaterAsynchronously(plugin, task, 1)
+        ScheduledTaskMock(lastId++, plugin, false, currentTick, task).also {
+            mainThreadExecutor.execute(wrapTask(it))
+        }
 
     override fun runTaskAsynchronously(plugin: Plugin, task: Consumer<BukkitTask>) {
         throw UnimplementedOperationException()
