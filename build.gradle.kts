@@ -31,7 +31,7 @@ dependencies {
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("test-junit5"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1")
     implementation("org.opentest4j:opentest4j:1.2.0")
 
     implementation("io.papermc.paper:paper-api:1.18.1-R0.1-20220104.205543-66")
