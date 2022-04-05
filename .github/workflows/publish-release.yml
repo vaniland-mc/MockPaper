@@ -47,7 +47,7 @@ jobs:
         run: ./gradlew koverXmlReport
       - name: Upload coverage reports
         if: always()
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: build/reports/kover/project-xml/report.xml
       - name: Cleanup Gradle caches
