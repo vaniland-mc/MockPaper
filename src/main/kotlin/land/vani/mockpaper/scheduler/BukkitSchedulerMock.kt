@@ -58,6 +58,7 @@ class BukkitSchedulerMock(
             LOGGER.warning("Consider using runTaskLater instead of scheduleSyncDelayTask")
         }
 
+    @Deprecated("use BukkitRunnable#runTaskLater", ReplaceWith("task.runTaskLater(plugin, delay)"))
     override fun scheduleSyncDelayedTask(plugin: Plugin, task: BukkitRunnable, delay: Long): Int =
         runTaskLater(plugin, task as Runnable, delay).taskId.also {
             LOGGER.warning("Consider using runTaskLater instead of scheduleSyncDelayTask")
@@ -68,6 +69,7 @@ class BukkitSchedulerMock(
             LOGGER.warning("Consider using runTask instead of scheduleSyncDelayedTask")
         }
 
+    @Deprecated("use BukkitRunnable#runTask", ReplaceWith("task.runTask(plugin)"))
     override fun scheduleSyncDelayedTask(plugin: Plugin, task: BukkitRunnable): Int =
         runTask(plugin, task as Runnable).taskId.also {
             LOGGER.warning("Consider using runTask instead of scheduleSyncDelayedTask")
@@ -78,21 +80,34 @@ class BukkitSchedulerMock(
             LOGGER.warning("Consider using runTaskTimer instead of scheduleSyncRepeatingTask")
         }
 
+    @Deprecated("use BukkitRunnable#runTaskTimer", ReplaceWith("task.runTaskTimer(plugin, delay, period)"))
     override fun scheduleSyncRepeatingTask(plugin: Plugin, task: BukkitRunnable, delay: Long, period: Long): Int =
         runTaskTimer(plugin, task as Runnable, delay, period).taskId.also {
             LOGGER.warning("Consider using runTaskTimer instead of scheduleSyncRepeatingTask")
         }
 
+    @Deprecated(
+        "This name is misleading, as it does not schedule \"a sync\" task," +
+            " but rather, \"an async\" task"
+    )
     override fun scheduleAsyncDelayedTask(plugin: Plugin, task: Runnable, delay: Long): Int =
         runTaskLaterAsynchronously(plugin, task, delay).taskId.also {
             LOGGER.warning("Consider using runTaskLaterAsynchronously instead of scheduleAsyncDelayedTask")
         }
 
+    @Deprecated(
+        "This name is misleading, as it does not schedule \"a sync\" task," +
+            " but rather, \"an async\" task"
+    )
     override fun scheduleAsyncDelayedTask(plugin: Plugin, task: Runnable): Int =
         runTaskAsynchronously(plugin, task).taskId.also {
             LOGGER.warning("Consider using runTaskAsynchronously instead of scheduleAsyncDelayedTask")
         }
 
+    @Deprecated(
+        "This name is misleading, as it does not schedule \"a sync\" task," +
+            " but rather, \"an async\" task"
+    )
     override fun scheduleAsyncRepeatingTask(plugin: Plugin, task: Runnable, delay: Long, period: Long): Int =
         runTaskTimerAsynchronously(plugin, task, delay, period).taskId.also {
             LOGGER.warning("Consider using runTaskTimerAsynchronously instead of scheduleAsyncRepeatingTask")
@@ -133,6 +148,7 @@ class BukkitSchedulerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use BukkitRunnable#runTask", ReplaceWith("task.runTask(plugin)"))
     override fun runTask(plugin: Plugin, task: BukkitRunnable): BukkitTask =
         runTask(plugin, task as Runnable)
 
@@ -145,6 +161,7 @@ class BukkitSchedulerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use BukkitRunnable#runTaskAsynchronously", ReplaceWith("task.runTaskAsynchronously(plugin)"))
     override fun runTaskAsynchronously(plugin: Plugin, task: BukkitRunnable): BukkitTask =
         runTaskAsynchronously(plugin, task as Runnable)
 
@@ -164,6 +181,7 @@ class BukkitSchedulerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use BukkitRunnable#runTaskLater", ReplaceWith("task.runTaskLater(plugin)"))
     override fun runTaskLater(plugin: Plugin, task: BukkitRunnable, delay: Long): BukkitTask =
         runTaskLater(plugin, task as Runnable, delay)
 
@@ -180,6 +198,7 @@ class BukkitSchedulerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use BukkitRunnable#runTaskAsynchronously", ReplaceWith("task.RunTaskLaterAsynchronously(plugin"))
     override fun runTaskLaterAsynchronously(plugin: Plugin, task: BukkitRunnable, delay: Long): BukkitTask =
         runTaskLaterAsynchronously(plugin, task as Runnable, delay)
 
@@ -199,6 +218,7 @@ class BukkitSchedulerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use BukkitRunnable#runTaskTimer", ReplaceWith("task.runTaskTimer(plugin, delay, period)"))
     override fun runTaskTimer(plugin: Plugin, task: BukkitRunnable, delay: Long, period: Long): BukkitTask =
         runTaskTimer(plugin, task as Runnable, delay, period)
 
@@ -216,6 +236,10 @@ class BukkitSchedulerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "use BukkitRunnable#runTaskTimerAsynchronously",
+        ReplaceWith("task.runTaskTimerAsynchronously(plugin, delay, period)")
+    )
     override fun runTaskTimerAsynchronously(
         plugin: Plugin,
         task: BukkitRunnable,
