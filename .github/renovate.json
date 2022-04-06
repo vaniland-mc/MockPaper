@@ -29,6 +29,7 @@
   ],
   "commitMessagePrefix": "⬆️ ",
   "labels": [
-    "dependencies"
+    "dependencies",
+    "release/none"
   ]
 }
