@@ -123,6 +123,4 @@ class ConsoleCommandSenderMock : ConsoleCommandSender, MessageTarget {
     override fun spigot(): CommandSender.Spigot {
         throw UnimplementedOperationException()
     }
-
-    override fun nextMessage(): String? = messages.poll()
 }

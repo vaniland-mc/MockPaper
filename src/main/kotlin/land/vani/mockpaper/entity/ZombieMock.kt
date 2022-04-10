@@ -3,6 +3,7 @@ package land.vani.mockpaper.entity
 import com.destroystokyo.paper.entity.Pathfinder
 import land.vani.mockpaper.ServerMock
 import land.vani.mockpaper.UnimplementedOperationException
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Villager
 import org.bukkit.entity.Zombie
@@ -12,14 +13,14 @@ import java.util.UUID
 class ZombieMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Zombie {
     private val equipment = EntityEquipmentMock(this)
 
-    private var isBaby: Boolean = false
+    private var isAdult: Boolean = false
     private var isVillager: Boolean = false
     private var profession: Villager.Profession? = null
     private var isConverting: Boolean = false
     private var conversionTime: Int? = null
 
     init {
-        maxHealth = 20.0
+        getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = 20.0
         health = 20.0
     }
 
@@ -27,20 +28,40 @@ class ZombieMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Zo
 
     override fun getEquipment(): EntityEquipment = equipment
 
-    override fun isBaby(): Boolean = isBaby
+    @Deprecated(
+        "use Ageable#isAdult",
+        ReplaceWith("isAdult")
+    )
+    override fun isBaby(): Boolean = !isAdult
 
+    @Deprecated(
+        "use Ageable#isAdult",
+        ReplaceWith("isAdult")
+    )
     override fun setBaby(flag: Boolean) {
-        isBaby = flag
+        isAdult = !flag
     }
 
+    // Suppress: Bukkit recommends checking the instanceof ZombieVillager to be a villager zombie,
+    // but MockPaper does not support this.
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun isVillager(): Boolean = isVillager
 
+    // Suppress: Bukkit recommends checking the instanceof ZombieVillager to be a villager zombie,
+    // but MockPaper does not support this.
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun setVillager(flag: Boolean) {
         isVillager = flag
     }
 
+    // Suppress: Bukkit recommends checking the instanceof ZombieVillager to be a villager zombie,
+    // but MockPaper does not support this.
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun getVillagerProfession(): Villager.Profession? = profession
 
+    // Suppress: Bukkit recommends checking the instanceof ZombieVillager to be a villager zombie,
+    // but MockPaper does not support this.
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun setVillagerProfession(profession: Villager.Profession?) {
         this.profession = profession
     }
@@ -58,6 +79,10 @@ class ZombieMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Zo
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "See #setConversionTime",
+        ReplaceWith("setConversionTime(drownedConvertionTime)")
+    )
     override fun startDrowning(drownedConversionTime: Int) {
         throw UnimplementedOperationException()
     }
@@ -103,7 +128,7 @@ class ZombieMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Zo
     }
 
     override fun setBaby() {
-        isBaby = true
+        isAdult = true
     }
 
     override fun getPathfinder(): Pathfinder {
@@ -118,26 +143,30 @@ class ZombieMock(server: ServerMock, uuid: UUID) : MonsterMock(server, uuid), Zo
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Breedable supports age locking and breed, but only Ageable does not.")
     override fun getAgeLock(): Boolean {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Breedable supports age locking and breed, but only Ageable does not.")
     override fun setAgeLock(lock: Boolean) {
         throw UnimplementedOperationException()
     }
 
-    override fun isAdult(): Boolean {
-        throw UnimplementedOperationException()
-    }
+    override fun isAdult(): Boolean = isAdult
 
     override fun setAdult() {
-        throw UnimplementedOperationException()
+        isAdult = true
     }
 
+    @Deprecated("Breedable supports age locking and breed, but only Ageable does not.")
     override fun canBreed(): Boolean {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Breedable supports age locking and breed, but only Ageable does not.")
     override fun setBreed(breed: Boolean) {
         throw UnimplementedOperationException()
     }

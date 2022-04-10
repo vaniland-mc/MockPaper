@@ -246,11 +246,19 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "use [broadcast(net.kyori.adventure.text.Component)]",
+        ReplaceWith("broadcast(components.toComponent())")
+    )
     override fun broadcastMessage(message: String): Int =
         onlinePlayers.onEach {
             it.sendMessage(message)
         }.count()
 
+    @Deprecated(
+        "use [broadcast(net.kyori.adventure.text.Component)]",
+        ReplaceWith("broadcast(components.toComponent())")
+    )
     override fun broadcast(vararg components: BaseComponent) {
         onlinePlayers.forEach {
             @Suppress("DEPRECATION")
@@ -258,6 +266,10 @@ open class ServerMock : Server, Server.Spigot() {
         }
     }
 
+    @Deprecated(
+        "use [broadcast(net.kyori.adventure.text.Component, String)]",
+        ReplaceWith("broadcast(components.toComponent(), permission)")
+    )
     override fun broadcast(message: String, permission: String): Int =
         onlinePlayers.filter {
             it.hasPermission(permission)
@@ -353,6 +365,7 @@ open class ServerMock : Server, Server.Spigot() {
 
     override fun getWorld(worldKey: NamespacedKey): WorldMock? = worlds.find { it.key == worldKey }
 
+    @Deprecated("Magic value")
     override fun getMap(id: Int): MapView? {
         throw UnimplementedOperationException()
     }
@@ -485,6 +498,7 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Persistent storage of users should be by UUID as names are no longer unique past a single session.")
     override fun getOfflinePlayer(name: String): OfflinePlayer = playerList.getOfflinePlayer(name)
 
     override fun getOfflinePlayer(id: UUID): OfflinePlayer = playerList.getOfflinePlayer(id)
@@ -555,6 +569,10 @@ open class ServerMock : Server, Server.Spigot() {
     override fun createInventory(owner: InventoryHolder?, type: InventoryType, title: Component): Inventory =
         createInventory(owner, type, -1)
 
+    @Deprecated(
+        "In favour of [createInventory(InventoryHolder, InventoryType, net.kyori.adventure.text.Component)]",
+        ReplaceWith("createInventory(holder, type, title.toComponent)")
+    )
     override fun createInventory(owner: InventoryHolder?, type: InventoryType, title: String): Inventory =
         createInventory(owner, type, -1)
 
@@ -565,6 +583,10 @@ open class ServerMock : Server, Server.Spigot() {
     override fun createInventory(owner: InventoryHolder?, size: Int, title: Component): Inventory =
         createInventory(owner, InventoryType.CHEST, size)
 
+    @Deprecated(
+        "In favour of [createInventory(InventoryHolder, Int, net.kyori.adventure.text.Component)]",
+        ReplaceWith("createInventory(holder, size, title.toComponent)")
+    )
     override fun createInventory(owner: InventoryHolder?, size: Int, title: String): Inventory =
         createInventory(owner, InventoryType.CHEST, size)
 
@@ -599,6 +621,10 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [createMerchant(Component)]",
+        ReplaceWith("createMerchant(title?.toComponent)]")
+    )
     override fun createMerchant(title: String?): Merchant {
         throw UnimplementedOperationException()
     }
@@ -631,12 +657,14 @@ open class ServerMock : Server, Server.Spigot() {
 
     override fun motd(): Component = Component.text(MOTD)
 
+    @Deprecated("In favour of [motd]")
     override fun getMotd(): String = MOTD
 
     override fun shutdownMessage(): Component? {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("In favour of [shutdownMessage]")
     override fun getShutdownMessage(): String? {
         throw UnimplementedOperationException()
     }
@@ -675,6 +703,11 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "The new multi-stage worldgen API allows a similar effect by overriding all of" +
+            " the \"shouldGenerate...\" methods to return true, and then modifying the chunkdata" +
+            " in a later stage such as surface or bedrock generation."
+    )
     override fun createVanillaChunkData(world: World, x: Int, z: Int): ChunkGenerator.ChunkData {
         throw UnimplementedOperationException()
     }
@@ -758,6 +791,7 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Unsafe")
     override fun getUnsafe(): UnsafeValuesMock = unsafeValues
 
     override fun spigot(): Server.Spigot {
@@ -812,6 +846,7 @@ open class ServerMock : Server, Server.Spigot() {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Use [broadcast(Component)]", ReplaceWith("broadcast(component.toComponent)"))
     override fun broadcast(component: BaseComponent) {
         onlinePlayers.forEach {
             @Suppress("DEPRECATION")

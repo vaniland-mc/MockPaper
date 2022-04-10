@@ -214,10 +214,24 @@ abstract class EntityMock(
         }
     }
 
+    @Deprecated(
+        "sendMessage(net.kyori.adventure.text.Component)",
+        ReplaceWith(
+            "sendMessage(Component.text(\"\"))",
+            "net.kyori.adventure.text.Component"
+        )
+    )
     override fun sendMessage(component: BaseComponent) {
         messages += component.toLegacyText()
     }
 
+    @Deprecated(
+        "sendMessage(net.kyori.adventure.text.Component)",
+        ReplaceWith(
+            "sendMessage(Component.text(\"\"))",
+            "net.kyori.adventure.text.Component"
+        )
+    )
     @Suppress("DEPRECATION")
     override fun sendMessage(vararg components: BaseComponent) {
         components.forEach {
@@ -354,10 +368,18 @@ abstract class EntityMock(
 
     override fun getServer(): ServerMock = server
 
+    @Deprecated(
+        "entities may have multiple passengers, use #getPassengers",
+        ReplaceWith("passengers")
+    )
     override fun getPassenger(): Entity? {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "entities may have multiple passengers, use #getPassengers",
+        ReplaceWith("passengers")
+    )
     override fun setPassenger(passenger: Entity): Boolean {
         throw UnimplementedOperationException()
     }

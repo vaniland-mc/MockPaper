@@ -29,10 +29,17 @@ import org.bukkit.plugin.java.isEnabledPublic
 import org.intellij.lang.annotations.Language
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.lang.reflect.Constructor
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.logging.Level
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.createTempFile
+import kotlin.io.path.deleteExisting
 import kotlin.test.fail
 
 class PluginManagerMock(private val server: ServerMock) : PluginManager {
@@ -47,6 +54,8 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
     private val loader = JavaPluginLoader(server)
 
     private val _commands: MutableList<PluginCommand> = mutableListOf()
+
+    private val tempPaths = mutableListOf<Path>()
 
     /**
      * Get a collection of all available commands
@@ -342,6 +351,36 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
 
     override fun useTimings(): Boolean = false
 
+    @Suppress("SameParameterValue")
+    private fun tempFile(prefix: String, suffix: String? = null): File =
+        createTempFile(prefix, suffix).also { tempPaths.add(it) }
+            .toFile()
+
+    private fun tempDirectory(prefix: String): File =
+        createTempDirectory(prefix).also { tempPaths.add(it) }
+            .toFile()
+
+    fun deleteTemporaryPaths() {
+        tempPaths.forEach { path ->
+            Files.walkFileTree(
+                path,
+                object : SimpleFileVisitor<Path>() {
+                    override fun postVisitDirectory(dir: Path, exc: IOException?): FileVisitResult {
+                        dir.deleteExisting()
+
+                        return FileVisitResult.CONTINUE
+                    }
+
+                    override fun visitFile(file: Path, attrs: BasicFileAttributes?): FileVisitResult {
+                        file.deleteExisting()
+
+                        return FileVisitResult.CONTINUE
+                    }
+                }
+            )
+        }
+    }
+
     private fun isConstructorCompatible(
         constructor: Constructor<*>,
         types: Array<Class<*>>,
@@ -434,12 +473,12 @@ class PluginManagerMock(private val server: ServerMock) : PluginManager {
         val arguments = arrayOf(
             loader,
             description,
-            createTempDirectory(
+            tempDirectory(
                 "MockPaper-${description.name}-${description.version}"
-            ).toFile(),
-            createTempFile(
+            ),
+            tempFile(
                 "MockPaper-${description.name}-${description.version}", ".jar"
-            ).toFile(),
+            ),
         )
         System.arraycopy(parameters, 0, arguments, 4, parameters.size)
 

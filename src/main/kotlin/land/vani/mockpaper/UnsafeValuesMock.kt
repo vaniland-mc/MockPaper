@@ -35,6 +35,7 @@ class UnsafeValuesMock : UnsafeValues {
     override fun componentFlattener(): ComponentFlattener =
         ComponentFlattener.basic()
 
+    @Suppress("UnstableApiUsage")
     override fun plainComponentSerializer(): PlainComponentSerializer =
         PlainComponentSerializer.plain()
 

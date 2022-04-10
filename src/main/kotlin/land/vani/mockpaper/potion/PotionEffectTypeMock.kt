@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.potion.PotionEffectType
 
 /**
- * This mocks an actual [PotionEffectType] by tacking an id, a name, wheather it is
+ * This mocks an actual [PotionEffectType] by tacking an id, a name, whether it is
  * instant and RGB [Color] variable.
  *
  * @author TheBusyBiscuit
@@ -17,6 +17,8 @@ class PotionEffectTypeMock(
     private val instant: Boolean,
     private val color: Color,
 ) : PotionEffectType(id, key) {
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("unused, always 1.0")
     override fun getDurationModifier(): Double = 1.0
 
     override fun getName(): String = name
@@ -67,15 +69,16 @@ fun registerPotionEffectTypes() {
 
 private fun register(id: Int, name: String) {
     val key = NamespacedKey.minecraft(name)
-    if (PotionEffectType.getByKey(key) == null) {
-        PotionEffectType.registerPotionEffectType(
-            PotionEffectTypeMock(
-                key,
-                id,
-                name,
-                false,
-                Color.AQUA
-            )
-        )
+    if (PotionEffectType.getByKey(key) != null) {
+        return
     }
+    PotionEffectType.registerPotionEffectType(
+        PotionEffectTypeMock(
+            key,
+            id,
+            name,
+            false,
+            Color.AQUA
+        )
+    )
 }

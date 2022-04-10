@@ -88,6 +88,7 @@ class ItemFactoryMock : ItemFactory {
 
     override fun getDefaultLeatherColor(): Color = DEFAULT_LEATHER_COLOR
 
+    @Deprecated("Internal use only", ReplaceWith(""))
     override fun updateMaterial(meta: ItemMeta, material: Material): Material = material
 
     override fun asHoverEvent(
@@ -113,18 +114,22 @@ class ItemFactoryMock : ItemFactory {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use [org.bukkit.entity.Entity#asHoverEvent]")
     override fun hoverContentOf(entity: Entity): Content {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use [org.bukkit.entity.Entity#asHoverEvent(java.util.function.UnaryOperator]")
     override fun hoverContentOf(entity: Entity, customName: Array<out BaseComponent>): Content {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use [org.bukkit.entity.Entity#asHoverEvent(java.util.function.UnaryOperator]")
     override fun hoverContentOf(entity: Entity, customName: BaseComponent?): Content {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use [org.bukkit.entity.Entity#asHoverEvent(java.util.function.UnaryOperator]")
     override fun hoverContentOf(entity: Entity, customName: String?): Content {
         throw UnimplementedOperationException()
     }

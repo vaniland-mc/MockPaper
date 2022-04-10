@@ -31,33 +31,104 @@ class ArmorStandMock(server: ServerMock, uuid: UUID) : LivingEntityMock(server, 
 
     override fun getEquipment(): EntityEquipment = equipment
 
+    @Suppress("DEPRECATION")
+    @Deprecated(
+        "Prefer ArmorStand#getItem(EquipmentSlot)",
+        ReplaceWith(
+            "getItem(EquipmentSlot.HAND)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun getItemInHand(): ItemStack = equipment.itemInHand
 
+    @Deprecated(
+        "Prefer ArmorStand#setItem(EquipmentSlot, ItemStack?)",
+        ReplaceWith(
+            "setItem(EquipmentSlot.HAND, item)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun setItemInHand(item: ItemStack?) {
         @Suppress("DEPRECATION")
         equipment.setItemInHand(item)
     }
 
+    @Deprecated(
+        "Prefer ArmorStand#getItem(EquipmentSlot)",
+        ReplaceWith(
+            "getItem(EquipmentSlot.FEET)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun getBoots(): ItemStack = equipment.boots ?: ItemStack(Material.AIR)
 
+    @Deprecated(
+        "Prefer ArmorStand#setItem(EquipmentSlot, ItemStack?)",
+        ReplaceWith(
+            "setItem(EquipmentSlot.FEET, item)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun setBoots(item: ItemStack?) {
         equipment.boots = item
     }
 
+    @Deprecated(
+        "Prefer ArmorStand#getItem(EquipmentSlot)",
+        ReplaceWith(
+            "getItem(EquipmentSlot.LEGS)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun getLeggings(): ItemStack = equipment.leggings ?: ItemStack(Material.AIR)
 
+    @Deprecated(
+        "Prefer ArmorStand#setItem(EquipmentSlot, ItemStack?)",
+        ReplaceWith(
+            "setItem(EquipmentSlot.LEGS, item)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun setLeggings(item: ItemStack?) {
         equipment.leggings = item
     }
 
+    @Deprecated(
+        "Prefer ArmorStand#getItem(EquipmentSlot)",
+        ReplaceWith(
+            "getItem(EquipmentSlot.CHEST)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun getChestplate(): ItemStack = equipment.chestplate ?: ItemStack(Material.AIR)
 
+    @Deprecated(
+        "Prefer ArmorStand#setItem(EquipmentSlot, ItemStack?)",
+        ReplaceWith(
+            "setItem(EquipmentSlot.CHEST, item)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun setChestplate(item: ItemStack?) {
         equipment.chestplate = item
     }
 
+    @Deprecated(
+        "Prefer ArmorStand#getItem(EquipmentSlot)",
+        ReplaceWith(
+            "getItem(EquipmentSlot.HEAD)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun getHelmet(): ItemStack = equipment.helmet ?: ItemStack(Material.AIR)
 
+    @Deprecated(
+        "Prefer ArmorStand#setItem(EquipmentSlot)",
+        ReplaceWith(
+            "setItem(EquipmentSlot.HEAD, item)",
+            "org.bukkit.inventory.EquipmentSlot"
+        )
+    )
     override fun setHelmet(item: ItemStack?) {
         equipment.helmet = item
     }

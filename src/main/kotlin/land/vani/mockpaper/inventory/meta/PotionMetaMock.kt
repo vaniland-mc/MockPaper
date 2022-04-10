@@ -60,6 +60,7 @@ class PotionMetaMock : ItemMetaMock, PotionMeta {
     private fun indexOf(type: PotionEffectType): Int =
         effects.indexOfFirst { it.type == type }
 
+    @Deprecated("use [setBasePotionData(org.bukkit.potion.PotionData]")
     override fun setMainEffect(type: PotionEffectType): Boolean {
         throw UnimplementedOperationException()
     }

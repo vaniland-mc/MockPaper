@@ -114,8 +114,16 @@ class PlayerInventoryMock(holder: HumanEntity?) : InventoryMock(holder, Inventor
         setItem(OFF_HAND, item)
     }
 
+    @Deprecated(
+        "players can duel wield now use the methods for the specific hand instead",
+        ReplaceWith("itemInMainHand")
+    )
     override fun getItemInHand(): ItemStack = itemInMainHand
 
+    @Deprecated(
+        "players can duel wield now use the methods for the specific hand instead",
+        ReplaceWith("setItemInMainHand(stack)")
+    )
     override fun setItemInHand(stack: ItemStack?) = setItemInMainHand(stack)
 
     override fun getHeldItemSlot(): Int = mainHandSlot

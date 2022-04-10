@@ -64,6 +64,11 @@ class OfflinePlayerMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "The API contract is ambiguous and the implementation may or may not return the correct value given" +
+            " this API ambiguity. It is instead recommended use [getLastLogin] or [getLastSeen] depending " +
+            "on your needs."
+    )
     override fun getLastPlayed(): Long {
         throw UnimplementedOperationException()
     }
