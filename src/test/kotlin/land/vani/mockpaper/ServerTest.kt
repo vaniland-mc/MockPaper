@@ -57,7 +57,7 @@ class ServerTest : ShouldSpec({
         }
     }
 
-    should("maxPlayers") {
+    context("maxPlayers") {
         should("default Int.MAX_VALUE") {
             server.maxPlayers shouldBeExactly Int.MAX_VALUE
         }
