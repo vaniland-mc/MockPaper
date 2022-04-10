@@ -11,6 +11,7 @@ class UnsafeValuesTest : ShouldSpec({
 
     beforeTest {
         server = MockPaper.mock()
+        @Suppress("DEPRECATION")
         unsafeValues = server.unsafe
     }
 

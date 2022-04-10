@@ -19,6 +19,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
+@Suppress("DEPRECATION")
 class ItemMetaTest : ShouldSpec({
     lateinit var meta: ItemMetaMock
 

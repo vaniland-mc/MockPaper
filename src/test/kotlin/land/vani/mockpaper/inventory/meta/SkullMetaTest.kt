@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import land.vani.mockpaper.MockPaper
 
+@Suppress("DEPRECATION")
 class SkullMetaTest : ShouldSpec({
     lateinit var meta: SkullMetaMock
 
