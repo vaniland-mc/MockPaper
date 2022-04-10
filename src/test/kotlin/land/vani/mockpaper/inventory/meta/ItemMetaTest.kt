@@ -166,7 +166,7 @@ class ItemMetaTest : ShouldSpec({
         }
     }
 
-    should("unbreakable") {
+    context("unbreakable") {
         should("unbreakable is default false") {
             meta.isUnbreakable shouldBe false
         }
