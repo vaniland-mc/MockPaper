@@ -49,6 +49,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.event.player.PlayerToggleSprintEvent
 import java.util.UUID
 
+@Suppress("DEPRECATION")
 class PlayerTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var uuid: UUID

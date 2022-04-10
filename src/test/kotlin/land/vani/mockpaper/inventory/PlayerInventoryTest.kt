@@ -14,6 +14,7 @@ import land.vani.mockpaper.internal.fallbackNull
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
+@Suppress("DEPRECATION")
 class PlayerInventoryTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var inventory: PlayerInventoryMock

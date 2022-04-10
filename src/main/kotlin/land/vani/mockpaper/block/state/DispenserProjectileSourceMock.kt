@@ -9,11 +9,11 @@ import org.bukkit.util.Vector
 class DispenserProjectileSourceMock(
     private val dispenser: DispenserMock,
 ) : BlockProjectileSource {
-    override fun <T : Projectile?> launchProjectile(projectile: Class<out T>): T {
+    override fun <T : Projectile> launchProjectile(projectile: Class<out T>): T {
         throw UnimplementedOperationException()
     }
 
-    override fun <T : Projectile?> launchProjectile(projectile: Class<out T>, velocity: Vector?): T {
+    override fun <T : Projectile> launchProjectile(projectile: Class<out T>, velocity: Vector?): T {
         throw UnimplementedOperationException()
     }
 
