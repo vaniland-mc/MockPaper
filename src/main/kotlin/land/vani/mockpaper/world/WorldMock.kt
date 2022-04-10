@@ -241,6 +241,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Upstream has added support for this, use [getHighestBlockYAt(int, int, HeightMap)]")
     override fun getHighestBlockYAt(
         x: Int,
         z: Int,
@@ -250,6 +251,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Upstream has added support for this, use [getHighestBlockYAt(int, int, HeightMap)]")
     override fun getHighestBlockYAt(
         location: Location,
         @Suppress("DEPRECATION")
@@ -274,6 +276,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Upstream has added support for this, use [getHighestBlockYAt(int, int, HeightMap)]")
     override fun getHighestBlockAt(
         location: Location,
         @Suppress("DEPRECATION")
@@ -282,6 +285,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Upstream has added support for this, use [getHighestBlockYAt(int, int, HeightMap)]")
     override fun getHighestBlockAt(
         x: Int,
         z: Int,
@@ -321,6 +325,11 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "This method was added to facilitate chunk garbage collection.\n" +
+            " As of the current Minecraft version chunks are now strictly managed and will not be" +
+            " loaded for more than 1 tick unless they are in use"
+    )
     override fun isChunkInUse(x: Int, z: Int): Boolean {
         throw UnimplementedOperationException()
     }
@@ -349,10 +358,16 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "regenerating a single chunk is not likely to produce the same chunk as before as terrain decoration" +
+            " may be spread across chunks. Use of this method should be avoided as it is known to" +
+            " produce buggy results."
+    )
     override fun regenerateChunk(x: Int, z: Int): Boolean {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("This method is not guaranteed to work suitably across all client implementations.")
     override fun refreshChunk(x: Int, z: Int): Boolean {
         throw UnimplementedOperationException()
     }
@@ -429,7 +444,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
-    override fun <T : AbstractArrow?> spawnArrow(
+    override fun <T : AbstractArrow> spawnArrow(
         location: Location,
         direction: Vector,
         speed: Float,
@@ -443,6 +458,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("This method does not handle tile entities (bee nests)")
     override fun generateTree(loc: Location, type: TreeType, delegate: BlockChangeDelegate): Boolean {
         throw UnimplementedOperationException()
     }
@@ -482,6 +498,7 @@ class WorldMock(
         .filter { it.world == this }
         .filterIsInstance<LivingEntity>()
 
+    @Deprecated("Deprecated in Java")
     override fun <T : Entity?> getEntitiesByClass(vararg classes: Class<T>): Collection<T> {
         throw UnimplementedOperationException()
     }
@@ -774,6 +791,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Magic value")
     override fun spawnFallingBlock(location: Location, material: Material, data: Byte): FallingBlock {
         throw UnimplementedOperationException()
     }
@@ -815,14 +833,17 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("biomes are now 3-dimensional")
     override fun getBiome(x: Int, z: Int): Biome {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("biomes are now 3-dimensional", ReplaceWith("setBiome(x, y, z, bio)"))
     override fun setBiome(x: Int, z: Int, bio: Biome) {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("biomes are now 3-dimensional")
     override fun getTemperature(x: Int, z: Int): Double {
         throw UnimplementedOperationException()
     }
@@ -831,6 +852,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("biomes are now 3-dimensional")
     override fun getHumidity(x: Int, z: Int): Double {
         throw UnimplementedOperationException()
     }
@@ -907,6 +929,10 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "world type is only used to select the default word generation settings and is not stored" +
+            " in Vanilla worlds, making it impossible for this method to always return the correct value."
+    )
     override fun getWorldType(): WorldType = worldType
 
     override fun canGenerateStructures(): Boolean {
@@ -1037,12 +1063,14 @@ class WorldMock(
         .map { it.toString() }
         .toTypedArray()
 
+    @Deprecated("use [getGameRuleValue(GameRule)] instead")
     override fun getGameRuleValue(rule: String?): String? {
         if (rule == null) return null
         val gameRule = GameRule.getByName(rule) ?: return null
         return getGameRuleValue(gameRule)?.toString()
     }
 
+    @Deprecated("use [setGameRuleValue(GameRule, value)] instead")
     @Suppress("UNCHECKED_CAST")
     override fun setGameRuleValue(rule: String, value: String): Boolean {
         val gameRule = GameRule.getByName(rule) ?: return false
@@ -1070,7 +1098,7 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
-    override fun <T> setGameRule(rule: GameRule<T>, newValue: T): Boolean {
+    override fun <T : Any> setGameRule(rule: GameRule<T>, newValue: T): Boolean {
         gameRules[rule] = newValue
         return true
     }
@@ -1253,18 +1281,23 @@ class WorldMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use [isUltraWarm]", ReplaceWith("isUltraWarm"))
     override fun isUltrawarm(): Boolean = isUltraWarm
 
     override fun getCoordinateScale(): Double {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("use [hasSkyLight]", ReplaceWith("hasSkyLight"))
     override fun hasSkylight(): Boolean = hasSkyLight()
 
+    @Deprecated("use [hasCeiling]", ReplaceWith("hasCeiling"))
     override fun hasBedrockCeiling(): Boolean = hasCeiling()
 
+    @Deprecated("use [isBedWorks]", ReplaceWith("isBedWorks"))
     override fun doesBedWork(): Boolean = isBedWorks
 
+    @Deprecated("use [isRespawnAnchorWorks]", ReplaceWith("isRespawnAnchorWorks"))
     override fun doesRespawnAnchorWork(): Boolean = isRespawnAnchorWorks
 
     override fun isFixedTime(): Boolean {
@@ -1407,14 +1440,14 @@ class WorldMock(
             else -> throw UnimplementedOperationException()
         }
 
-    override fun <T : Entity?> spawn(location: Location, clazz: Class<T>): T {
+    override fun <T : Entity> spawn(location: Location, clazz: Class<T>): T {
         val entity = mockEntity(clazz)
         entity.location = location
         server.registerEntity(entity)
         return clazz.cast(entity)
     }
 
-    override fun <T : Entity?> spawn(
+    override fun <T : Entity> spawn(
         location: Location,
         clazz: Class<T>,
         function: Consumer<T>?,
@@ -1425,7 +1458,7 @@ class WorldMock(
         return entity
     }
 
-    override fun <T : Entity?> spawn(
+    override fun <T : Entity> spawn(
         location: Location,
         clazz: Class<T>,
         randomizeData: Boolean,

@@ -41,7 +41,7 @@ abstract class LivingEntityMock(
     uuid: UUID,
 ) : EntityMock(server, uuid), LivingEntity {
     companion object {
-        private const val MAX_HEALTH = 20.0
+        const val MAX_HEALTH = 20.0
     }
 
     private var health: Double = MAX_HEALTH
@@ -64,7 +64,7 @@ abstract class LivingEntityMock(
 
     override fun setHealth(health: Double) {
         if (health > 0) {
-            this.health = min(health, maxHealth)
+            this.health = min(health, getAttribute(Attribute.GENERIC_MAX_HEALTH).value)
             return
         }
         this.health = 0.0
@@ -75,15 +75,34 @@ abstract class LivingEntityMock(
         isAlive = false
     }
 
-    override fun getMaxHealth(): Double = getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
+    @Deprecated(
+        "use Attribute.GENERIC_MAX_HEALTH",
+        ReplaceWith(
+            "getAttribute(Attribute.GENERIC_MAX_HEALTH).value",
+            "org.bukkit.attribute.Attribute"
+        )
+    )
+    override fun getMaxHealth(): Double = getAttribute(Attribute.GENERIC_MAX_HEALTH).value
 
+    @Deprecated(
+        "use Attribute.GENERIC_MAX_HEALTH",
+        ReplaceWith(
+            "getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue",
+            "org.bukkit.attribute.Attribute"
+        )
+    )
     override fun setMaxHealth(health: Double) {
-        getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue = health
+        getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = health
         if (health > health) {
             this.health = health
         }
     }
 
+    @Deprecated(
+        "use Attribute.GENERIC_MAX_HEALTH",
+        ReplaceWith("getAttribute(Attribute.GENERIC_MAX_HEALTH).baseValue = LivingEntityMock.MAX_HEALTH")
+    )
+    @Suppress("DEPRECATION")
     override fun resetMaxHealth() {
         maxHealth = MAX_HEALTH
     }
@@ -137,13 +156,8 @@ abstract class LivingEntityMock(
         throw UnimplementedOperationException()
     }
 
-    override fun getAttribute(attribute: Attribute): AttributeInstance? {
-        if (attribute in attributes) {
-            return attributes[attribute]
-        } else {
-            throw UnimplementedOperationException()
-        }
-    }
+    override fun getAttribute(attribute: Attribute): AttributeInstance =
+        attributes[attribute] ?: throw UnimplementedOperationException()
 
     override fun <T : Projectile> launchProjectile(projectile: Class<out T>): T {
         throw UnimplementedOperationException()
@@ -264,6 +278,7 @@ abstract class LivingEntityMock(
     @Suppress("DEPRECATION")
     override fun addPotionEffect(effect: PotionEffect): Boolean = addPotionEffect(effect, false)
 
+    @Deprecated(" no need to force since multiple effects of the same type are now supported.")
     override fun addPotionEffect(effect: PotionEffect, force: Boolean): Boolean {
         activeEffects += ActivePotionEffect(effect)
         return true

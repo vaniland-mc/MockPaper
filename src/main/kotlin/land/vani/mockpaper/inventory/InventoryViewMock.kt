@@ -60,5 +60,6 @@ open class InventoryViewMock(
         this.type = type
     }
 
+    @Deprecated("in favour of [title]")
     override fun getTitle(): String = name
 }

@@ -134,16 +134,32 @@ class EntityEquipmentMock(
         boots = null
     }
 
+    @Deprecated(
+        "entities can duel wield now use the methods for the specific hand instead",
+        ReplaceWith("itemInMainHand")
+    )
     override fun getItemInHand(): ItemStack = itemInMainHand
 
+    @Deprecated(
+        "entities can duel wield now use the methods for the specific hand instead",
+        ReplaceWith("itemInMaiNHand")
+    )
     override fun setItemInHand(stack: ItemStack?) {
         setItemInMainHand(stack)
     }
 
+    @Deprecated(
+        "entities can duel wield now use the methods for the specific hand instead",
+        ReplaceWith("itemInMaiNHandDropChance")
+    )
     override fun getItemInHandDropChance(): Float {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "entities can duel wield now use the methods for the specific hand instead",
+        ReplaceWith("itemInMaiNHandDropChance")
+    )
     override fun setItemInHandDropChance(chance: Float) {
         throw UnimplementedOperationException()
     }

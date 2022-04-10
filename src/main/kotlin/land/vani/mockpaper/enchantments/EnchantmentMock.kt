@@ -20,6 +20,7 @@ class EnchantmentMock(key: NamespacedKey, private val name: String) : Enchantmen
     private var isTreasure: Boolean = false
     private var isCursed: Boolean = false
 
+    @Deprecated("enchantments are badly named, use #key", ReplaceWith("key"))
     override fun getName(): String = name
 
     override fun getMaxLevel(): Int = maxLevel

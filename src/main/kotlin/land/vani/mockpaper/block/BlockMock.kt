@@ -47,6 +47,7 @@ class BlockMock(
      */
     constructor() : this(Material.AIR, Location(null, 0.0, 0.0, 0.0))
 
+    @Deprecated("Magic value")
     override fun getData(): Byte = data
 
     override fun getRelative(modX: Int, modY: Int, modZ: Int): Block {
@@ -261,6 +262,7 @@ class BlockMock(
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Use [translationKey]", ReplaceWith("translationKey()"))
     override fun getTranslationKey(): String = translationKey()
 
     override fun getDestroySpeed(itemStack: ItemStack, considerEnchants: Boolean): Float {

@@ -169,8 +169,16 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         this.displayName = displayName ?: Component.text(name)
     }
 
+    @Deprecated(
+        "In favour of [displayName]",
+        ReplaceWith("displayName()")
+    )
     override fun getDisplayName(): String = displayName().toLegacyString()
 
+    @Deprecated(
+        "In favour of [displayName]",
+        ReplaceWith("displayName(name)")
+    )
     override fun setDisplayName(name: String?) {
         displayName(name?.toComponent())
     }
@@ -185,24 +193,52 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
 
     override fun playerListFooter(): Component? = playerListFooter
 
+    @Deprecated(
+        "In favour of [playerListName]",
+        ReplaceWith("playerListName()")
+    )
     override fun getPlayerListName(): String = playerListName().toLegacyString()
 
+    @Deprecated(
+        "In favour of [playerListName(Component)]",
+        ReplaceWith("playerListName(name)")
+    )
     override fun setPlayerListName(name: String?) {
         playerListName(name?.toComponent())
     }
 
+    @Deprecated(
+        "In favour of [playerListHeader]",
+        ReplaceWith("playerListHeader()")
+    )
     override fun getPlayerListHeader(): String? = playerListHeader()?.toLegacyString()
 
+    @Deprecated(
+        "In favour of [playerListHeader(Component)]",
+        ReplaceWith("playerListHeader(header)")
+    )
     override fun setPlayerListHeader(header: String?) {
         sendPlayerListHeader(header?.toComponent() ?: Component.empty())
     }
 
+    @Deprecated(
+        "In favour of [playerListFooter]",
+        ReplaceWith("playerListFooter()")
+    )
     override fun getPlayerListFooter(): String? = playerListFooter()?.toLegacyString()
 
+    @Deprecated(
+        "In favour of [playerListFooter(Component)]",
+        ReplaceWith("playerListFooter(footer)")
+    )
     override fun setPlayerListFooter(footer: String?) {
         sendPlayerListFooter(footer?.toComponent() ?: Component.empty())
     }
 
+    @Deprecated(
+        "In favour of [sendPlayerListHeaderAndFooter(Component, Component)]",
+        ReplaceWith("sendPlayerListHeaderAndFooter(header, footer)")
+    )
     override fun setPlayerListHeaderFooter(header: String?, footer: String?) {
         sendPlayerListHeaderAndFooter(
             header?.toComponent() ?: Component.empty(),
@@ -247,7 +283,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         )
         server.pluginManager.callEvent(event)
 
-        health = getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value
+        health = getAttribute(Attribute.GENERIC_MAX_HEALTH).value
         location = event.respawnLocation.clone()
 
         val postEvent = PlayerPostRespawnEvent(this, event.respawnLocation, isBedSpawn)
@@ -293,6 +329,11 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         this.firstPlayed = firstPlayed
     }
 
+    @Deprecated(
+        "The API contract is ambiguous and the implementation may or may not return the correct value given" +
+            " this API ambiguity. It is instead recommended use [getLastLogin] or [getLastSeen] depending " +
+            "on your needs."
+    )
     override fun getLastPlayed(): Long = lastPlayed
 
     @VisibleForTesting
@@ -400,8 +441,16 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         inventoryView = InventoryViewMock(this, InventoryMock.Crafting, inventory, InventoryType.CRAFTING)
     }
 
+    @Deprecated(
+        "Humans may now dual wield in their off hand, use explicit methods in [PlayerInventory].",
+        ReplaceWith("inventory.itemInMainHand")
+    )
     override fun getItemInHand(): ItemStack = inventory.itemInMainHand
 
+    @Deprecated(
+        "Humans may now dual wield in their off hand, use explicit methods in [PlayerInventory].",
+        ReplaceWith("inventory.setItemInMainHand(item)")
+    )
     override fun setItemInHand(item: ItemStack?) {
         inventory.setItemInMainHand(item)
     }
@@ -524,6 +573,10 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [kick(Component)]",
+        ReplaceWith("kick(message)")
+    )
     override fun kickPlayer(message: String?) {
         kick(message?.toComponent())
     }
@@ -644,6 +697,8 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Magic value")
     override fun playNote(loc: Location, instrument: Byte, note: Byte) {
         throw UnimplementedOperationException()
     }
@@ -704,6 +759,8 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         // We just pretend the Sound has stopped
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Magic value")
     override fun playEffect(loc: Location, effect: Effect, data: Int) {
         throw UnimplementedOperationException()
     }
@@ -715,6 +772,8 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     override fun breakBlock(block: Block): Boolean =
         simulateBlockBreak(block) != null
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Magic value")
     override fun sendBlockChange(loc: Location, material: Material, data: Byte) {
         throw UnimplementedOperationException()
     }
@@ -812,14 +871,26 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [sendSignChange(Location, List<String)?]",
+        ReplaceWith("sendSignChange(loc, lines?.toList())")
+    )
     override fun sendSignChange(loc: Location, lines: Array<out String?>?) {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [sendSignChange(Location, List<String>?, DyeColor)]",
+        ReplaceWith("sendSignChange(loc, lines?.toList(), dyeColor)")
+    )
     override fun sendSignChange(loc: Location, lines: Array<out String?>?, dyeColor: DyeColor) {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [sendSignChange(Location, List<String>?, DyeColor, Boolean)]",
+        ReplaceWith("sendSignChange(loc, lines?.toList(), dyeColor, hasGlowingText)")
+    )
     override fun sendSignChange(
         loc: Location,
         lines: Array<out String?>?,
@@ -837,6 +908,10 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "Use [sendActionBar(Component)",
+        ReplaceWith("sendActionBar(message.toComponent())")
+    )
     override fun sendActionBar(message: String) {
         throw UnimplementedOperationException()
     }
@@ -845,30 +920,61 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "Use [sendActionBar(Component)",
+        ReplaceWith("sendActionBar(message.toComponent())")
+    )
     override fun sendActionBar(vararg message: BaseComponent) {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "Use [sendActionBar(Component)",
+        ReplaceWith("sendActionBar(message.toComponent(alternateChar))")
+    )
     override fun sendActionBar(alternateChar: Char, message: String) {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [sendPlayerListHeaderAndFooter(Component, Component)]",
+        ReplaceWith("sendPlayerListHeaderAndFooter(header, footer)")
+    )
     override fun setPlayerListHeaderFooter(header: BaseComponent?, footer: BaseComponent?) {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "In favour of [sendPlayerListHeaderAndFooter(Component, Component)]",
+        ReplaceWith("sendPlayerListHeaderAndFooter(header, footer)")
+    )
     override fun setPlayerListHeaderFooter(header: Array<out BaseComponent?>?, footer: Array<out BaseComponent?>?) {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun setTitleTimes(fadeInTicks: Int, stayTicks: Int, fadeOutTicks: Int) {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun setSubtitle(subtitle: BaseComponent?) {
         subTitles.offer(subtitle?.toLegacyText())
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun setSubtitle(subtitle: Array<out BaseComponent?>?) {
         subtitle?.forEach {
             @Suppress("DEPRECATION")
@@ -876,15 +982,29 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         }
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun showTitle(title: BaseComponent?) {
         titles.offer(title?.toLegacyText())
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun showTitle(title: Array<out BaseComponent?>?) {
         title?.forEach { titles.offer(it?.toLegacyText()) }
     }
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION", "DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun showTitle(
         title: BaseComponent?,
         subtitle: BaseComponent?,
@@ -896,7 +1016,11 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         setSubtitle(subtitle)
     }
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION", "DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun showTitle(
         title: Array<out BaseComponent?>?,
         subtitle: Array<out BaseComponent?>?,
@@ -908,18 +1032,28 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         setSubtitle(subtitle)
     }
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION", "DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun sendTitle(title: com.destroystokyo.paper.Title) {
         showTitle(title.title)
         setSubtitle(title.subtitle)
     }
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION", "DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun updateTitle(title: com.destroystokyo.paper.Title) {
         showTitle(title.title)
         setSubtitle(title.subtitle)
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Use [clearTitle]")
     override fun hideTitle() {
         throw UnimplementedOperationException()
     }
@@ -1030,6 +1164,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         isAllowFlight = flight
     }
 
+    @Deprecated("See [hidePlayer(Player, Player)]")
     override fun hidePlayer(player: Player) {
         hiddenPlayersDeprecated += player.uniqueId
     }
@@ -1039,6 +1174,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             .add(plugin)
     }
 
+    @Deprecated("See [showPlayer(Player, Player)]")
     override fun showPlayer(player: Player) {
         hiddenPlayersDeprecated -= player.uniqueId
     }
@@ -1054,14 +1190,20 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         player.uniqueId !in hiddenPlayers &&
             player.uniqueId !in hiddenPlayersDeprecated
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Draft API.")
     override fun hideEntity(plugin: Plugin, entity: Entity) {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Draft API.")
     override fun showEntity(plugin: Plugin, entity: Entity) {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated("Draft API.")
     override fun canSee(entity: Entity): Boolean {
         throw UnimplementedOperationException()
     }
@@ -1101,6 +1243,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Use [setResourcePack(String)]", ReplaceWith("setResourcePack(url)"))
     override fun setTexturePack(url: String) {
         throw UnimplementedOperationException()
     }
@@ -1137,6 +1280,10 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "Use [setResourcePack(String, String)",
+        ReplaceWith("setResourcePack(url, hash)")
+    )
     override fun setResourcePack(url: String) {
         throw UnimplementedOperationException()
     }
@@ -1181,11 +1328,21 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DEPRECATION", "DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun sendTitle(title: String?, subtitle: String?) {
         titles.offer(title)
         subTitles.offer(subtitle)
     }
 
+    @Suppress("DEPRECATION", "DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "Use [showTitle(net.kyori.adventure.title.Title)] or" +
+            " [sendTitlePart(net.kyori.adventure.title.TitlePart, Object)]",
+    )
     override fun sendTitle(title: String?, subtitle: String?, fadeIn: Int, stay: Int, fadeOut: Int) {
         @Suppress("DEPRECATION")
         sendTitle(title, subtitle)
@@ -1343,6 +1500,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("In favour of [locale()]", ReplaceWith("locale()"))
     override fun getLocale(): String {
         throw UnimplementedOperationException()
     }
@@ -1387,6 +1545,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("This is no longer sent from the client and will always be null")
     override fun getResourcePackHash(): String? {
         throw UnimplementedOperationException()
     }
@@ -1419,7 +1578,7 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
-    override fun <T : Any?> getClientOption(option: ClientOption<T>): T {
+    override fun <T : Any> getClientOption(option: ClientOption<T>): T {
         throw UnimplementedOperationException()
     }
 
@@ -1519,18 +1678,36 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "There are currently no well defined semantics regarding serialized entities in Bukkit. " +
+            "Use with care."
+    )
     override fun getShoulderEntityLeft(): Entity? {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "There are currently no well defined semantics regarding serialized entities in Bukkit. " +
+            "Use with care."
+    )
     override fun getShoulderEntityRight(): Entity? {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "There are currently no well defined semantics regarding serialized entities in Bukkit. " +
+            "Use with care."
+    )
     override fun setShoulderEntityLeft(entity: Entity?) {
         throw UnimplementedOperationException()
     }
 
+    @Suppress("DeprecatedCallableAddReplaceWith")
+    @Deprecated(
+        "There are currently no well defined semantics regarding serialized entities in Bukkit. " +
+            "Use with care."
+    )
     override fun setShoulderEntityRight(entity: Entity?) {
         throw UnimplementedOperationException()
     }
@@ -1571,6 +1748,13 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         foodLevel = value
     }
 
+    @Deprecated(
+        "sendMessage(net.kyori.adventure.text.Component)",
+        ReplaceWith(
+            "sendMessage(Component.text(\"\"))",
+            "net.kyori.adventure.text.Component"
+        )
+    )
     override fun sendMessage(vararg components: BaseComponent) {
         components.forEach {
             @Suppress("DEPRECATION")
@@ -1578,8 +1762,15 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
         }
     }
 
+    @Deprecated(
+        "sendMessage(net.kyori.adventure.text.Component)",
+        ReplaceWith(
+            "sendMessage(Component.text(\"\"))",
+            "net.kyori.adventure.text.Component"
+        )
+    )
     override fun sendMessage(component: BaseComponent) {
-        messages.offer(component.toLegacyText())
+        messages += component.toLegacyText()
     }
 
     override fun getSaturatedRegenRate(): Int {
@@ -1638,6 +1829,14 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
     override fun spigot(): Player.Spigot = PlayerSpigotMock()
 
     inner class PlayerSpigotMock : Player.Spigot() {
+        @Suppress("DeprecatedCallableAddReplaceWith")
+        @Deprecated(
+            "sendMessage(net.kyori.adventure.text.Component)",
+            ReplaceWith(
+                "sendMessage(Component.text(\"\"))",
+                "net.kyori.adventure.text.Component"
+            )
+        )
         override fun sendMessage(vararg components: BaseComponent) {
             components.forEach {
                 @Suppress("DEPRECATION")
@@ -1645,11 +1844,25 @@ class PlayerMock(server: ServerMock, name: String, uuid: UUID) :
             }
         }
 
+        @Deprecated(
+            "sendMessage(net.kyori.adventure.text.Component)",
+            ReplaceWith(
+                "sendMessage(Component.text(\"\"))",
+                "net.kyori.adventure.text.Component"
+            )
+        )
         override fun sendMessage(component: BaseComponent) {
             @Suppress("DEPRECATION")
             sendMessage(ChatMessageType.CHAT, component)
         }
 
+        @Deprecated(
+            "sendMessage(net.kyori.adventure.text.Component)",
+            ReplaceWith(
+                "sendMessage(Component.text(\"\"))",
+                "net.kyori.adventure.text.Component"
+            )
+        )
         override fun sendMessage(position: ChatMessageType, component: BaseComponent) {
             this@PlayerMock.sendMessage(component.toLegacyText())
         }

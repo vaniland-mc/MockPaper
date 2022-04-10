@@ -59,30 +59,55 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable, Object {
         this.displayName = displayName
     }
 
+    @Deprecated(
+        "In favour of [displayName]",
+        ReplaceWith("displayName()")
+    )
     override fun getDisplayName(): String = displayName?.toLegacyString()
         ?: error("this item does not have display name")
 
+    @Deprecated(
+        "Use [displayName()]",
+        ReplaceWith("displayName()")
+    )
     override fun getDisplayNameComponent(): Array<out BaseComponent> =
         displayName?.toBungeeComponents() ?: emptyArray()
 
+    @Deprecated(
+        "In favour of [displayName(net.kyori.adventure.text.Component)]",
+        ReplaceWith("displayName(name)")
+    )
     override fun setDisplayName(name: String?) {
         displayName = name?.toComponent()
     }
 
+    @Deprecated(
+        "Use [displayName(Component)]",
+        ReplaceWith("displayName(component)")
+    )
     override fun setDisplayNameComponent(component: Array<out BaseComponent?>?) {
         displayName = component?.filterNotNull()
             ?.toTypedArray()
             ?.toComponent()
     }
 
+    @Deprecated("Use [displayName] and check if it is instanceof a [net.kyori.adventure.text.TranslatableComponent]")
     override fun hasLocalizedName(): Boolean {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("Use [displayName] and cast it to a [net.kyori.adventure.text.TranslatableComponent]")
     override fun getLocalizedName(): String {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "Use [displayName(Component)] with a [net.kyori.adventure.text.TranslatableComponent]",
+        ReplaceWith(
+            "displayName(Component.translatable(name))",
+            "net.kyori.adventure.text.Component"
+        )
+    )
     override fun setLocalizedName(name: String?) {
         throw UnimplementedOperationException()
     }
@@ -95,15 +120,19 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable, Object {
         this.lore = lore?.toMutableList()
     }
 
+    @Deprecated("In favour of [lore]")
     override fun getLore(): List<String>? = lore?.map { it.toLegacyString() }
 
+    @Deprecated("Use [lore]")
     override fun getLoreComponents(): List<Array<out BaseComponent>>? =
         lore?.map { it.toBungeeComponents() }
 
+    @Deprecated("In favour of [lore(List<Component>)]")
     override fun setLore(lore: List<String>?) {
         this.lore = lore?.map { it.toComponent() }?.toMutableList()
     }
 
+    @Deprecated("Use [lore(List<Component>]")
     override fun setLoreComponents(lore: List<Array<out BaseComponent>>?) {
         this.lore = lore?.map { it.toComponent() }?.toMutableList()
     }
@@ -197,11 +226,16 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable, Object {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated("This API part has been replaced by the [PersistentDataHolder] API.")
     @Suppress("DEPRECATION")
     override fun getCustomTagContainer(): org.bukkit.inventory.meta.tags.CustomItemTagContainer {
         throw UnimplementedOperationException()
     }
 
+    @Deprecated(
+        "Internal use only",
+        ReplaceWith("")
+    )
     override fun setVersion(version: Int) {
         throw UnimplementedOperationException()
     }
@@ -218,20 +252,30 @@ open class ItemMetaMock : ItemMeta, Damageable, Repairable, Object {
         it
     }
 
+    @Deprecated("Minecraft does not limit this to the material enum, Use [getDestroyableKeys] as a replacement")
     override fun getCanDestroy(): Set<Material> {
         throw UnimplementedOperationException()
     }
 
-    override fun setCanDestroy(canDestroy: Set<Material>?) {
-        throw UnimplementedOperationException()
+    @Deprecated(
+        "Minecraft does not limit this to the material enum, Use [setDestroyableKeys(Collection)] as a replacement",
+        ReplaceWith("setDestroyableKeys(canDestroy.map { it.key })")
+    )
+    override fun setCanDestroy(canDestroy: Set<Material>) {
+        setDestroyableKeys(canDestroy.map { it.key })
     }
 
+    @Deprecated("Minecraft does not limit this to the material enum, Use [getPlaceableKeys] as a replacement")
     override fun getCanPlaceOn(): Set<Material> {
         throw UnimplementedOperationException()
     }
 
-    override fun setCanPlaceOn(canPlaceOn: Set<Material>?) {
-        throw UnimplementedOperationException()
+    @Deprecated(
+        "Minecraft does not limit this to the material enum, Use [setPlaceableKeys(Collection)] as a replacement",
+        ReplaceWith("setPlaceableKeys(canDestroy.map { it.key })")
+    )
+    override fun setCanPlaceOn(canPlaceOn: Set<Material>) {
+        setPlaceableKeys(canPlaceOn.map { it.key })
     }
 
     override fun getDestroyableKeys(): Set<Namespaced> {

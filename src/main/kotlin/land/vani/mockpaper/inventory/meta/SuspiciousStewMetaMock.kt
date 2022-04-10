@@ -31,6 +31,7 @@ class SuspiciousStewMetaMock : ItemMetaMock, SuspiciousStewMeta {
 
         val prev = effects[index]
         if (prev.duration == effect.duration) return false
+
         effects[index] = effect
         return true
     }

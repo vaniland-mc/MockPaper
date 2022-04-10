@@ -16,10 +16,12 @@ class SkullMetaMock : ItemMetaMock, SkullMeta {
         owningPlayer = meta.owningPlayer
     }
 
+    @Deprecated("See [getOwningPlayer]")
     override fun getOwner(): String? = owningPlayer?.name
 
     override fun hasOwner(): Boolean = owningPlayer != null
 
+    @Deprecated("See [setOwningPlayer]")
     override fun setOwner(owner: String?): Boolean {
         owningPlayer = owner?.let {
             @Suppress("DEPRECATION")
@@ -43,6 +45,7 @@ class SkullMetaMock : ItemMetaMock, SkullMeta {
         return true
     }
 
+    @Suppress("DEPRECATION")
     override fun clone(): SkullMetaMock = (super.clone() as SkullMetaMock)
         .apply {
             owner = this@SkullMetaMock.owner
