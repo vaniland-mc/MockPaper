@@ -10,7 +10,7 @@ class InventoryViewTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var view: InventoryViewMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         view = InventoryViewMock(
             server.addPlayer(),
@@ -18,6 +18,10 @@ class InventoryViewTest : ShouldSpec({
             server.createInventory(null, InventoryType.CHEST),
             InventoryType.CHEST
         )
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("constructor") {

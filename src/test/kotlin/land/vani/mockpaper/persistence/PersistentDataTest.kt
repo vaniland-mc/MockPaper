@@ -18,9 +18,13 @@ class PersistentDataTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var container: PersistentDataContainerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         container = PersistentDataContainerMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("adapterContext") {

@@ -23,9 +23,13 @@ import java.io.ByteArrayOutputStream
 class ItemMetaTest : ShouldSpec({
     lateinit var meta: ItemMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = ItemMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("constructor") {

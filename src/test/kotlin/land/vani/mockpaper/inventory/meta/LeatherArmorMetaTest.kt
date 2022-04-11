@@ -10,9 +10,13 @@ class LeatherArmorMetaTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var meta: LeatherArmorMetaMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         meta = LeatherArmorMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("getColor is default") {

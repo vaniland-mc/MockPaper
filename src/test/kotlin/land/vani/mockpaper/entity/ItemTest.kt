@@ -22,9 +22,13 @@ class ItemTest : ShouldSpec({
     var item = ItemStack(Material.EMERALD)
     lateinit var entity: Item
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         world = server.addSimpleWorld("world")
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("entityType") {

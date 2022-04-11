@@ -15,9 +15,13 @@ class StatisticTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var player: PlayerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         player = server.addPlayer()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("defaults") {

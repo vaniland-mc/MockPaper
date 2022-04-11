@@ -34,10 +34,14 @@ class EntityTest : ShouldSpec({
     lateinit var world: WorldMock
     lateinit var entity: EntityMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         entity = SimpleEntityMock(server)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("server") {

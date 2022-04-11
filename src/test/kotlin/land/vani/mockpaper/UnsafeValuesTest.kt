@@ -9,10 +9,14 @@ class UnsafeValuesTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var unsafeValues: UnsafeValuesMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         @Suppress("DEPRECATION")
         unsafeValues = server.unsafe
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     val pluginInfoFormat = """

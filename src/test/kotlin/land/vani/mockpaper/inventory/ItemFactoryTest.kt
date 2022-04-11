@@ -23,9 +23,13 @@ class ItemFactoryTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var factory: ItemFactoryMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         factory = server.itemFactory as ItemFactoryMock
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("getItemMeta") {

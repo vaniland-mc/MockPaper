@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowUnit
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.nulls.shouldBeNull
+import land.vani.mockpaper.MockPaper
 import land.vani.mockpaper.UnimplementedOperationException
 import org.bukkit.Material
 import org.bukkit.loot.LootTables
@@ -12,8 +13,13 @@ import java.util.UUID
 class DispenserTest : ShouldSpec({
     lateinit var dispenser: DispenserMock
 
-    beforeTest {
+    beforeEach {
+        MockPaper.mock()
         dispenser = DispenserMock(Material.DISPENSER)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("getLootTable is not implemented yet") {

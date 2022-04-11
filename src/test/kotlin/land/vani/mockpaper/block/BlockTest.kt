@@ -23,6 +23,10 @@ class BlockTest : ShouldSpec({
         block = BlockMock(randomLocation(world))
     }
 
+    afterEach {
+        MockPaper.unmock()
+    }
+
     should("type default is air") {
         block.type shouldBe Material.AIR
     }

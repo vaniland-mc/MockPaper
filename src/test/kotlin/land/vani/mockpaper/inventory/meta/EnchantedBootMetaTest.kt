@@ -13,11 +13,15 @@ class EnchantedBootMetaTest : ShouldSpec({
 
     lateinit var meta: EnchantedBookMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = EnchantedBookMetaMock()
         enchantment1 = Enchantment.DURABILITY
         enchantment2 = Enchantment.DAMAGE_ALL
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("enchants") {

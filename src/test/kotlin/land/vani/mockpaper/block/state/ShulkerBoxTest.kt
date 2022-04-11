@@ -33,9 +33,13 @@ private fun Arb.Companion.notShulkerBox(): Arb<Material> = Arb.enum<Material>()
 class ShulkerBoxTest : ShouldSpec({
     lateinit var shulkerBox: ShulkerBoxMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         shulkerBox = ShulkerBoxMock(Material.SHULKER_BOX)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("material block state") {

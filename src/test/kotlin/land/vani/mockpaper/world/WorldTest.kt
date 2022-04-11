@@ -23,9 +23,13 @@ class WorldTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var world: WorldMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         world = server.addWorld(WorldMock(server))
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("name") {

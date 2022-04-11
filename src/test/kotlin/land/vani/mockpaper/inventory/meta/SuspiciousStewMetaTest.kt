@@ -12,9 +12,13 @@ import org.bukkit.potion.PotionEffectType
 class SuspiciousStewMetaTest : ShouldSpec({
     lateinit var meta: SuspiciousStewMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = SuspiciousStewMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("customEffect") {

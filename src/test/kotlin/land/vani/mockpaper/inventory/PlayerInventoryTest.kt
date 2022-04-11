@@ -19,9 +19,13 @@ class PlayerInventoryTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var inventory: PlayerInventoryMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         inventory = PlayerInventoryMock(null)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("inventory size is 41") {

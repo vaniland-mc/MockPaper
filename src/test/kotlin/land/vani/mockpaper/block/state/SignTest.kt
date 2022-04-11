@@ -15,7 +15,7 @@ import org.bukkit.Material
 class SignTest : ShouldSpec({
     lateinit var sign: SignMock
 
-    beforeTest {
+    beforeEach {
         sign = SignMock(Material.OAK_SIGN)
     }
 

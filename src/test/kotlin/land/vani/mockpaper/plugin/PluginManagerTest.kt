@@ -21,10 +21,14 @@ class PluginManagerTest : ShouldSpec({
     lateinit var pluginManager: PluginManagerMock
     lateinit var plugin: MockPlugin
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         pluginManager = server.pluginManager
         plugin = pluginManager.createMockPlugin("MockPlugin")
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("getPlugin(String)") {

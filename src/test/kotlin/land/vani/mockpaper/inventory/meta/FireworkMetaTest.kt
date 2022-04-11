@@ -12,9 +12,13 @@ import org.bukkit.FireworkEffect
 class FireworkMetaTest : ShouldSpec({
     lateinit var meta: FireworkMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = FireworkMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("addEffect") {

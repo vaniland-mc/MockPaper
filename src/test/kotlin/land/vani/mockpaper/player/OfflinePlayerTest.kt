@@ -10,8 +10,12 @@ import java.util.UUID
 class OfflinePlayerTest : ShouldSpec({
     lateinit var server: ServerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("isOnline") {

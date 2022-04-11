@@ -16,8 +16,12 @@ import org.bukkit.Material
 class BlockStateTest : ShouldSpec({
     lateinit var server: ServerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("constructor") {
@@ -43,7 +47,7 @@ class BlockStateTest : ShouldSpec({
         lateinit var location: Location
         lateinit var block: BlockMock
         lateinit var state: BlockStateMock
-        beforeTest {
+        beforeEach {
             location = randomLocation(server.addSimpleWorld("test"))
             block = BlockMock(Material.DIRT, location)
             state = block.state
@@ -93,7 +97,7 @@ class BlockStateTest : ShouldSpec({
 
     context("not placed") {
         lateinit var state: BlockStateMock
-        beforeTest {
+        beforeEach {
             state = BlockStateMock(Material.DIRT)
         }
 

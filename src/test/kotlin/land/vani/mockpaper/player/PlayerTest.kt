@@ -55,7 +55,7 @@ class PlayerTest : ShouldSpec({
     lateinit var uuid: UUID
     lateinit var player: PlayerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock(
             object : ServerMock() {
                 private var tick = 0
@@ -66,6 +66,10 @@ class PlayerTest : ShouldSpec({
         )
         uuid = UUID.randomUUID()
         player = PlayerMock(server, randomPlayerName(), uuid)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("entityType is Player") {

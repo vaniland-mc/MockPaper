@@ -9,9 +9,13 @@ import org.bukkit.Material
 class KnowledgeBookMetaTest : ShouldSpec({
     lateinit var meta: KnowledgeBookMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = KnowledgeBookMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("hasRecipes is default false") {
