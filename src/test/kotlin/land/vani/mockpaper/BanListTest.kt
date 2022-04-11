@@ -11,7 +11,7 @@ import java.util.Date
 class BanListTest : ShouldSpec({
     lateinit var banList: BanListMock
 
-    beforeTest {
+    beforeEach {
         banList = BanListMock()
     }
 

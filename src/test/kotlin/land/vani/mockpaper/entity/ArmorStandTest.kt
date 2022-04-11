@@ -15,10 +15,14 @@ class ArmorStandTest : ShouldSpec({
     lateinit var world: WorldMock
     lateinit var armorStand: ArmorStandMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         armorStand = world.spawn(randomLocation(world))
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("entityType") {

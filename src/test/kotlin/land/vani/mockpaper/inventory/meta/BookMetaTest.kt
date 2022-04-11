@@ -13,9 +13,13 @@ import org.bukkit.inventory.meta.BookMeta
 class BookMetaTest : ShouldSpec({
     lateinit var meta: BookMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = BookMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("constructor") {

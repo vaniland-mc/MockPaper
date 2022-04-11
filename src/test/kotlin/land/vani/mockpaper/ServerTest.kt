@@ -40,8 +40,12 @@ import java.util.UUID
 class ServerTest : ShouldSpec({
     lateinit var server: ServerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("getOnlinePlayers") {

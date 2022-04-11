@@ -13,9 +13,13 @@ class HelpMapTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var helpMap: HelpMapMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         helpMap = server.helpMap
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("lookup") {

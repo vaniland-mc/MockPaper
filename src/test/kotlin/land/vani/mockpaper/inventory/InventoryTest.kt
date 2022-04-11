@@ -16,9 +16,13 @@ import org.bukkit.inventory.ItemStack
 class InventoryTest : ShouldSpec({
     lateinit var inventory: InventoryMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         inventory = InventoryMock(null, 9, InventoryType.CHEST)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("constructors") {

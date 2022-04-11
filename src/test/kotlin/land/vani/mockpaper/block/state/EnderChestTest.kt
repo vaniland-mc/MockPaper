@@ -9,7 +9,7 @@ import org.bukkit.Material
 class EnderChestTest : ShouldSpec({
     lateinit var enderChest: EnderChestMock
 
-    beforeTest {
+    beforeEach {
         enderChest = EnderChestMock(Material.ENDER_CHEST)
     }
 

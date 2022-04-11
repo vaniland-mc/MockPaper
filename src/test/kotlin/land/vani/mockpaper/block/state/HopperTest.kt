@@ -18,9 +18,13 @@ import java.util.UUID
 class HopperTest : ShouldSpec({
     lateinit var hopper: HopperMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         hopper = HopperMock(Material.HOPPER)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("setLock") {

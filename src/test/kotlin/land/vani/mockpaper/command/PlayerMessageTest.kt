@@ -21,6 +21,10 @@ class PlayerMessageTest : ShouldSpec({
         player = server.addPlayer()
     }
 
+    afterEach {
+        MockPaper.unmock()
+    }
+
     should("sendMessage(Component)") {
         player.sendMessage(
             Component.text("Component message").color(NamedTextColor.WHITE)

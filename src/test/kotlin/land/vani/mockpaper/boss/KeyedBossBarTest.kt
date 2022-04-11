@@ -18,6 +18,10 @@ class KeyedBossBarTest : ShouldSpec({
         server = MockPaper.mock()
     }
 
+    afterEach {
+        MockPaper.unmock()
+    }
+
     should("keyedBossBar") {
         @Suppress("DEPRECATION")
         val key = NamespacedKey("mockpaper", "bossbar1")

@@ -8,7 +8,7 @@ import land.vani.mockpaper.randomCoordinate
 class CoordinateTest : ShouldSpec({
     lateinit var coordinate: Coordinate
 
-    beforeTest {
+    beforeEach {
         coordinate = randomCoordinate()
     }
 

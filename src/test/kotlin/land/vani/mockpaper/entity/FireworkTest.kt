@@ -20,10 +20,14 @@ class FireworkTest : ShouldSpec({
     lateinit var world: WorldMock
     lateinit var firework: FireworkMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         firework = world.spawn(randomLocation(world))
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("entityType") {

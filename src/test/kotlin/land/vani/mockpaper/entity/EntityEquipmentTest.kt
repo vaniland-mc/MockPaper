@@ -16,10 +16,14 @@ class EntityEquipmentTest : ShouldSpec({
     lateinit var armorStand: ArmorStandMock
     lateinit var equipment: EntityEquipment
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         armorStand = ArmorStandMock(server, UUID.randomUUID())
         equipment = armorStand.equipment
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("mainHand") {

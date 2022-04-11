@@ -8,9 +8,13 @@ import land.vani.mockpaper.MockPaper
 class SkullMetaTest : ShouldSpec({
     lateinit var meta: SkullMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = SkullMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("owner") {

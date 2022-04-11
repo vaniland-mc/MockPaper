@@ -71,7 +71,7 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
-        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 + 1
+//        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2 + 1
 
         extensions.configure<KoverTaskExtension> {
             isDisabled = false

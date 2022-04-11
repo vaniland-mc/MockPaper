@@ -15,9 +15,13 @@ import org.bukkit.inventory.meta.BookMeta
 class LecternTest : ShouldSpec({
     lateinit var lectern: LecternMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         lectern = LecternMock(Material.LECTERN)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("setPage is valid") {

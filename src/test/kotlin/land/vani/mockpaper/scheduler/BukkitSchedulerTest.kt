@@ -17,10 +17,14 @@ class BukkitSchedulerTest : ShouldSpec({
     lateinit var scheduler: BukkitSchedulerMock
     lateinit var plugin: MockPlugin
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         scheduler = BukkitSchedulerMock(server)
         plugin = server.pluginManager.createMockPlugin()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("currentTick") {

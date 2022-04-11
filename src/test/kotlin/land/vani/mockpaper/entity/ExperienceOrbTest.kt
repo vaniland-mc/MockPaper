@@ -16,10 +16,14 @@ class ExperienceOrbTest : ShouldSpec({
     lateinit var world: WorldMock
     lateinit var orb: ExperienceOrbMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         world = server.addSimpleWorld("world")
         orb = world.spawn(randomLocation(world))
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("entityType") {

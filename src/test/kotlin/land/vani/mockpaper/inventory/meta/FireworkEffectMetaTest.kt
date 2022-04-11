@@ -9,9 +9,13 @@ import org.bukkit.FireworkEffect
 class FireworkEffectMetaTest : ShouldSpec({
     lateinit var meta: FireworkEffectMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = FireworkEffectMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("hasEffect is default false") {

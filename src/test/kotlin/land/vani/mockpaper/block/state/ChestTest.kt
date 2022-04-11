@@ -18,9 +18,13 @@ import java.util.UUID
 class ChestTest : ShouldSpec({
     lateinit var chest: ChestMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         chest = ChestMock(Material.CHEST)
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("setLock") {

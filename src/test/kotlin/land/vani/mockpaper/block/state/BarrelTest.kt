@@ -18,8 +18,12 @@ import org.bukkit.loot.LootTables
 class BarrelTest : ShouldSpec({
     lateinit var server: ServerMock
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("placed") {
@@ -27,7 +31,7 @@ class BarrelTest : ShouldSpec({
         lateinit var block: BlockMock
         lateinit var barrel: BarrelMock
 
-        beforeTest {
+        beforeEach {
             world = WorldMock(server)
             block = BlockMock(Material.BARREL, randomLocation(world))
             barrel = BarrelMock(Material.BARREL, block)
@@ -52,7 +56,7 @@ class BarrelTest : ShouldSpec({
     context("not placed") {
         lateinit var barrel: BarrelMock
 
-        beforeTest {
+        beforeEach {
             barrel = BarrelMock(Material.BARREL)
         }
 
@@ -80,7 +84,7 @@ class BarrelTest : ShouldSpec({
     context("common") {
         lateinit var barrel: BarrelMock
 
-        beforeTest {
+        beforeEach {
             barrel = BarrelMock(Material.BARREL)
         }
 

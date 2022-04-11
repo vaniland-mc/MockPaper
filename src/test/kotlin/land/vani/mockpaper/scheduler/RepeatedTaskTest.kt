@@ -10,9 +10,13 @@ class RepeatedTaskTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var plugin: MockPlugin
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         plugin = server.pluginManager.createMockPlugin()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("scheduledTick on start is delay") {

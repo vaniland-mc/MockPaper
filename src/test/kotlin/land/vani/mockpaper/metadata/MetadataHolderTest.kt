@@ -12,9 +12,13 @@ class MetadataHolderTest : ShouldSpec({
     lateinit var server: ServerMock
     lateinit var meta: MetadataHolder
 
-    beforeTest {
+    beforeEach {
         server = MockPaper.mock()
         meta = MetadataHolder()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     should("setMetadata") {

@@ -15,9 +15,13 @@ import org.bukkit.potion.PotionType
 class PotionMetaTest : ShouldSpec({
     lateinit var meta: PotionMetaMock
 
-    beforeTest {
+    beforeEach {
         MockPaper.mock()
         meta = PotionMetaMock()
+    }
+
+    afterEach {
+        MockPaper.unmock()
     }
 
     context("basePotionData") {

@@ -29,6 +29,10 @@ class BossBarTest : ShouldSpec({
         )
     }
 
+    afterEach {
+        MockPaper.unmock()
+    }
+
     should("flags is correct") {
         bar.hasFlag(BarFlag.PLAY_BOSS_MUSIC) shouldBe true
         bar.hasFlag(BarFlag.CREATE_FOG) shouldBe true
