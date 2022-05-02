@@ -37,9 +37,9 @@ dependencies {
     implementation("io.papermc.paper:paper-api:1.18.1-R0.1-20220104.205543-66")
     implementation("net.kyori:adventure-text-serializer-bungeecord:4.1.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.2.3")
-    testImplementation("io.kotest:kotest-assertions-core:5.2.3")
-    testImplementation("io.kotest:kotest-property:5.2.3")
+    testImplementation("io.kotest:kotest-runner-junit5:5.3.0")
+    testImplementation("io.kotest:kotest-assertions-core:5.3.0")
+    testImplementation("io.kotest:kotest-property:5.3.0")
 
     // Missing dependencies for LibraryLoader
     implementation("org.apache.maven:maven-aether-provider:3.3.9")
