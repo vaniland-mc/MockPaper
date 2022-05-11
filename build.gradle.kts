@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.dokka")
 
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
+    id("org.jetbrains.kotlinx.kover") version "0.5.1"
 
     id("land.vani.maven.publish")
 }
